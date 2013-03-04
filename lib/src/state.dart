@@ -25,6 +25,7 @@ class State {
    * Triggers the [callback] when [milliseconds] ellapse.
    */
   void onTimeout(int milliseconds, void callback()) {
+    assert(milliseconds > 0);
     _transitions.add(new TimeoutTransition(milliseconds, callback));
   }
 

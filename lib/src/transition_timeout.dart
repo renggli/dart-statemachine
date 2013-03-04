@@ -15,10 +15,12 @@ class TimeoutTransition extends Transition {
   TimeoutTransition(this._milliseconds, this._callback);
 
   void activate() {
+    assert(_timer == null);
     _timer = new Timer(_milliseconds, (Timer timer) => _callback());
   }
 
   void deactivate() {
+    assert(_timer != null);
     _timer.cancel();
     _timer = null;
   }

@@ -35,9 +35,10 @@ class Machine {
   State get current => _current;
 
   /**
-   * Updates this machie to the given [state].
+   * Updates this machine to the given [state].
    */
   set current(State state) {
+    assert(state != null);
     if (_current != null) {
       _current._transitions.forEach((each) => each.deactivate());
     }

@@ -14,10 +14,12 @@ class StreamTransition extends Transition {
   StreamTransition(this._stream, this._callback);
 
   void activate() {
+    assert(_subscription == null);
     _subscription = _stream.listen(this._callback);
   }
 
   void deactivate() {
+    assert(_subscription != null);
     _subscription.cancel();
     _subscription = null;
   }
