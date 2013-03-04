@@ -8,7 +8,7 @@ part of statemachine;
 class State {
 
   final Machine _machine;
-  final List<_Transition> _transitions = new List();
+  final List<Transition> _transitions = new List();
 
   State._internal(this._machine);
 
@@ -16,18 +16,18 @@ class State {
    * Triggers the [callback] when [stream] triggers an event.
    */
   void on(Stream stream, void callback(event)) {
-    _transitions.add(new _StreamTransition(stream, callback));
+    _transitions.add(new StreamTransition(stream, callback));
   }
 
   /**
    * Triggers the [callback] when [milliseconds] ellapse.
    */
   void onTimeout(int milliseconds, void callback()) {
-    _transitions.add(new _TimeoutTransition(milliseconds, callback));
+    _transitions.add(new TimeoutTransition(milliseconds, callback));
   }
 
   /**
-   * Call this method to enter the state.
+   * Call this method to enter this state.
    */
   void enter() {
     _machine.current = this;
