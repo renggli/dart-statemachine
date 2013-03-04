@@ -10,6 +10,7 @@ class TimeoutTransition extends Transition {
 
   final int _milliseconds;
   final Function _callback;
+
   Timer _timer;
 
   TimeoutTransition(this._milliseconds, this._callback);

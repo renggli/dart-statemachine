@@ -9,6 +9,7 @@ class StreamTransition extends Transition {
 
   final Stream _stream;
   final Function _callback;
+
   StreamSubscription _subscription;
 
   StreamTransition(this._stream, this._callback);
