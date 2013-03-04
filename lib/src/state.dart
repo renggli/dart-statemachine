@@ -13,9 +13,11 @@ class State {
   State._internal(this._machine);
 
   /**
-   * Triggers the [callback] when [stream] triggers an event.
+   * Triggers the [callback] when [stream] triggers an event. The stream
+   * must be a boradcast stream.
    */
   void on(Stream stream, void callback(event)) {
+    assert(stream.isBroadcast);
     _transitions.add(new StreamTransition(stream, callback));
   }
 
