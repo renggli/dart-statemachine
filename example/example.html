@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tooltip</title>
+    <link rel="stylesheet" type="text/css" href="example.css" />
+    <style>
+      .tooltip {
+        background: #ffeaa6;
+        border: 1px solid #e1ca82;
+        padding: 3px;
+        border-radius: 3px;
+        box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1);
+        position: relative;
+        width: 150px;
+        font-size: 0.8em;
+      }
+      .tooltip:before {
+        position: absolute;
+        top: -7px;
+        left: 8px;
+        display: inline-block;
+        border-right: 7px solid transparent;
+        border-bottom: 7px solid #e1ca82;
+        border-left: 7px solid transparent;
+        border-bottom-color: rgba(0, 0, 0, 0.1);
+        content: '';
+      }
+      .tooltip:after {
+        position: absolute;
+        top: -6px;
+        left: 9px;
+        display: inline-block;
+        border-right: 6px solid transparent;
+        border-bottom: 6px solid #ffeaa6;
+        border-left: 6px solid transparent;
+        content: '';
+      }
+    </style>
+  </head>
+
+  <body>
+    <p id="text"></p>
+    <script type="application/dart" src="example.dart"></script>
+    <script src="packages/browser/dart.js"></script>
+    <button id="button_1">1</button>
+    <button id="button_2">2</button>
+    <button id="button_3">3</button>
+    <div id="tootlip" class="tooltip" style="visibility: hidden">This is a tooltip</div>
+  </body>
+</html>

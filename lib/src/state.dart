@@ -22,11 +22,10 @@ class State {
   }
 
   /**
-   * Triggers the [callback] when [milliseconds] ellapse.
+   * Triggers the [callback] when [duration] ellapses.
    */
-  void onTimeout(int milliseconds, void callback()) {
-    assert(milliseconds > 0);
-    _transitions.add(new TimeoutTransition(milliseconds, callback));
+  void onTimeout(Duration duration, void callback()) {
+    _transitions.add(new TimeoutTransition(duration, callback));
   }
 
   /**

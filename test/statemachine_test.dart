@@ -50,6 +50,42 @@ void main() {
       emitterA.add('*');
       expect(machine.current, stateA);
     });
-
+    test('many transitions', () {
+      machine.reset();
+      for (var i = 0; i < 100; i++) {
+        emitterB.add('*');
+        emitterA.add('*');
+      }
+      expect(machine.current, stateA);
+    });
   });
+  test('timeout transitions', () {
+    var machine = new Machine();
+
+    var stateA = machine.newState();
+    var stateB = machine.newState();
+    var stateC = machine.newState();
+
+    stateA.onTimeout(
+        new Duration(milliseconds: 10),
+        expectAsync0(() {
+          expect(machine.current, stateA);
+          stateB.enter();
+        }));
+    stateA.onTimeout(
+        new Duration(milliseconds: 20),
+        () => fail('should never be called'));
+    stateB.onTimeout(
+        new Duration(milliseconds: 20),
+        () => fail('should never be called'));
+    stateB.onTimeout(
+        new Duration(milliseconds: 10),
+        expectAsync0(() {
+          expect(machine.current, stateB);
+          stateC.enter();
+        }));
+
+    machine.reset();
+  });
+
 }

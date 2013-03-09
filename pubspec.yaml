@@ -5,6 +5,7 @@ description: A sample application
 homepage: https://github.com/renggli/StateMachineDart
 dependencies:
   unittest: '>=0.3.1+1'
+  browser: '>=0.3.1+1'
 
 #dependencies:
 #  js: any
