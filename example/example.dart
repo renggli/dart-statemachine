@@ -4,17 +4,8 @@ import 'dart:html';
 import 'tooltip.dart';
 
 void main() {
-
-  Element tootlip = query('#tooltip');
-
-  TooltipMachine tooltip = new TooltipMachine(
-    (event) => print("show"),
-    (event) => null,
-    (event) => print("hide")
+  new Tooltip(
+    offsetX: -16,
+    offsetY: 8
   );
-
-  tooltip.add(query('#button_1'));
-  tooltip.add(query('#button_2'));
-  tooltip.add(query('#button_3'));
-
 }

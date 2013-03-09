@@ -2,17 +2,17 @@
 <html>
   <head>
     <title>Tooltip</title>
-    <link rel="stylesheet" type="text/css" href="example.css" />
     <style>
       .tooltip {
+        position: absolute;
+        z-index: 10;
+        width: 150px;
+        font-size: 0.9em;
+        padding: 3px 6px;
         background: #ffeaa6;
         border: 1px solid #e1ca82;
-        padding: 3px;
         border-radius: 3px;
         box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1);
-        position: relative;
-        width: 150px;
-        font-size: 0.8em;
       }
       .tooltip:before {
         position: absolute;
@@ -22,7 +22,6 @@
         border-right: 7px solid transparent;
         border-bottom: 7px solid #e1ca82;
         border-left: 7px solid transparent;
-        border-bottom-color: rgba(0, 0, 0, 0.1);
         content: '';
       }
       .tooltip:after {
@@ -36,15 +35,14 @@
         content: '';
       }
     </style>
+    <script type="application/dart" src="example.dart"></script>
+    <script src="packages/browser/dart.js"></script>
   </head>
 
   <body>
-    <p id="text"></p>
-    <script type="application/dart" src="example.dart"></script>
-    <script src="packages/browser/dart.js"></script>
-    <button id="button_1">1</button>
-    <button id="button_2">2</button>
-    <button id="button_3">3</button>
-    <div id="tootlip" class="tooltip" style="visibility: hidden">This is a tooltip</div>
+    <h1>Tooltip</h1>
+    <button id="button_1" data-tooltip="Helpful message for button 1.">1</button>
+    <button id="button_2" data-tooltip="What a nice button with an even number.">2</button>
+    <button id="button_3" data-tooltip="Gorgeous help messages make the users happy.">3</button>
   </body>
 </html>
