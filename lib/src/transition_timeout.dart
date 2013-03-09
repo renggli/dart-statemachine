@@ -16,7 +16,7 @@ class TimeoutTransition extends Transition {
 
   void activate() {
     assert(_timer == null);
-    _timer = new Timer(_duration, (Timer timer) => _callback());
+    _timer = new Timer(_duration, _callback);
   }
 
   void deactivate() {
