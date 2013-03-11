@@ -34,6 +34,21 @@
         border-left: 6px solid transparent;
         content: '';
       }
+
+      .tooltip {
+        -webkit-transition: visibility 0s 800ms, opacity 800ms ease-out;
+        -moz-transition: visibility 0s 800ms, opacity 800ms ease-out;
+        transition: visibility 0s 800ms, opacity 800ms ease-out;
+        visibility: hidden;
+        opacity: 0;
+      }
+      .tooltip.visible {
+        -webkit-transition: opacity 200ms ease-out;
+        -moz-transition: opacity 200ms ease-out;
+        transition: opacity 200ms ease-out;
+        visibility: visible;
+        opacity: 1;
+      }
     </style>
     <script type="application/dart" src="example.dart"></script>
     <script src="packages/browser/dart.js"></script>
