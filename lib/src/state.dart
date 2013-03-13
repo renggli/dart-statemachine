@@ -14,7 +14,7 @@ class State {
 
   /**
    * Triggers the [callback] when [stream] triggers an event. The stream
-   * must be a boradcast stream.
+   * must be a broadcast stream.
    */
   void on(Stream stream, void callback(event)) {
     assert(stream.isBroadcast);
@@ -22,7 +22,7 @@ class State {
   }
 
   /**
-   * Triggers the [callback] when [duration] ellapses.
+   * Triggers the [callback] when [duration] elapses.
    */
   void onTimeout(Duration duration, void callback()) {
     _transitions.add(new TimeoutTransition(duration, callback));

@@ -34,7 +34,7 @@ class Tooltip {
   /** The actual state machine for the tooltips. */
   final Machine _machine = new Machine();
 
-  /** Various (internal) states of the tooltip machine. */
+  /** Various (internal) states of the tooltip machine.  */
   State _waiting;
   State _heating;
   State _display;
@@ -55,7 +55,7 @@ class Tooltip {
 
   Tooltip._internal(this._root, this._dataKey, this._baseCssClass,
       this._visibleCssClass, this._offsetX, this._offsetY,
-      Duration dealy) {
+      Duration delay) {
     _tooltip.classes.add(_baseCssClass);
 
     _waiting = _machine.newState();
@@ -75,7 +75,7 @@ class Tooltip {
       _element = null;
       _waiting.enter();
     });
-    _heating.onTimeout(dealy, () {
+    _heating.onTimeout(delay, () {
       show(_element, _element.dataset[_dataKey]);
       _display.enter();
     });
@@ -91,7 +91,7 @@ class Tooltip {
         _display.enter();
       }
     });
-    _cooling.onTimeout(dealy, () {
+    _cooling.onTimeout(delay, () {
       hide();
       _element = null;
       _waiting.enter();
