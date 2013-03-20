@@ -102,8 +102,8 @@ class Tooltip {
 
   /** Shows tooltip with [message] relative to [element]. */
   void show(Element element, String message) {
-    var left = element.offsetLeft + element.offsetWidth / 2 + _offsetX;
-    var top = element.offsetTop + element.offsetHeight + _offsetY;
+    var left = element.offset.left + element.offset.width / 2 + _offsetX;
+    var top = element.offset.top + element.offset.height + _offsetY;
     _tooltip.style.left = '${left}px';
     _tooltip.style.top = '${top}px';
     _tooltip.innerHtml = message;
