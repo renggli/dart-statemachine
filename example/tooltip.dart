@@ -108,7 +108,7 @@ class Tooltip {
     _tooltip.style.top = '${top}px';
     _tooltip.innerHtml = message;
     element.parentNode.insertBefore(_tooltip, element.nextNode);
-    _tooltip.classes.add(_visibleCssClass);
+    Timer.run(() => _tooltip.classes.add(_visibleCssClass));
   }
 
   /** Removes the tooltip. */
