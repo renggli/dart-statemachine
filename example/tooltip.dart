@@ -1,3 +1,5 @@
+// Copyright (c) 2013, Lukas Renggli <renggli@gmail.com>
+
 library tooltip;
 
 import 'dart:html';
@@ -6,7 +8,7 @@ import 'dart:async';
 import '../lib/statemachine.dart';
 
 /**
- *
+ * A pretty HTML tooltip machine.
  */
 class Tooltip {
 
