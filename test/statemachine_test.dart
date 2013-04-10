@@ -75,6 +75,31 @@ void main() {
     emitter.add('a');
     expect(machine.current, stateB);
   });
+  test('future transitions', () {
+    var completerB = new Completer();
+    var completerC = new Completer();
+
+    var machine = new Machine();
+
+    var stateA = machine.newState();
+    var stateB = machine.newState();
+    var stateC = machine.newState();
+
+    stateA.onFuture(completerB.future, (value) => stateB.enter());
+    stateA.onFuture(completerC.future, (value) => stateC.enter());
+
+    machine.reset();
+    expect(machine.current, stateA);
+
+    completerB.complete();
+    expect(machine.current, stateB);
+
+    completerC.complete();
+    expect(machine.current, stateB);
+
+    machine.reset();
+    expect(machine.current, stateC);
+  });
   test('timeout transitions', () {
     var machine = new Machine();
 

@@ -22,6 +22,14 @@ class State {
   }
 
   /**
+   * Triggers the [callback] when [future] provides a value.
+   */
+  void onFuture(Future future, void callback(value)) {
+    //onStream(future.asStream().asBroadcastStream(), callback);
+    _transitions.add(new FutureTransition(future, callback));
+  }
+
+  /**
    * Triggers the [callback] when [duration] elapses.
    */
   void onTimeout(Duration duration, void callback()) {
