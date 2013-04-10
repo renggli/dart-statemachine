@@ -16,7 +16,7 @@ class State {
    * Triggers the [callback] when [stream] triggers an event. The stream
    * must be a broadcast stream.
    */
-  void on(Stream stream, void callback(event)) {
+  void onStream(Stream stream, void callback(value)) {
     assert(stream.isBroadcast);
     _transitions.add(new StreamTransition(stream, callback));
   }

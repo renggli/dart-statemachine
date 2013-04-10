@@ -65,7 +65,7 @@ class Tooltip {
     _display = _machine.newState();
     _cooling = _machine.newState();
 
-    _waiting.on(_root.onMouseOver, (Event event) {
+    _waiting.onStream(_root.onMouseOver, (Event event) {
       var element = event.target as Element;
       if (element.dataset.containsKey(_dataKey)) {
         _element = element;
@@ -73,7 +73,7 @@ class Tooltip {
       }
     });
 
-    _heating.on(_root.onMouseOut, (Event event) {
+    _heating.onStream(_root.onMouseOut, (Event event) {
       _element = null;
       _waiting.enter();
     });
@@ -82,11 +82,11 @@ class Tooltip {
       _display.enter();
     });
 
-    _display.on(_root.onMouseOut, (Event event) {
+    _display.onStream(_root.onMouseOut, (Event event) {
       _cooling.enter();
     });
 
-    _cooling.on(_root.onMouseOver, (Event event) {
+    _cooling.onStream(_root.onMouseOver, (Event event) {
       var element = event.target as Element;
       if (element.dataset.containsKey(_dataKey)) {
         show(_element = element, _element.dataset[_dataKey]);

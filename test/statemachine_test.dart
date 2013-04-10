@@ -8,7 +8,7 @@ import 'package:unittest/unittest.dart';
 import 'package:statemachine/statemachine.dart';
 
 void main() {
-  group('multiple streams', () {
+  group('stream transitions', () {
     var emitterA = new StreamController.broadcast();
     var emitterB = new StreamController.broadcast();
     var emitterC = new StreamController.broadcast();
@@ -19,14 +19,14 @@ void main() {
     var stateB = machine.newState();
     var stateC = machine.newState();
 
-    stateA.on(emitterB.stream, (event) => stateB.enter());
-    stateA.on(emitterC.stream, (event) => stateC.enter());
+    stateA.onStream(emitterB.stream, (event) => stateB.enter());
+    stateA.onStream(emitterC.stream, (event) => stateC.enter());
 
-    stateB.on(emitterA.stream, (event) => stateA.enter());
-    stateB.on(emitterC.stream, (event) => stateC.enter());
+    stateB.onStream(emitterA.stream, (event) => stateA.enter());
+    stateB.onStream(emitterC.stream, (event) => stateC.enter());
 
-    stateC.on(emitterA.stream, (event) => stateA.enter());
-    stateC.on(emitterB.stream, (event) => stateB.enter());
+    stateC.onStream(emitterA.stream, (event) => stateA.enter());
+    stateC.onStream(emitterB.stream, (event) => stateB.enter());
 
     test('initial state', () {
       machine.reset();
@@ -58,6 +58,22 @@ void main() {
       }
       expect(machine.current, stateA);
     });
+  });
+  test('conflicting transitions', () {
+    var emitter = new StreamController.broadcast();
+
+    var machine = new Machine();
+
+    var stateA = machine.newState();
+    var stateB = machine.newState();
+    var stateC = machine.newState();
+
+    stateA.onStream(emitter.stream, (value) => stateB.enter());
+    stateA.onStream(emitter.stream, (value) => stateC.enter());
+
+    machine.reset();
+    emitter.add('a');
+    expect(machine.current, stateB);
   });
   test('timeout transitions', () {
     var machine = new Machine();
