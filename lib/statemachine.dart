@@ -15,7 +15,7 @@
  *
  *     machine.reset();
  *
- * To enter a specific state call [State#enter].
+ * To enter a specific state call [State.enter].
  *
  *     inactive.enter();
  *
@@ -24,7 +24,15 @@
  * when the inactive state is entered. In case of a click event the callback
  * is executed and the state machine transitions into the active state:
  *
- *     inactive.onStream(element.onClick, (event) => active.enter());
+ *     inactive.onStream(element.onClick, (value) => active.enter());
+ *
+ * Also, transitions can be triggered by the completion of a future using
+ * [State.onFuture]. Since futures cannot be suspended or cancelled the future
+ * continues to run even if the owning state is deactivated. Should the state
+ * be activated value is immediately supplied into the callback. Further
+ * activations have no effect.
+ *
+ *     inactive.onFuture(computation, (value) => active.enter());
  *
  * Also, you can automatically trigger callbacks after a timeout using
  * [State.onTimeout]. The following snippet calls the callback 1 second after
