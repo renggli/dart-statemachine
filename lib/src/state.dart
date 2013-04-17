@@ -17,7 +17,6 @@ class State {
    * must be a broadcast stream.
    */
   void onStream(Stream stream, void callback(value)) {
-    assert(stream.isBroadcast);
     _transitions.add(new StreamTransition(stream, callback));
   }
 
@@ -25,7 +24,6 @@ class State {
    * Triggers the [callback] when [future] provides a value.
    */
   void onFuture(Future future, void callback(value)) {
-    //onStream(future.asStream().asBroadcastStream(), callback);
     _transitions.add(new FutureTransition(future, callback));
   }
 

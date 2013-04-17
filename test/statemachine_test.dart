@@ -9,9 +9,9 @@ import 'package:statemachine/statemachine.dart';
 
 void main() {
   group('stream transitions', () {
-    var emitterA = new StreamController.broadcast();
-    var emitterB = new StreamController.broadcast();
-    var emitterC = new StreamController.broadcast();
+    var emitterA = new StreamController();
+    var emitterB = new StreamController();
+    var emitterC = new StreamController();
 
     var machine = new Machine();
 
@@ -60,7 +60,8 @@ void main() {
     });
   });
   test('conflicting transitions', () {
-    var emitter = new StreamController.broadcast();
+    var emitter = new StreamController();
+    var stream = emitter.stream.asBroadcastStream();
 
     var machine = new Machine();
 
@@ -68,11 +69,11 @@ void main() {
     var stateB = machine.newState();
     var stateC = machine.newState();
 
-    stateA.onStream(emitter.stream, (value) => stateB.enter());
-    stateA.onStream(emitter.stream, (value) => stateC.enter());
+    stateA.onStream(stream, (value) => stateB.enter());
+    stateA.onStream(stream, (value) => stateC.enter());
 
     machine.reset();
-    emitter.add('a');
+    emitter.add('*');
     expect(machine.current, stateB);
   });
   test('future transitions', () {
