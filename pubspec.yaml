@@ -1,9 +1,9 @@
 name: statemachine
-version: 0.0.5
+version: 0.0.6
 author: Lukas Renggli <renggli@gmail.com>
 description: A simple, but generic state machine framework for Dart.
 homepage: https://github.com/renggli/StateMachineDart
 dev_dependencies:
+  browser: '>=0.5.0'
   junitconfiguration: '>=0.5.0'
   unittest: '>=0.5.0'
-  browser: '>=0.5.0'

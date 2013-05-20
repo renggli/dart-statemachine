@@ -15,9 +15,9 @@ void main() {
 
     var machine = new Machine();
 
-    var stateA = machine.newState();
-    var stateB = machine.newState();
-    var stateC = machine.newState();
+    var stateA = machine.newState('a');
+    var stateB = machine.newState('b');
+    var stateC = machine.newState('c');
 
     stateA.onStream(emitterB.stream, (event) => stateB.enter());
     stateA.onStream(emitterC.stream, (event) => stateC.enter());
@@ -65,9 +65,9 @@ void main() {
 
     var machine = new Machine();
 
-    var stateA = machine.newState();
-    var stateB = machine.newState();
-    var stateC = machine.newState();
+    var stateA = machine.newState('a');
+    var stateB = machine.newState('b');
+    var stateC = machine.newState('c');
 
     stateA.onStream(stream, (value) => stateB.enter());
     stateA.onStream(stream, (value) => stateC.enter());
@@ -82,31 +82,29 @@ void main() {
 
     var machine = new Machine();
 
-    var stateA = machine.newState();
-    var stateB = machine.newState();
-    var stateC = machine.newState();
+    var stateA = machine.newState('a');
+    var stateB = machine.newState('b');
+    var stateC = machine.newState('c');
 
-    stateA.onFuture(completerB.future, (value) => stateB.enter());
-    stateA.onFuture(completerC.future, (value) => stateC.enter());
+    stateA.onFuture(
+        completerB.future,
+        expectAsync1((value) {
+          expect(machine.current, stateA);
+          stateB.enter();
+        }));
+    stateA.onFuture(
+        completerC.future,
+        (value) => fail('should never be called'));
 
     machine.reset();
-    expect(machine.current, stateA);
-
     completerB.complete();
-    expect(machine.current, stateB);
-
-    completerC.complete();
-    expect(machine.current, stateB);
-
-    machine.reset();
-    expect(machine.current, stateC);
   });
   test('timeout transitions', () {
     var machine = new Machine();
 
-    var stateA = machine.newState();
-    var stateB = machine.newState();
-    var stateC = machine.newState();
+    var stateA = machine.newState('a');
+    var stateB = machine.newState('b');
+    var stateC = machine.newState('c');
 
     stateA.onTimeout(
         new Duration(milliseconds: 10),
