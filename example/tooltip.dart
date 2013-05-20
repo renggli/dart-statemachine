@@ -60,10 +60,10 @@ class Tooltip {
       Duration delay) {
     _tooltip.classes.add(_baseCssClass);
 
-    _waiting = _machine.newState();
-    _heating = _machine.newState();
-    _display = _machine.newState();
-    _cooling = _machine.newState();
+    _waiting = _machine.newState('waiting');
+    _heating = _machine.newState('heating');
+    _display = _machine.newState('display');
+    _cooling = _machine.newState('cooling');
 
     _waiting.onStream(_root.onMouseOver, (Event event) {
       var element = event.target as Element;

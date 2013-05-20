@@ -5,10 +5,11 @@
  *
  *     var machine = new Machine();
  *
- * To create states call [Machine.newState] and store them in variables:
+ * To create states call [Machine.newState] and store them in variables.
+ * Optionally you can provide a name as argument to ease debugging.
  *
  *     var inactive = machine.newState();
- *     var active = machine.newState();
+ *     var active = machine.newState('active');
  *
  * To start a state machine or to reset its state to its initial state call
  * [Machine.reset]:
