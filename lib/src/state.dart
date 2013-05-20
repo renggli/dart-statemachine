@@ -8,9 +8,10 @@ part of statemachine;
 class State {
 
   final Machine _machine;
+  final String _name;
   final List<Transition> _transitions = new List();
 
-  State._internal(this._machine);
+  State._internal(this._machine, this._name);
 
   /**
    * Triggers the [callback] when [stream] triggers an event. The stream
@@ -40,6 +41,11 @@ class State {
   void enter() {
     _machine.current = this;
   }
+
+  /**
+   * Returns a debug string of this state.
+   */
+  String toString() => _name == null ? super.toString() : 'State[$_name]';
 
 }
 

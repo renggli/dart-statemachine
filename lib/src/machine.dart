@@ -20,10 +20,11 @@ class Machine {
 
   /**
    * Returns a new state. The first call to this method defines
-   * the initial state of the machine.
+   * the initial state of the machine. For debugging purposes an
+   * optional [name] can be provided.
    */
-  State newState() {
-    var state = new State._internal(this);
+  State newState([String name]) {
+    var state = new State._internal(this, name);
     if (_initial == null) _initial = state;
     return state;
   }
