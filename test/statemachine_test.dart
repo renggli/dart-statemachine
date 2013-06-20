@@ -9,9 +9,9 @@ import 'package:statemachine/statemachine.dart';
 
 void main() {
   group('stream transitions', () {
-    var emitterA = new StreamController();
-    var emitterB = new StreamController();
-    var emitterC = new StreamController();
+    var controllerA = new StreamController.broadcast(sync: true);
+    var controllerB = new StreamController.broadcast(sync: true);
+    var controllerC = new StreamController.broadcast(sync: true);
 
     var machine = new Machine();
 
@@ -19,14 +19,14 @@ void main() {
     var stateB = machine.newState('b');
     var stateC = machine.newState('c');
 
-    stateA.onStream(emitterB.stream, (event) => stateB.enter());
-    stateA.onStream(emitterC.stream, (event) => stateC.enter());
+    stateA.onStream(controllerB.stream, (event) => stateB.enter());
+    stateA.onStream(controllerC.stream, (event) => stateC.enter());
 
-    stateB.onStream(emitterA.stream, (event) => stateA.enter());
-    stateB.onStream(emitterC.stream, (event) => stateC.enter());
+    stateB.onStream(controllerA.stream, (event) => stateA.enter());
+    stateB.onStream(controllerC.stream, (event) => stateC.enter());
 
-    stateC.onStream(emitterA.stream, (event) => stateA.enter());
-    stateC.onStream(emitterB.stream, (event) => stateB.enter());
+    stateC.onStream(controllerA.stream, (event) => stateA.enter());
+    stateC.onStream(controllerB.stream, (event) => stateB.enter());
 
     test('initial state', () {
       machine.reset();
@@ -34,34 +34,33 @@ void main() {
     });
     test('simple transition', () {
       machine.reset();
-      emitterB.add('*');
+      controllerB.add('*');
       expect(machine.current, stateB);
     });
     test('double transition', () {
       machine.reset();
-      emitterB.add('*');
-      emitterC.add('*');
+      controllerB.add('*');
+      controllerC.add('*');
       expect(machine.current, stateC);
     });
     test('triple transition', () {
       machine.reset();
-      emitterB.add('*');
-      emitterC.add('*');
-      emitterA.add('*');
+      controllerB.add('*');
+      controllerC.add('*');
+      controllerA.add('*');
       expect(machine.current, stateA);
     });
     test('many transitions', () {
       machine.reset();
       for (var i = 0; i < 100; i++) {
-        emitterB.add('*');
-        emitterA.add('*');
+        controllerB.add('*');
+        controllerA.add('*');
       }
       expect(machine.current, stateA);
     });
   });
   test('conflicting transitions', () {
-    var emitter = new StreamController();
-    var stream = emitter.stream.asBroadcastStream();
+    var controller = new StreamController.broadcast(sync: true);
 
     var machine = new Machine();
 
@@ -69,11 +68,11 @@ void main() {
     var stateB = machine.newState('b');
     var stateC = machine.newState('c');
 
-    stateA.onStream(stream, (value) => stateB.enter());
-    stateA.onStream(stream, (value) => stateC.enter());
+    stateA.onStream(controller.stream, (value) => stateB.enter());
+    stateA.onStream(controller.stream, (value) => stateC.enter());
 
     machine.reset();
-    emitter.add('*');
+    controller.add('*');
     expect(machine.current, stateB);
   });
   test('future transitions', () {
