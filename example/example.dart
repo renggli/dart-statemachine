@@ -2,7 +2,6 @@
 
 library example;
 
-import 'dart:html';
 import 'tooltip.dart';
 
 void main() {
