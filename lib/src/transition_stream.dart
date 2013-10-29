@@ -14,11 +14,13 @@ class StreamTransition extends Transition {
 
   StreamTransition(this._stream, this._callback);
 
+  @override
   void activate() {
     assert(_subscription == null);
     _subscription = _stream.listen(this._callback);
   }
 
+  @override
   void deactivate() {
     assert(_subscription != null);
     _subscription.cancel();

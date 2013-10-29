@@ -18,6 +18,7 @@ class FutureTransition extends Transition {
 
   FutureTransition(this._future, this._callback);
 
+  @override
   void activate() {
     assert(!_active);
     _active = true;
@@ -38,6 +39,7 @@ class FutureTransition extends Transition {
     }
   }
 
+  @override
   void deactivate() {
     assert(_active);
     _active = false;

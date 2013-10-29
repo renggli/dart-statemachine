@@ -14,11 +14,13 @@ class TimeoutTransition extends Transition {
 
   TimeoutTransition(this._duration, this._callback);
 
+  @override
   void activate() {
     assert(_timer == null);
     _timer = new Timer(_duration, _callback);
   }
 
+  @override
   void deactivate() {
     assert(_timer != null);
     _timer.cancel();
