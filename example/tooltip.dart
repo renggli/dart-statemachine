@@ -1,5 +1,3 @@
-// Copyright (c) 2013, Lukas Renggli <renggli@gmail.com>
-
 library tooltip;
 
 import 'dart:html';

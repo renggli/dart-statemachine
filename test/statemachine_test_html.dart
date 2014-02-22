@@ -1,5 +1,3 @@
-// Copyright (c) 2013, Lukas Renggli <renggli@gmail.com>
-
 library statemachine_test_html;
 
 import 'package:unittest/html_enhanced_config.dart';

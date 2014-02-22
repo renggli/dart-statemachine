@@ -1,5 +1,3 @@
-// Copyright (c) 2013, Lukas Renggli <renggli@gmail.com>
-
 /**
  * To create a new state machine instantiate [Machine]:
  *
