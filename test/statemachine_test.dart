@@ -85,7 +85,7 @@ void main() {
 
     stateA.onFuture(
         completerB.future,
-        expectAsync1((value) {
+        expectAsync((value) {
           expect(machine.current, stateA);
           stateB.enter();
         }));
@@ -105,7 +105,7 @@ void main() {
 
     stateA.onTimeout(
         new Duration(milliseconds: 10),
-        expectAsync0(() {
+        expectAsync(() {
           expect(machine.current, stateA);
           stateB.enter();
         }));
@@ -117,7 +117,7 @@ void main() {
         () => fail('should never be called'));
     stateB.onTimeout(
         new Duration(milliseconds: 10),
-        expectAsync0(() {
+        expectAsync(() {
           expect(machine.current, stateB);
           stateC.enter();
         }));
