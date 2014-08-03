@@ -23,7 +23,9 @@ class Machine {
    */
   State newState([String name]) {
     var state = new State._internal(this, name);
-    if (_initial == null) _initial = state;
+    if (_initial == null) {
+      _initial = state;
+    }
     return state;
   }
 

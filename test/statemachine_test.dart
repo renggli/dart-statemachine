@@ -56,6 +56,11 @@ void main() {
       }
       expect(machine.current, stateA);
     });
+    test('name', () {
+      expect(stateA.toString(), 'State[a]');
+      expect(stateB.toString(), 'State[b]');
+      expect(stateC.toString(), 'State[c]');
+    });
   });
   test('conflicting transitions', () {
     var controller = new StreamController.broadcast(sync: true);
