@@ -5,8 +5,11 @@ part of statemachine;
  */
 class FutureTransition extends Transition {
 
-  final Future _future;
-  final Function _callback;
+  /** The future triggering this transition. */
+  final Future future;
+
+  /** The callback to be evaluated when the future triggers. */
+  final Function callback;
 
   bool _active = false;
   bool _started = false;
@@ -14,7 +17,7 @@ class FutureTransition extends Transition {
 
   dynamic _value;
 
-  FutureTransition(this._future, this._callback);
+  FutureTransition(this.future, this.callback);
 
   @override
   void activate() {
@@ -22,16 +25,16 @@ class FutureTransition extends Transition {
     _active = true;
     if (!_started) {
       _started = true;
-      _future.then((value) {
+      future.then((value) {
         if (_active) {
-          _callback(value);
+          callback(value);
         } else {
           _waiting = true;
           _value = value;
         }
       });
     } else if (_waiting) {
-      _callback(_value);
+      callback(_value);
       _waiting = false;
       _value = null;
     }

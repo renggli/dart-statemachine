@@ -48,10 +48,10 @@ class Machine {
   set current(State state) {
     assert(state != null);
     if (_current != null) {
-      _current._transitions.forEach((each) => each.deactivate());
+      _current.transitions.forEach((each) => each.deactivate());
     }
     _current = state;
-    _current._transitions.forEach((each) => each.activate());
+    _current.transitions.forEach((each) => each.activate());
   }
 
 }

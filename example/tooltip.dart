@@ -11,28 +11,28 @@ import '../lib/statemachine.dart';
 class Tooltip {
 
   /** The element this tooltip machine is installed on. */
-  final Element _root;
+  final Element root;
 
   /** The data key used to retrieve the tooltip text. */
-  final String _dataKey;
+  final String dataKey;
 
   /** The CSS class applied to the tooltip its style. */
-  final String _baseCssClass;
+  final String baseCssClass;
 
   /** The CSS class applied to the tooltip to show it. */
-  final String _visibleCssClass;
+  final String visibleCssClass;
 
   /** The X offset of the tooltip element. */
-  final int _offsetX;
+  final int offsetX;
 
   /** The Y offset of the tooltip element. */
-  final int _offsetY;
+  final int offsetY;
 
   /** The dom element that shows the tooltip contents. */
-  final Element _tooltip = new DivElement();
+  final Element tooltip = new DivElement();
 
   /** The actual state machine for the tooltips. */
-  final Machine _machine = new Machine();
+  final Machine machine = new Machine();
 
   /** Various (internal) states of the tooltip machine.  */
   State _waiting;
@@ -53,41 +53,41 @@ class Tooltip {
         delay);
   }
 
-  Tooltip._internal(this._root, this._dataKey, this._baseCssClass,
-      this._visibleCssClass, this._offsetX, this._offsetY,
+  Tooltip._internal(this.root, this.dataKey, this.baseCssClass,
+      this.visibleCssClass, this.offsetX, this.offsetY,
       Duration delay) {
-    _tooltip.classes.add(_baseCssClass);
+    tooltip.classes.add(baseCssClass);
 
-    _waiting = _machine.newState('waiting');
-    _heating = _machine.newState('heating');
-    _display = _machine.newState('display');
-    _cooling = _machine.newState('cooling');
+    _waiting = machine.newState('waiting');
+    _heating = machine.newState('heating');
+    _display = machine.newState('display');
+    _cooling = machine.newState('cooling');
 
-    _waiting.onStream(_root.onMouseOver, (Event event) {
+    _waiting.onStream(root.onMouseOver, (Event event) {
       var element = event.target as Element;
-      if (element.dataset.containsKey(_dataKey)) {
+      if (element.dataset.containsKey(dataKey)) {
         _element = element;
         _heating.enter();
       }
     });
 
-    _heating.onStream(_root.onMouseOut, (Event event) {
+    _heating.onStream(root.onMouseOut, (Event event) {
       _element = null;
       _waiting.enter();
     });
     _heating.onTimeout(delay, () {
-      show(_element, _element.dataset[_dataKey]);
+      show(_element, _element.dataset[dataKey]);
       _display.enter();
     });
 
-    _display.onStream(_root.onMouseOut, (Event event) {
+    _display.onStream(root.onMouseOut, (Event event) {
       _cooling.enter();
     });
 
-    _cooling.onStream(_root.onMouseOver, (Event event) {
+    _cooling.onStream(root.onMouseOver, (Event event) {
       var element = event.target as Element;
-      if (element.dataset.containsKey(_dataKey)) {
-        show(_element = element, _element.dataset[_dataKey]);
+      if (element.dataset.containsKey(dataKey)) {
+        show(_element = element, _element.dataset[dataKey]);
         _display.enter();
       }
     });
@@ -97,23 +97,23 @@ class Tooltip {
       _waiting.enter();
     });
 
-    _machine.reset();
+    machine.reset();
   }
 
   /** Shows tooltip with [message] relative to [element]. */
   void show(Element element, String message) {
-    var left = element.offset.left + element.offset.width / 2 + _offsetX;
-    var top = element.offset.top + element.offset.height + _offsetY;
-    _tooltip.style.left = '${left}px';
-    _tooltip.style.top = '${top}px';
-    _tooltip.innerHtml = message;
-    element.parentNode.insertBefore(_tooltip, element.nextNode);
-    Timer.run(() => _tooltip.classes.add(_visibleCssClass));
+    var left = element.offset.left + element.offset.width / 2 + offsetX;
+    var top = element.offset.top + element.offset.height + offsetY;
+    tooltip.style.left = '${left}px';
+    tooltip.style.top = '${top}px';
+    tooltip.innerHtml = message;
+    element.parentNode.insertBefore(tooltip, element.nextNode);
+    Timer.run(() => tooltip.classes.add(visibleCssClass));
   }
 
   /** Removes the tooltip. */
   void hide() {
-    _tooltip.classes.remove(_visibleCssClass);
+    tooltip.classes.remove(visibleCssClass);
   }
 
 }

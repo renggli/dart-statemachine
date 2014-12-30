@@ -5,17 +5,20 @@ part of statemachine;
  */
 class TimeoutTransition extends Transition {
 
-  final Duration _duration;
-  final Function _callback;
+  /** The duration to wait before the timer triggers. */
+  final Duration duration;
+
+  /** The callback to be evaluated when the timer triggers. */
+  final Function callback;
 
   Timer _timer;
 
-  TimeoutTransition(this._duration, this._callback);
+  TimeoutTransition(this.duration, this.callback);
 
   @override
   void activate() {
     assert(_timer == null);
-    _timer = new Timer(_duration, _callback);
+    _timer = new Timer(duration, callback);
   }
 
   @override

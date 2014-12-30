@@ -5,17 +5,20 @@ part of statemachine;
  */
 class StreamTransition extends Transition {
 
-  final Stream _stream;
-  final Function _callback;
+  /** The stream triggering this transition. */
+  final Stream stream;
+
+  /** The callback to be evaluated when the stream triggers. */
+  final Function callback;
 
   StreamSubscription _subscription;
 
-  StreamTransition(this._stream, this._callback);
+  StreamTransition(this.stream, this.callback);
 
   @override
   void activate() {
     assert(_subscription == null);
-    _subscription = _stream.listen(this._callback);
+    _subscription = stream.listen(this.callback);
   }
 
   @override
