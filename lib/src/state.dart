@@ -17,17 +17,17 @@ class State {
   State._internal(this.machine, this.name);
 
   /**
-   * Triggers the [callback] when the state enters.
+   * Triggers the [callback] when the state is entered.
    */
-  void onActivate(Callback0 callback) {
-    transitions.add(new ActivateTransition(callback));
+  void onEntry(Callback0 callback) {
+    transitions.add(new EntryTransition(callback));
   }
 
   /**
-   * Triggers the [callback] when the state leaves.
+   * Triggers the [callback] when the state is left.
    */
-  void onDeactivate(Callback0 callback) {
-    transitions.add(new DeactivateTransition(callback));
+  void onExit(Callback0 callback) {
+    transitions.add(new ExitTransition(callback));
   }
 
   /**
@@ -50,6 +50,14 @@ class State {
    */
   void onTimeout(Duration duration, Callback0 callback) {
     transitions.add(new TimeoutTransition(duration, callback));
+  }
+
+  /**
+   * Adds a nested [machine] that gets started when this state is entered, and
+   * stopped when this state is left.
+   */
+  void addNested(Machine machine) {
+    transitions.add(new NestedTransition(machine));
   }
 
   /**

@@ -129,30 +129,43 @@ void main() {
 
     machine.start();
   });
-  test('activate/deactivate transitions', () {
+  test('start/stop state', () {
+    var machine = new Machine();
+    var startState = machine.newStartState('a');
+    var stopState = machine.newStopState('b');
+    expect(machine.current, isNull);
+    machine.start();
+    expect(machine.current, startState);
+    machine.stop();
+    expect(machine.current, stopState);
+  });
+  test('entry/exit transitions', () {
     var log = new List();
-
     var machine = new Machine();
     var stateA = machine.newState('a')
-        ..onActivate(() => log.add('on a'))
-        ..onDeactivate(() => log.add('off a'));
+        ..onEntry(() => log.add('on a'))
+        ..onExit(() => log.add('off a'));
     var stateB = machine.newState('b')
-        ..onActivate(() => log.add('on b'))
-        ..onDeactivate(() => log.add('off b'));
-
+        ..onEntry(() => log.add('on b'))
+        ..onExit(() => log.add('off b'));
     machine.start();
     stateB.enter();
-
     expect(log, ['on a', 'off a', 'on b']);
   });
-  test('start/stop state', () {
-      var machine = new Machine();
-      var startState = machine.newStartState('a');
-      var stopState = machine.newStopState('b');
-      expect(machine.current, isNull);
-      machine.start();
-      expect(machine.current, startState);
-      machine.stop();
-      expect(machine.current, stopState);
-    });
+  test('nested machine', () {
+    var log = new List();
+    var inner = new Machine();
+    var innerState = inner.newState('a')
+        ..onEntry(() => log.add('inner entry a'))
+        ..onExit(() => log.add('inner exit a'));
+    var outer = new Machine();
+    var outerState = outer.newState('a')
+        ..onEntry(() => log.add('outer entry a'))
+        ..onExit(() => log.add('outer exit a'))
+        ..addNested(inner);
+    outer.start();
+    expect(log, ['outer entry a', 'inner entry a']);
+    outer.stop();
+    expect(log, ['outer entry a', 'inner entry a', 'outer exit a', 'inner exit a']);
+  });
 }
