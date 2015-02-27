@@ -5,11 +5,11 @@ part of statemachine;
  */
 class StreamTransition extends Transition {
 
-  /** The stream triggering this transition. */
+  /// The stream triggering this transition.
   final Stream stream;
 
-  /** The callback to be evaluated when the stream triggers. */
-  final Function callback;
+  /// The callback to be evaluated when the stream triggers.
+  final Callback1 callback;
 
   StreamSubscription _subscription;
 

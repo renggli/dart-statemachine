@@ -5,10 +5,10 @@ part of statemachine;
  */
 class Machine {
 
-  /** The initial state of this machine. */
+  /// The initial state of this machine.
   State _initial;
 
-  /** The current state of this machine. */
+  /// The current state of this machine.
   State _current;
 
   /**

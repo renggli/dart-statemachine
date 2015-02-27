@@ -129,5 +129,20 @@ void main() {
 
     machine.reset();
   });
+  test('activate/deactivate transitions', () {
+    var log = new List();
 
+    var machine = new Machine();
+    var stateA = machine.newState('a')
+        ..onActivate(() => log.add('on a'))
+        ..onDeactivate(() => log.add('off a'));
+    var stateB = machine.newState('b')
+        ..onActivate(() => log.add('on b'))
+        ..onDeactivate(() => log.add('off b'));
+
+    machine.reset();
+    stateB.enter();
+
+    expect(log, ['on a', 'off a', 'on b']);
+  });
 }

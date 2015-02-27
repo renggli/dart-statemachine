@@ -5,11 +5,11 @@ part of statemachine;
  */
 class TimeoutTransition extends Transition {
 
-  /** The duration to wait before the timer triggers. */
+  /// The duration to wait before the timer triggers.
   final Duration duration;
 
-  /** The callback to be evaluated when the timer triggers. */
-  final Function callback;
+  /// The callback to be evaluated when the timer triggers.
+  final Callback0 callback;
 
   Timer _timer;
 

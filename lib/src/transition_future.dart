@@ -5,11 +5,11 @@ part of statemachine;
  */
 class FutureTransition extends Transition {
 
-  /** The future triggering this transition. */
+  /// The future triggering this transition.
   final Future future;
 
-  /** The callback to be evaluated when the future triggers. */
-  final Function callback;
+  /// The callback to be evaluated when the future triggers.
+  final Callback1 callback;
 
   bool _active = false;
   bool _started = false;
