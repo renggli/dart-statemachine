@@ -11,7 +11,7 @@ class State {
   /// A human readable name of the state.
   final String name;
 
-  /// The list of outgoing transitions from this state.
+  /// The list of transitions of this state.
   final List<Transition> transitions = new List();
 
   State._internal(this.machine, this.name);

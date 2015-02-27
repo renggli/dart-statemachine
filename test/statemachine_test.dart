@@ -27,29 +27,29 @@ void main() {
     stateC.onStream(controllerB.stream, (event) => stateB.enter());
 
     test('initial state', () {
-      machine.reset();
+      machine.start();
       expect(machine.current, stateA);
     });
     test('simple transition', () {
-      machine.reset();
+      machine.start();
       controllerB.add('*');
       expect(machine.current, stateB);
     });
     test('double transition', () {
-      machine.reset();
+      machine.start();
       controllerB.add('*');
       controllerC.add('*');
       expect(machine.current, stateC);
     });
     test('triple transition', () {
-      machine.reset();
+      machine.start();
       controllerB.add('*');
       controllerC.add('*');
       controllerA.add('*');
       expect(machine.current, stateA);
     });
     test('many transitions', () {
-      machine.reset();
+      machine.start();
       for (var i = 0; i < 100; i++) {
         controllerB.add('*');
         controllerA.add('*');
@@ -74,7 +74,7 @@ void main() {
     stateA.onStream(controller.stream, (value) => stateB.enter());
     stateA.onStream(controller.stream, (value) => stateC.enter());
 
-    machine.reset();
+    machine.start();
     controller.add('*');
     expect(machine.current, stateB);
   });
@@ -98,7 +98,7 @@ void main() {
         completerC.future,
         (value) => fail('should never be called'));
 
-    machine.reset();
+    machine.start();
     completerB.complete();
   });
   test('timeout transitions', () {
@@ -127,7 +127,7 @@ void main() {
           stateC.enter();
         }));
 
-    machine.reset();
+    machine.start();
   });
   test('activate/deactivate transitions', () {
     var log = new List();
@@ -140,9 +140,19 @@ void main() {
         ..onActivate(() => log.add('on b'))
         ..onDeactivate(() => log.add('off b'));
 
-    machine.reset();
+    machine.start();
     stateB.enter();
 
     expect(log, ['on a', 'off a', 'on b']);
   });
+  test('start/stop state', () {
+      var machine = new Machine();
+      var startState = machine.newStartState('a');
+      var stopState = machine.newStopState('b');
+      expect(machine.current, isNull);
+      machine.start();
+      expect(machine.current, startState);
+      machine.stop();
+      expect(machine.current, stopState);
+    });
 }

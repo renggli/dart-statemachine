@@ -5,7 +5,7 @@ part of statemachine;
  */
 class ActivateTransition extends Transition {
 
-  /// The callback to be evaluated when the state triggers.
+  /// The callback to be evaluated when the state activates.
   final Callback0 callback;
 
   ActivateTransition(this.callback);
