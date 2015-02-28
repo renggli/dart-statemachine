@@ -97,7 +97,7 @@ class Tooltip {
       _waiting.enter();
     });
 
-    machine.reset();
+    machine.start();
   }
 
   /** Shows tooltip with [message] relative to [element]. */
