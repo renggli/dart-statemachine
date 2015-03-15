@@ -86,7 +86,6 @@ void main() {
 
     var stateA = machine.newState('a');
     var stateB = machine.newState('b');
-    var stateC = machine.newState('c');
 
     stateA.onFuture(
         completerB.future,
@@ -151,15 +150,17 @@ void main() {
     machine.start();
     stateB.enter();
     expect(log, ['on a', 'off a', 'on b']);
+    stateA.enter();
+    expect(log, ['on a', 'off a', 'on b', 'off b', 'on a']);
   });
   test('nested machine', () {
     var log = new List();
     var inner = new Machine();
-    var innerState = inner.newState('a')
+    inner.newState('a')
         ..onEntry(() => log.add('inner entry a'))
         ..onExit(() => log.add('inner exit a'));
     var outer = new Machine();
-    var outerState = outer.newState('a')
+    outer.newState('a')
         ..onEntry(() => log.add('outer entry a'))
         ..onExit(() => log.add('outer exit a'))
         ..addNested(inner);
