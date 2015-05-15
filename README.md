@@ -54,7 +54,11 @@ machine.start();
 
 Similarly you can stop a machine by calling `Machine.stop`.
 
-### Changing the state
+### Transitioning between states
+
+There are various ways in which your machine can switch states.
+
+#### Manually triggered transition
 
 From anywhere within your code you can enter a specific state by call `State.enter`.
 
@@ -62,19 +66,23 @@ From anywhere within your code you can enter a specific state by call `State.ent
 activeState.enter();
 ```
 
-### Transitioning between states
+#### Event triggered transition
 
 You can define transitions between states that are triggered by events of any kind using `State.onStream`. The example below registers for click events when the inactive state is entered. In case of a click event the callback is executed and the state machine transitions into the active state:
 
 ```dart
-startState.onStream(element.onClick, (value) => active.enter());
+startState.onStream(element.onClick, (value) => activeState.enter());
 ```
+
+#### Future completion transition
 
 Also, transitions can be triggered by the completion of a future using `State.onFuture`. Since futures cannot be suspended or cancelled the future continues to run even if the owning state is deactivated. Should the state be activated value is immediately supplied into the callback. Further activations have no effect.
 
 ```dart
-startState.onFuture(computation, (value) => active.enter());
+startState.onFuture(computation, (value) => activeState.enter());
 ```
+
+#### Time based transition
 
 Also, you can automatically trigger callbacks after a timeout using `State.onTimeout`. The following snippet calls the callback 1 second after the active state is entered and falls back to the inactive state:
 
