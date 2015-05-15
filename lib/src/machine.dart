@@ -67,12 +67,6 @@ class Machine {
   }
 
   /**
-   * Sets the machine to its start state. This method is deprecated, instead use [Machine#start].
-   */
-  @deprecated
-  void reset() => start();
-
-  /**
    * Sets the machine to its stop state.
    */
   void stop() {
