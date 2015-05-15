@@ -104,6 +104,7 @@ void main() {
         (value) => fail('should never be called'));
 
     machine.start();
+    completerB.complete('something');
   });
   test('timeout transitions', () {
     var machine = new Machine();
