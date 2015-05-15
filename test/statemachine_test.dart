@@ -26,6 +26,11 @@ void main() {
     stateC.onStream(controllerA.stream, (event) => stateA.enter());
     stateC.onStream(controllerB.stream, (event) => stateB.enter());
 
+    test('string', () {
+      expect(machine.toString(), 'Instance of \'Machine\'[null]');
+      machine.start();
+      expect(machine.toString(), 'Instance of \'Machine\'[State[a]]');
+    });
     test('initial state', () {
       machine.start();
       expect(machine.current, stateA);
@@ -90,6 +95,7 @@ void main() {
     stateA.onFuture(
         completerB.future,
         expectAsync((value) {
+          expect(value, 'something');
           expect(machine.current, stateA);
           stateB.enter();
         }));
@@ -98,7 +104,6 @@ void main() {
         (value) => fail('should never be called'));
 
     machine.start();
-    completerB.complete();
   });
   test('timeout transitions', () {
     var machine = new Machine();
