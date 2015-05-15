@@ -2,7 +2,7 @@ library statemachine_test;
 
 import 'dart:async';
 
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'package:statemachine/statemachine.dart';
 
 void main() {
