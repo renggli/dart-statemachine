@@ -1,7 +1,7 @@
 part of statemachine;
 
 /**
- * A transition that is triggered when the state deactivates.
+ * A callback that is triggered when the state deactivates.
  */
 class ExitTransition extends Transition {
 

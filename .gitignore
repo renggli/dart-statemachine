@@ -1,10 +1,6 @@
-out
-docs
+.idea/
+.DS_Store
+.pub/
 packages
 pubspec.lock
-
-.DS_Store
-*.js
-*.js_
-*.js.map
-*.js.deps
+*.iml
