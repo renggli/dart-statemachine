@@ -84,27 +84,23 @@ void main() {
     expect(machine.current, stateB);
   });
   test('future transitions', () {
-    var completerB = new Completer();
-    var completerC = new Completer();
-
     var machine = new Machine();
 
     var stateA = machine.newState('a');
     var stateB = machine.newState('b');
 
     stateA.onFuture(
-        completerB.future,
+        new Future.delayed(new Duration(days: 1)),
+        (value) => fail('should never be called'));
+    stateA.onFuture(
+        new Future.delayed(new Duration(milliseconds: 10), () => 'something'),
         expectAsync((value) {
           expect(value, 'something');
           expect(machine.current, stateA);
           stateB.enter();
         }));
-    stateA.onFuture(
-        completerC.future,
-        (value) => fail('should never be called'));
 
     machine.start();
-    completerB.complete('something');
   });
   test('timeout transitions', () {
     var machine = new Machine();
