@@ -4,7 +4,7 @@ StateMachine
 [![Pub Package](https://img.shields.io/pub/v/statemachine.svg)](https://pub.dartlang.org/packages/statemachine)
 [![Build Status](https://travis-ci.org/renggli/dart-statemachine.svg)](https://travis-ci.org/renggli/dart-statemachine)
 [![Coverage Status](https://coveralls.io/repos/renggli/dart-statemachine/badge.svg)](https://coveralls.io/r/renggli/dart-statemachine)
-[![Github Issues](http://githubbadges.herokuapp.com/renggli/dart-statemachine/issues.svg)](https://github.com/renggli/dart-statemachine/issues)]
+[![Github Issues](http://githubbadges.herokuapp.com/renggli/dart-statemachine/issues.svg)](https://github.com/renggli/dart-statemachine/issues)
 
 A simple, but generic state machine framework for Dart.
 
