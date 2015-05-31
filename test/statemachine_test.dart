@@ -85,19 +85,28 @@ void main() {
   });
   test('future transitions', () {
     var machine = new Machine();
+    var log = new List();
 
     var stateA = machine.newState('a');
     var stateB = machine.newState('b');
 
     stateA.onFuture(
-        new Future.delayed(new Duration(days: 1)),
+        new Future.delayed(new Duration(milliseconds: 100)),
         (value) => fail('should never be called'));
     stateA.onFuture(
         new Future.delayed(new Duration(milliseconds: 10), () => 'something'),
         expectAsync((value) {
+          expect(log, isEmpty);
           expect(value, 'something');
           expect(machine.current, stateA);
+          log.add('a');
           stateB.enter();
+        }));
+    stateB.onFuture(
+        new Future.delayed(new Duration(milliseconds: 1)),
+        expectAsync((value) {
+          expect(log, ['a']);
+          expect(value, isNull);
         }));
 
     machine.start();
