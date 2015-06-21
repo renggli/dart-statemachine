@@ -73,6 +73,9 @@ class Machine {
     current = _stop;
   }
 
+  /**
+   * Returns a debug string of this state.
+   */
   @override
   String toString() => '${super.toString()}[$current]';
 
