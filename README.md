@@ -34,7 +34,7 @@ var startState = machine.newState();
 var activeState = machine.newState('active');
 ```
 
-It is possible to explicitely create start and stop states of the machine using `Machine.newStartState` and `Machine.newStopState`.
+It is possible to explicitly create start and stop states of the machine using `Machine.newStartState` and `Machine.newStopState`.
 
 ### Callbacks on states
 
