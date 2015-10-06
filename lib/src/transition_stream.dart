@@ -1,8 +1,6 @@
 part of statemachine;
 
-/**
- * A transition that is triggered through a stream.
- */
+/// A transition that is triggered through a stream.
 class StreamTransition extends Transition {
 
   /// The stream triggering this transition.

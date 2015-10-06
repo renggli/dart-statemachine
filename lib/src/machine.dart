@@ -1,8 +1,6 @@
 part of statemachine;
 
-/**
- * The state machine itself.
- */
+/// The state machine itself.
 class Machine {
 
   /// The start state of this machine.
@@ -14,15 +12,11 @@ class Machine {
   /// The current state of this machine.
   State _current;
 
-  /**
-   * Constructor of a state machine.
-   */
+  /// Constructor of a state machine.
   Machine();
 
-  /**
-   * Returns a new state. The first call to this method defines the start state
-   * of the machine. For debugging purposes an optional [name] can be provided.
-   */
+  /// Returns a new state. The first call to this method defines the start state
+  /// of the machine. For debugging purposes an optional [name] can be provided.
   State newState([String name]) {
     var state = new State._internal(this, name);
     if (_start == null) {
@@ -31,24 +25,16 @@ class Machine {
     return state;
   }
 
-  /**
-   * Returns a new start state for this machine.
-   */
+  /// Returns a new start state for this machine.
   State newStartState([String name]) => _start = newState(name);
 
-  /**
-   * Returns a new stop state for this machine.
-   */
+  /// Returns a new stop state for this machine.
   State newStopState([String name]) => _stop = newState(name);
 
-  /**
-   * Returns the current state of this machine.
-   */
+  /// Returns the current state of this machine.
   State get current => _current;
 
-  /**
-   * Sets this machine to the given [state].
-   */
+  /// Sets this machine to the given [state].
   set current(State state) {
     if (_current != null) {
       _current.transitions.forEach((each) => each.deactivate());
@@ -59,23 +45,17 @@ class Machine {
     }
   }
 
-  /**
-   * Sets the machine to its start state.
-   */
+  /// Sets the machine to its start state.
   void start() {
     current = _start;
   }
 
-  /**
-   * Sets the machine to its stop state.
-   */
+  /// Sets the machine to its stop state.
   void stop() {
     current = _stop;
   }
 
-  /**
-   * Returns a debug string of this state.
-   */
+  /// Returns a debug string of this state.
   @override
   String toString() => '${super.toString()}[$current]';
 

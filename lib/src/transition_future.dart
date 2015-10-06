@@ -1,8 +1,6 @@
 part of statemachine;
 
-/**
- * A transition that is triggered one time by a future.
- */
+/// A transition that is triggered one time by a future.
 class FutureTransition extends Transition {
 
   /// The future triggering this transition.

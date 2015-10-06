@@ -1,8 +1,6 @@
 part of statemachine;
 
-/**
- * A transition that happens automatically after a certain duration elapsed.
- */
+/// A transition that happens automatically after a certain duration elapsed.
 class TimeoutTransition extends Transition {
 
   /// The duration to wait before the timer triggers.

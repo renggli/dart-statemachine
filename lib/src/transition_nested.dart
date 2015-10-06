@@ -1,8 +1,6 @@
 part of statemachine;
 
-/**
- * A transition that triggers a nested state machine.
- */
+/// A transition that triggers a nested state machine.
 class NestedTransition extends Transition {
 
   /// The nested state machine.

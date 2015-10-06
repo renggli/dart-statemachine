@@ -1,6 +1,4 @@
-/**
- * Generic state machine framework.
- */
+/// Generic state machine framework.
 library statemachine;
 
 import 'dart:async';

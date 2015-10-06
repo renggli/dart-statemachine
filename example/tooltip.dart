@@ -5,9 +5,7 @@ import 'dart:async';
 
 import '../lib/statemachine.dart';
 
-/**
- * A pretty HTML tooltip machine.
- */
+/// A pretty HTML tooltip machine.
 class Tooltip {
 
   /// The element this tooltip machine is installed on.

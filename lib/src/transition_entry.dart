@@ -1,8 +1,6 @@
 part of statemachine;
 
-/**
- * A callback that is triggered when the state activates.
- */
+/// A callback that is triggered when the state activates.
 class EntryTransition extends Transition {
 
   /// The callback to be evaluated when the state activates.
