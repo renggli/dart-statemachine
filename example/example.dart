@@ -1,4 +1,4 @@
-library example;
+library statemachine.example;
 
 import 'tooltip.dart';
 

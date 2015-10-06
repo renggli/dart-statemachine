@@ -1,4 +1,4 @@
-library tooltip;
+library statemachine.example.tooltip;
 
 import 'dart:html';
 import 'dart:async';

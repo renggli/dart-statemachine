@@ -1,4 +1,4 @@
-library statemachine_test;
+library statemachine.test.statemachine_test;
 
 import 'dart:async';
 
