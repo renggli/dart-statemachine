@@ -1,5 +1,5 @@
-StateMachine
-============
+State Machine
+=============
 
 [![Pub Package](https://img.shields.io/pub/v/statemachine.svg)](https://pub.dartlang.org/packages/statemachine)
 [![Build Status](https://travis-ci.org/renggli/dart-statemachine.svg)](https://travis-ci.org/renggli/dart-statemachine)
