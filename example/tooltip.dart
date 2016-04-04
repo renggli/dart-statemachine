@@ -59,7 +59,7 @@ class Tooltip {
     _cooling = machine.newState('cooling');
 
     _waiting.onStream(root.onMouseOver, (Event event) {
-      var element = event.target as Element;
+      Element element = event.target;
       if (element.dataset.containsKey(dataKey)) {
         _element = element;
         _heating.enter();
@@ -80,7 +80,7 @@ class Tooltip {
     });
 
     _cooling.onStream(root.onMouseOver, (Event event) {
-      var element = event.target as Element;
+      Element element = event.target;
       if (element.dataset.containsKey(dataKey)) {
         show(_element = element, _element.dataset[dataKey]);
         _display.enter();

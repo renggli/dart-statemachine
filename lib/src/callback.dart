@@ -4,4 +4,4 @@ part of statemachine;
 typedef void Callback0();
 
 /// A callback with one argument.
-typedef void Callback1(value);
+typedef void Callback1(dynamic value);

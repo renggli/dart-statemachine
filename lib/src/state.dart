@@ -52,6 +52,7 @@ class State {
   }
 
   /// Returns a debug string of this state.
+  @override
   String toString() => name == null ? super.toString() : 'State[$name]';
 
 }
