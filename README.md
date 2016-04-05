@@ -74,7 +74,7 @@ There are various ways in which your machine can switch states.
 
 #### Manually triggered transition
 
-From anywhere within your code you can enter a specific state by call `State.enter`.
+From anywhere within your code you can enter a specific state by calling `State.enter`.
 
 ```dart
 activeState.enter();
@@ -90,7 +90,7 @@ startState.onStream(element.onClick, (value) => activeState.enter());
 
 #### Future completion transition
 
-Also, transitions can be triggered by the completion of a future using `State.onFuture`. Since futures cannot be suspended or cancelled the future continues to run even if the owning state is deactivated. Should the state be activated value is immediately supplied into the callback. Further activations have no effect.
+Also, transitions can be triggered by the completion of a future using `State.onFuture`. Since futures cannot be suspended or cancelled, the future continues to run even if the owning state is deactivated. Should the state be activated and the future value is already present, then the value is immediately supplied into the callback. Further activations have no effect.
 
 ```dart
 startState.onFuture(computation, (value) => activeState.enter());
