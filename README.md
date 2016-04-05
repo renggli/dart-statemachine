@@ -20,6 +20,16 @@ This code was inspired by work of Vassily Boykov on his [Smalltalk Announcement 
 Tutorial
 --------
 
+### Installation
+
+Follow the _Installing_ instructions on https://pub.dartlang.org/packages/statemachine.
+
+Import the package into your Dart code using:
+
+```dart
+import 'package:statemachine/statemachine.dart';
+```
+
 ### Creating a machine
 
 To create a new state machine instantiate `Machine`:
