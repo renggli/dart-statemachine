@@ -1,6 +1,6 @@
 name: statemachine
 author: Lukas Renggli <renggli@gmail.com>
-version: 1.2.2
+version: 1.2.3
 homepage: https://github.com/renggli/dart-statemachine
 description: A simple, but generic state machine framework for Dart.
 environment:
