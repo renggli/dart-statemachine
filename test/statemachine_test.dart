@@ -95,7 +95,7 @@ void main() {
         (value) => fail('should never be called'));
     stateA.onFuture(
         new Future.delayed(new Duration(milliseconds: 10), () => 'something'),
-        expectAsync((value) {
+        expectAsync1((value) {
           expect(log, isEmpty);
           expect(value, 'something');
           expect(machine.current, stateA);
@@ -104,7 +104,7 @@ void main() {
         }) as Callback1);
     stateB.onFuture(
         new Future.delayed(new Duration(milliseconds: 1)),
-        expectAsync((value) {
+        expectAsync1((value) {
           expect(log, ['a']);
           expect(value, isNull);
         }) as Callback1);
@@ -120,7 +120,7 @@ void main() {
 
     stateA.onTimeout(
         new Duration(milliseconds: 10),
-        expectAsync(() {
+        expectAsync0(() {
           expect(machine.current, stateA);
           stateB.enter();
         }) as Callback0);
@@ -132,7 +132,7 @@ void main() {
         () => fail('should never be called'));
     stateB.onTimeout(
         new Duration(milliseconds: 10),
-        expectAsync(() {
+        expectAsync0(() {
           expect(machine.current, stateB);
           stateC.enter();
         }) as Callback0);
