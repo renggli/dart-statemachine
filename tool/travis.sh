@@ -7,7 +7,8 @@ set -e
 dartanalyzer --fatal-warnings \
     lib/*.dart \
     test/*.dart \
-    example/*.dart
+    example/tooltip/*.dart \
+    example/traffic/*.dart
 
 # Verify that all the tests pass.
 dart --checked test/all_tests.dart
