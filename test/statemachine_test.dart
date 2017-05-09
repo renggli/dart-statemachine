@@ -7,24 +7,35 @@ import 'package:statemachine/statemachine.dart';
 
 void main() {
   group('stream transitions', () {
-    var controllerA = new StreamController.broadcast(sync: true);
-    var controllerB = new StreamController.broadcast(sync: true);
-    var controllerC = new StreamController.broadcast(sync: true);
+    StreamController controllerA, controllerB, controllerC;
+    Machine machine;
+    State stateA, stateB, stateC;
 
-    var machine = new Machine();
+    setUp(() {
+      controllerA = new StreamController.broadcast(sync: true);
+      controllerB = new StreamController.broadcast(sync: true);
+      controllerC = new StreamController.broadcast(sync: true);
 
-    var stateA = machine.newState('a');
-    var stateB = machine.newState('b');
-    var stateC = machine.newState('c');
+      machine = new Machine();
 
-    stateA.onStream(controllerB.stream, (event) => stateB.enter());
-    stateA.onStream(controllerC.stream, (event) => stateC.enter());
+      stateA = machine.newState('a');
+      stateB = machine.newState('b');
+      stateC = machine.newState('c');
 
-    stateB.onStream(controllerA.stream, (event) => stateA.enter());
-    stateB.onStream(controllerC.stream, (event) => stateC.enter());
+      stateA.onStream(controllerB.stream, (event) => stateB.enter());
+      stateA.onStream(controllerC.stream, (event) => stateC.enter());
 
-    stateC.onStream(controllerA.stream, (event) => stateA.enter());
-    stateC.onStream(controllerB.stream, (event) => stateB.enter());
+      stateB.onStream(controllerA.stream, (event) => stateA.enter());
+      stateB.onStream(controllerC.stream, (event) => stateC.enter());
+
+      stateC.onStream(controllerA.stream, (event) => stateA.enter());
+      stateC.onStream(controllerB.stream, (event) => stateB.enter());
+    });
+    tearDown(() {
+      controllerA.close();
+      controllerB.close();
+      controllerC.close();
+    });
 
     test('string', () {
       expect(machine.toString(), 'Instance of \'Machine\'[null]');
@@ -70,18 +81,22 @@ void main() {
   test('conflicting transitions', () {
     var controller = new StreamController.broadcast(sync: true);
 
-    var machine = new Machine();
+    try {
+      var machine = new Machine();
 
-    var stateA = machine.newState('a');
-    var stateB = machine.newState('b');
-    var stateC = machine.newState('c');
+      var stateA = machine.newState('a');
+      var stateB = machine.newState('b');
+      var stateC = machine.newState('c');
 
-    stateA.onStream(controller.stream, (value) => stateB.enter());
-    stateA.onStream(controller.stream, (value) => stateC.enter());
+      stateA.onStream(controller.stream, (value) => stateB.enter());
+      stateA.onStream(controller.stream, (value) => stateC.enter());
 
-    machine.start();
-    controller.add('*');
-    expect(machine.current, stateB);
+      machine.start();
+      controller.add('*');
+      expect(machine.current, stateB);
+    } finally {
+      controller.close();
+    }
   });
   test('future transitions', () {
     var machine = new Machine();
@@ -90,24 +105,22 @@ void main() {
     var stateA = machine.newState('a');
     var stateB = machine.newState('b');
 
-    stateA.onFuture(
-        new Future.delayed(new Duration(milliseconds: 100)),
+    stateA.onFuture(new Future.delayed(new Duration(milliseconds: 100)),
         (value) => fail('should never be called'));
     stateA.onFuture(
         new Future.delayed(new Duration(milliseconds: 10), () => 'something'),
+        expectAsync1((String value) {
+      expect(log, isEmpty);
+      expect(value, 'something');
+      expect(machine.current, stateA);
+      log.add('a');
+      stateB.enter();
+    }));
+    stateB.onFuture(new Future.delayed(new Duration(milliseconds: 1)),
         expectAsync1((value) {
-          expect(log, isEmpty);
-          expect(value, 'something');
-          expect(machine.current, stateA);
-          log.add('a');
-          stateB.enter();
-        }));
-    stateB.onFuture(
-        new Future.delayed(new Duration(milliseconds: 1)),
-        expectAsync1((value) {
-          expect(log, ['a']);
-          expect(value, isNull);
-        }));
+      expect(log, ['a']);
+      expect(value, isNull);
+    }));
 
     machine.start();
   });
@@ -118,24 +131,18 @@ void main() {
     var stateB = machine.newState('b');
     var stateC = machine.newState('c');
 
+    stateA.onTimeout(new Duration(milliseconds: 10), expectAsync0(() {
+      expect(machine.current, stateA);
+      stateB.enter();
+    }));
     stateA.onTimeout(
-        new Duration(milliseconds: 10),
-        expectAsync0(() {
-          expect(machine.current, stateA);
-          stateB.enter();
-        }));
-    stateA.onTimeout(
-        new Duration(milliseconds: 20),
-        () => fail('should never be called'));
+        new Duration(milliseconds: 20), () => fail('should never be called'));
     stateB.onTimeout(
-        new Duration(milliseconds: 20),
-        () => fail('should never be called'));
-    stateB.onTimeout(
-        new Duration(milliseconds: 10),
-        expectAsync0(() {
-          expect(machine.current, stateB);
-          stateC.enter();
-        }));
+        new Duration(milliseconds: 20), () => fail('should never be called'));
+    stateB.onTimeout(new Duration(milliseconds: 10), expectAsync0(() {
+      expect(machine.current, stateB);
+      stateC.enter();
+    }));
 
     machine.start();
   });
@@ -153,11 +160,11 @@ void main() {
     var log = new List();
     var machine = new Machine();
     var stateA = machine.newState('a')
-        ..onEntry(() => log.add('on a'))
-        ..onExit(() => log.add('off a'));
+      ..onEntry(() => log.add('on a'))
+      ..onExit(() => log.add('off a'));
     var stateB = machine.newState('b')
-        ..onEntry(() => log.add('on b'))
-        ..onExit(() => log.add('off b'));
+      ..onEntry(() => log.add('on b'))
+      ..onExit(() => log.add('off b'));
     machine.start();
     stateB.enter();
     expect(log, ['on a', 'off a', 'on b']);
@@ -168,16 +175,17 @@ void main() {
     var log = new List();
     var inner = new Machine();
     inner.newState('a')
-        ..onEntry(() => log.add('inner entry a'))
-        ..onExit(() => log.add('inner exit a'));
+      ..onEntry(() => log.add('inner entry a'))
+      ..onExit(() => log.add('inner exit a'));
     var outer = new Machine();
     outer.newState('a')
-        ..onEntry(() => log.add('outer entry a'))
-        ..onExit(() => log.add('outer exit a'))
-        ..addNested(inner);
+      ..onEntry(() => log.add('outer entry a'))
+      ..onExit(() => log.add('outer exit a'))
+      ..addNested(inner);
     outer.start();
     expect(log, ['outer entry a', 'inner entry a']);
     outer.stop();
-    expect(log, ['outer entry a', 'inner entry a', 'outer exit a', 'inner exit a']);
+    expect(log,
+        ['outer entry a', 'inner entry a', 'outer exit a', 'inner exit a']);
   });
 }
