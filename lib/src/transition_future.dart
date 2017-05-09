@@ -1,19 +1,19 @@
 part of statemachine;
 
 /// A transition that is triggered one time by a future.
-class FutureTransition extends Transition {
+class FutureTransition<T> extends Transition {
 
   /// The future triggering this transition.
-  final Future future;
+  final Future<T> future;
 
   /// The callback to be evaluated when the future triggers.
-  final Callback1 callback;
+  final Callback1<T> callback;
 
   bool _active = false;
   bool _started = false;
   bool _waiting = false;
 
-  dynamic _value;
+  T _value;
 
   FutureTransition(this.future, this.callback);
 

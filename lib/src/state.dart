@@ -26,12 +26,12 @@ class State {
 
   /// Triggers the [callback] when [stream] triggers an event. The stream
   /// must be a broadcast stream.
-  void onStream(Stream stream, Callback1 callback) {
-    transitions.add(new StreamTransition(stream, callback));
+  void onStream<T>(Stream<T> stream, Callback1<T> callback) {
+    transitions.add(new StreamTransition<T>(stream, callback));
   }
 
   /// Triggers the [callback] when [future] provides a value.
-  void onFuture(Future future, Callback1 callback) {
+  void onFuture<T>(Future<T> future, Callback1<T> callback) {
     transitions.add(new FutureTransition(future, callback));
   }
 

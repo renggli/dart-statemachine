@@ -1,15 +1,15 @@
 part of statemachine;
 
 /// A transition that is triggered through a stream.
-class StreamTransition extends Transition {
+class StreamTransition<T> extends Transition {
 
   /// The stream triggering this transition.
-  final Stream stream;
+  final Stream<T> stream;
 
   /// The callback to be evaluated when the stream triggers.
-  final Callback1 callback;
+  final Callback1<T> callback;
 
-  StreamSubscription _subscription;
+  StreamSubscription<T> _subscription;
 
   StreamTransition(this.stream, this.callback);
 
