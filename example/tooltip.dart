@@ -14,7 +14,7 @@ class Tooltip {
   /// The data key used to retrieve the tooltip text.
   final String dataKey;
 
-  /// The CSS class applied to the tooltip its style.
+  /// The CSS class applied to the tooltip style.
   final String baseCssClass;
 
   /// The CSS class applied to the tooltip to show it.
@@ -33,10 +33,7 @@ class Tooltip {
   final Machine machine = new Machine();
 
   /// Various (internal) states of the tooltip machine.
-  State _waiting;
-  State _heating;
-  State _display;
-  State _cooling;
+  State _waiting, _heating, _display, _cooling;
 
   /// The currently active element.
   Element _element;
@@ -58,7 +55,7 @@ class Tooltip {
     _display = machine.newState('display');
     _cooling = machine.newState('cooling');
 
-    _waiting.onStream(root.onMouseOver, (Event event) {
+    _waiting.onStream(root.onMouseOver, (MouseEvent event) {
       Element element = event.target;
       if (element.dataset.containsKey(dataKey)) {
         _element = element;
@@ -66,7 +63,7 @@ class Tooltip {
       }
     });
 
-    _heating.onStream(root.onMouseOut, (Event event) {
+    _heating.onStream(root.onMouseOut, (MouseEvent event) {
       _element = null;
       _waiting.enter();
     });
@@ -75,11 +72,11 @@ class Tooltip {
       _display.enter();
     });
 
-    _display.onStream(root.onMouseOut, (Event event) {
+    _display.onStream(root.onMouseOut, (MouseEvent event) {
       _cooling.enter();
     });
 
-    _cooling.onStream(root.onMouseOver, (Event event) {
+    _cooling.onStream(root.onMouseOver, (MouseEvent event) {
       Element element = event.target;
       if (element.dataset.containsKey(dataKey)) {
         show(_element = element, _element.dataset[dataKey]);
