@@ -3,7 +3,7 @@ library statemachine.example.tooltip;
 import 'dart:html';
 import 'dart:async';
 
-import '../lib/statemachine.dart';
+import 'package:statemachine/statemachine.dart';
 
 /// A pretty HTML tooltip machine.
 class Tooltip {
