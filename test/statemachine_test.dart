@@ -7,7 +7,7 @@ import 'package:statemachine/statemachine.dart';
 
 void main() {
   group('stream transitions', () {
-    StreamController controllerA, controllerB, controllerC;
+    StreamController<String> controllerA, controllerB, controllerC;
     Machine machine;
     State stateA, stateB, stateC;
 
@@ -22,14 +22,14 @@ void main() {
       stateB = machine.newState('b');
       stateC = machine.newState('c');
 
-      stateA.onStream(controllerB.stream, (event) => stateB.enter());
-      stateA.onStream(controllerC.stream, (event) => stateC.enter());
+      stateA.onStream(controllerB.stream, (String event) => stateB.enter());
+      stateA.onStream(controllerC.stream, (String event) => stateC.enter());
 
-      stateB.onStream(controllerA.stream, (event) => stateA.enter());
-      stateB.onStream(controllerC.stream, (event) => stateC.enter());
+      stateB.onStream(controllerA.stream, (String event) => stateA.enter());
+      stateB.onStream(controllerC.stream, (String event) => stateC.enter());
 
-      stateC.onStream(controllerA.stream, (event) => stateA.enter());
-      stateC.onStream(controllerB.stream, (event) => stateB.enter());
+      stateC.onStream(controllerA.stream, (String event) => stateA.enter());
+      stateC.onStream(controllerB.stream, (String event) => stateB.enter());
     });
     tearDown(() {
       controllerA.close();
@@ -79,7 +79,7 @@ void main() {
     });
   });
   test('conflicting transitions', () {
-    var controller = new StreamController.broadcast(sync: true);
+    var controller = new StreamController<String>.broadcast(sync: true);
 
     try {
       var machine = new Machine();
@@ -88,8 +88,8 @@ void main() {
       var stateB = machine.newState('b');
       var stateC = machine.newState('c');
 
-      stateA.onStream(controller.stream, (value) => stateB.enter());
-      stateA.onStream(controller.stream, (value) => stateC.enter());
+      stateA.onStream(controller.stream, (String value) => stateB.enter());
+      stateA.onStream(controller.stream, (String value) => stateC.enter());
 
       machine.start();
       controller.add('*');
@@ -100,13 +100,13 @@ void main() {
   });
   test('future transitions', () {
     var machine = new Machine();
-    var log = new List();
+    var log = new List<String>();
 
     var stateA = machine.newState('a');
     var stateB = machine.newState('b');
 
-    stateA.onFuture(new Future.delayed(new Duration(milliseconds: 100)),
-        (value) => fail('should never be called'));
+    stateA.onFuture(new Future<String>.delayed(new Duration(milliseconds: 100)),
+        (String value) => fail('should never be called'));
     stateA.onFuture(
         new Future.delayed(new Duration(milliseconds: 10), () => 'something'),
         expectAsync1((String value) {
@@ -116,8 +116,8 @@ void main() {
       log.add('a');
       stateB.enter();
     }));
-    stateB.onFuture(new Future.delayed(new Duration(milliseconds: 1)),
-        expectAsync1((value) {
+    stateB.onFuture(new Future<String>.delayed(new Duration(milliseconds: 1)),
+        expectAsync1((String value) {
       expect(log, ['a']);
       expect(value, isNull);
     }));
@@ -157,7 +157,7 @@ void main() {
     expect(machine.current, stopState);
   });
   test('entry/exit transitions', () {
-    var log = new List();
+    var log = new List<String>();
     var machine = new Machine();
     var stateA = machine.newState('a')
       ..onEntry(() => log.add('on a'))
@@ -172,7 +172,7 @@ void main() {
     expect(log, ['on a', 'off a', 'on b', 'off b', 'on a']);
   });
   test('nested machine', () {
-    var log = new List();
+    var log = new List<String>();
     var inner = new Machine();
     inner.newState('a')
       ..onEntry(() => log.add('inner entry a'))
