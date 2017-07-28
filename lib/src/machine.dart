@@ -4,7 +4,6 @@ import 'package:statemachine/src/state.dart';
 
 /// The state machine itself.
 class Machine {
-
   /// The start state of this machine.
   State _start;
 
@@ -62,5 +61,4 @@ class Machine {
   /// Returns a debug string of this state.
   @override
   String toString() => '${super.toString()}[$current]';
-
 }

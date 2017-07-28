@@ -31,7 +31,6 @@ Callback1<String> keyboardDispatcher([State nextState]) {
 }
 
 void main() {
-
   // Require stdout to be connected to terminal.
   if (!stdout.hasTerminal) {
     stderr.writeln('Unable to connect to terminal window.');
@@ -52,7 +51,8 @@ void main() {
   stdin.lineMode = false;
 
   // Setup a consumable input stream.
-  var input = stdin.asBroadcastStream()
+  var input = stdin
+      .asBroadcastStream()
       .expand((List<int> charCodes) => charCodes)
       .map((int charCode) => new String.fromCharCode(charCode));
 

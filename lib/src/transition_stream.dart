@@ -5,10 +5,8 @@ import 'dart:async';
 import 'package:statemachine/src/callback.dart';
 import 'package:statemachine/src/transition.dart';
 
-
 /// A transition that is triggered through a stream.
 class StreamTransition<T> extends Transition {
-
   /// The stream triggering this transition.
   final Stream<T> stream;
 
@@ -31,5 +29,4 @@ class StreamTransition<T> extends Transition {
     _subscription.cancel();
     _subscription = null;
   }
-
 }

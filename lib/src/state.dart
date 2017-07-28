@@ -14,7 +14,6 @@ import 'package:statemachine/src/transition_timeout.dart';
 
 /// State of the state machine.
 class State {
-
   /// The state machine holding this state.
   final Machine machine;
 
@@ -76,6 +75,4 @@ class State {
   /// Returns a debug string of this state.
   @override
   String toString() => name == null ? super.toString() : 'State[$name]';
-
 }
-

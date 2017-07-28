@@ -110,8 +110,7 @@ void main() {
 
     stateA.onFuture(new Future<String>.delayed(new Duration(milliseconds: 100)),
         (String value) => fail('should never be called'));
-    stateA.onFuture(
-        new Future.delayed(new Duration(milliseconds: 10), () => 'something'),
+    stateA.onFuture(new Future.delayed(new Duration(milliseconds: 10), () => 'something'),
         expectAsync1((String value) {
       expect(log, isEmpty);
       expect(value, 'something');
@@ -138,10 +137,8 @@ void main() {
       expect(machine.current, stateA);
       stateB.enter();
     }));
-    stateA.onTimeout(
-        new Duration(milliseconds: 20), () => fail('should never be called'));
-    stateB.onTimeout(
-        new Duration(milliseconds: 20), () => fail('should never be called'));
+    stateA.onTimeout(new Duration(milliseconds: 20), () => fail('should never be called'));
+    stateB.onTimeout(new Duration(milliseconds: 20), () => fail('should never be called'));
     stateB.onTimeout(new Duration(milliseconds: 10), expectAsync0(() {
       expect(machine.current, stateB);
       stateC.enter();
@@ -188,7 +185,6 @@ void main() {
     outer.start();
     expect(log, ['outer entry a', 'inner entry a']);
     outer.stop();
-    expect(log,
-        ['outer entry a', 'inner entry a', 'outer exit a', 'inner exit a']);
+    expect(log, ['outer entry a', 'inner entry a', 'outer exit a', 'inner exit a']);
   });
 }

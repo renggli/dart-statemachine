@@ -5,10 +5,8 @@ import 'dart:async';
 import 'package:statemachine/src/callback.dart';
 import 'package:statemachine/src/transition.dart';
 
-
 /// A transition that happens automatically after a certain duration elapsed.
 class TimeoutTransition extends Transition {
-
   /// The duration to wait before the timer triggers.
   final Duration duration;
 
@@ -31,5 +29,4 @@ class TimeoutTransition extends Transition {
     _timer.cancel();
     _timer = null;
   }
-
 }

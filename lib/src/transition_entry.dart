@@ -5,7 +5,6 @@ import 'package:statemachine/src/transition.dart';
 
 /// A callback that is triggered when the state activates.
 class EntryTransition extends Transition {
-
   /// The callback to be evaluated when the state activates.
   final Callback0 callback;
 
@@ -16,5 +15,4 @@ class EntryTransition extends Transition {
 
   @override
   void deactivate() => null;
-
 }

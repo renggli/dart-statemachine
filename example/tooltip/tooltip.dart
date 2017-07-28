@@ -1,13 +1,12 @@
 library statemachine.example.tooltip;
 
-import 'dart:html';
 import 'dart:async';
+import 'dart:html';
 
 import 'package:statemachine/statemachine.dart';
 
 /// A pretty HTML tooltip machine.
 class Tooltip {
-
   /// The element this tooltip machine is installed on.
   final Element root;
 
@@ -39,8 +38,13 @@ class Tooltip {
   Element _element;
 
   /// Constructor for tooltip machine.
-  factory Tooltip({Element root: null, String dataKey: 'tooltip', String baseCssClass: 'tooltip',
-      String visibleCssClass: 'visible', int offsetX: 0, int offsetY: 0,
+  factory Tooltip(
+      {Element root: null,
+      String dataKey: 'tooltip',
+      String baseCssClass: 'tooltip',
+      String visibleCssClass: 'visible',
+      int offsetX: 0,
+      int offsetY: 0,
       Duration delay: const Duration(milliseconds: 500)}) {
     return new Tooltip._internal(root == null ? document.body : root, dataKey, baseCssClass,
         visibleCssClass, offsetX, offsetY, delay);
