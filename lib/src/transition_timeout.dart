@@ -1,4 +1,10 @@
-part of statemachine;
+library statemachine.transition.timeout;
+
+import 'dart:async';
+
+import 'package:statemachine/src/callback.dart';
+import 'package:statemachine/src/transition.dart';
+
 
 /// A transition that happens automatically after a certain duration elapsed.
 class TimeoutTransition extends Transition {

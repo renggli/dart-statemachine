@@ -1,4 +1,10 @@
-part of statemachine;
+library statemachine.transition.future;
+
+import 'dart:async';
+
+import 'package:statemachine/src/callback.dart';
+import 'package:statemachine/src/transition.dart';
+
 
 /// A transition that is triggered one time by a future.
 class FutureTransition<T> extends Transition {

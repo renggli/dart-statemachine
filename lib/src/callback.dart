@@ -1,4 +1,4 @@
-part of statemachine;
+library statemachine.callback;
 
 /// A callback with no argument.
 typedef void Callback0();

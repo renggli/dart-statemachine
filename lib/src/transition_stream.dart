@@ -1,4 +1,10 @@
-part of statemachine;
+library statemachine.transition.stream;
+
+import 'dart:async';
+
+import 'package:statemachine/src/callback.dart';
+import 'package:statemachine/src/transition.dart';
+
 
 /// A transition that is triggered through a stream.
 class StreamTransition<T> extends Transition {
@@ -16,7 +22,7 @@ class StreamTransition<T> extends Transition {
   @override
   void activate() {
     assert(_subscription == null);
-    _subscription = stream.listen(this.callback);
+    _subscription = stream.listen(callback);
   }
 
   @override

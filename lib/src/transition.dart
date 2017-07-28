@@ -1,4 +1,4 @@
-part of statemachine;
+library statemachine.transition;
 
 /// A transition from one state to another.
 abstract class Transition {

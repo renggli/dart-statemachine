@@ -1,4 +1,6 @@
-part of statemachine;
+library statemachine.machine;
+
+import 'package:statemachine/src/state.dart';
 
 /// The state machine itself.
 class Machine {
@@ -18,10 +20,8 @@ class Machine {
   /// Returns a new state. The first call to this method defines the start state
   /// of the machine. For debugging purposes an optional [name] can be provided.
   State newState([String name]) {
-    var state = new State._internal(this, name);
-    if (_start == null) {
-      _start = state;
-    }
+    var state = new State(this, name);
+    _start ??= state;
     return state;
   }
 
@@ -37,11 +37,15 @@ class Machine {
   /// Sets this machine to the given [state].
   set current(State state) {
     if (_current != null) {
-      _current.transitions.forEach((each) => each.deactivate());
+      for (var transition in _current.transitions) {
+        transition.deactivate();
+      }
     }
     _current = state;
     if (_current != null) {
-      _current.transitions.forEach((each) => each.activate());
+      for (var transition in _current.transitions) {
+        transition.activate();
+      }
     }
   }
 

@@ -2,8 +2,8 @@ library statemachine.test.statemachine_test;
 
 import 'dart:async';
 
-import 'package:test/test.dart';
 import 'package:statemachine/statemachine.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('stream transitions', () {
@@ -76,6 +76,9 @@ void main() {
       expect(stateA.toString(), 'State[a]');
       expect(stateB.toString(), 'State[b]');
       expect(stateC.toString(), 'State[c]');
+    });
+    test('state without machine', () {
+      expect(() => new State(null), throwsArgumentError);
     });
   });
   test('conflicting transitions', () {
