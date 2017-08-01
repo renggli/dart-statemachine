@@ -66,19 +66,19 @@ void main() {
 
   green.onEntry(() => output('${ansiGreen}GREEN '));
   green.onStream(input, keyboardDispatcher(yellowToRed));
-  green.onTimeout(new Duration(seconds: 10), () => yellowToRed.enter());
+  green.onTimeout(const Duration(seconds: 10), () => yellowToRed.enter());
 
   yellowToRed.onEntry(() => output('${ansiYellow}YELLOW'));
   yellowToRed.onStream(input, keyboardDispatcher());
-  yellowToRed.onTimeout(new Duration(seconds: 1), () => red.enter());
+  yellowToRed.onTimeout(const Duration(seconds: 1), () => red.enter());
 
   yellowToGreen.onEntry(() => output('${ansiYellow}YELLOW'));
   yellowToGreen.onStream(input, keyboardDispatcher());
-  yellowToGreen.onTimeout(new Duration(seconds: 2), () => green.enter());
+  yellowToGreen.onTimeout(const Duration(seconds: 2), () => green.enter());
 
   red.onEntry(() => output('${ansiRed}RED   '));
   red.onStream(input, keyboardDispatcher(yellowToGreen));
-  red.onTimeout(new Duration(seconds: 20), () => yellowToGreen.enter());
+  red.onTimeout(const Duration(seconds: 20), () => yellowToGreen.enter());
 
   // Start the machine
   machine.start();

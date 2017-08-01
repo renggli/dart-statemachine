@@ -37,7 +37,6 @@ linter:
     - avoid_returning_null
     - avoid_returning_this
     - avoid_setters_without_getters
-    - avoid_types_on_closure_parameters
     - await_only_futures
     - camel_case_types
     - constant_identifier_names
@@ -55,7 +54,6 @@ linter:
     - package_api_docs
     - package_prefixed_library_names
     - prefer_adjacent_string_concatenation
-    - prefer_collection_literals
     - prefer_conditional_assignment
     - prefer_const_constructors
     - prefer_constructors_over_static_methods

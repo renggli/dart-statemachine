@@ -108,9 +108,9 @@ void main() {
     var stateA = machine.newState('a');
     var stateB = machine.newState('b');
 
-    stateA.onFuture(new Future<String>.delayed(new Duration(milliseconds: 100)),
+    stateA.onFuture(new Future<String>.delayed(const Duration(milliseconds: 100)),
         (String value) => fail('should never be called'));
-    stateA.onFuture(new Future.delayed(new Duration(milliseconds: 10), () => 'something'),
+    stateA.onFuture(new Future.delayed(const Duration(milliseconds: 10), () => 'something'),
         expectAsync1((String value) {
       expect(log, isEmpty);
       expect(value, 'something');
@@ -118,7 +118,7 @@ void main() {
       log.add('a');
       stateB.enter();
     }));
-    stateB.onFuture(new Future<String>.delayed(new Duration(milliseconds: 1)),
+    stateB.onFuture(new Future<String>.delayed(const Duration(milliseconds: 1)),
         expectAsync1((String value) {
       expect(log, ['a']);
       expect(value, isNull);
@@ -133,13 +133,13 @@ void main() {
     var stateB = machine.newState('b');
     var stateC = machine.newState('c');
 
-    stateA.onTimeout(new Duration(milliseconds: 10), expectAsync0(() {
+    stateA.onTimeout(const Duration(milliseconds: 10), expectAsync0(() {
       expect(machine.current, stateA);
       stateB.enter();
     }));
-    stateA.onTimeout(new Duration(milliseconds: 20), () => fail('should never be called'));
-    stateB.onTimeout(new Duration(milliseconds: 20), () => fail('should never be called'));
-    stateB.onTimeout(new Duration(milliseconds: 10), expectAsync0(() {
+    stateA.onTimeout(const Duration(milliseconds: 20), () => fail('should never be called'));
+    stateB.onTimeout(const Duration(milliseconds: 20), () => fail('should never be called'));
+    stateB.onTimeout(const Duration(milliseconds: 10), expectAsync0(() {
       expect(machine.current, stateB);
       stateC.enter();
     }));
