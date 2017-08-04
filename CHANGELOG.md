@@ -2,45 +2,44 @@
 
 ## 1.3.0
 
-- Reformatted all code
-- Reorganized into micro libraries
+* Reformat all code.
+* Reorganize into micro libraries.
 
 ## 1.2.3
 
-- Replaced deprecated async code
+* Replace deprecated async code.
 
 ## 1.2.2
 
-- Fixed CSS problem in example
+* Fix CSS problem in example.
 
 ## 1.2.1
 
-- Updated documentation
+* Update documentation.
 
 ## 1.2.0
 
-- Fixed linter warnings
-- Updated documentation
-- Addressed missing coverage
+* Fix linter warnings.
+* Update documentation.
+* Address missing coverage.
 
 ## 1.1.1
 
-- Fixed a broken test
+* Fix a broken test.
 
 ## 1.1.0
 
-- Updated to use Travis
+* Update to use Travis.
 
 ## 1.0.6
 
-- Support for nested machines
-- Support for enter/exist state events
+* Support for nested machines.
+* Support for enter/exist state events.
 
 ## 1.0.3
 
-- Improved test coverage
+* Improve test coverage.
 
 ## 1.0.0
 
-- Initial version
-
+* Initial version.
