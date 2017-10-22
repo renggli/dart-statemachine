@@ -14,7 +14,7 @@ void output(String output) {
 }
 
 Callback1<String> keyboardDispatcher([State nextState]) {
-  return (String input) {
+  return (input) {
     switch (input) {
       case ' ':
         if (nextState != null) {
@@ -53,16 +53,16 @@ void main() {
   // Setup a consumable input stream.
   var input = stdin
       .asBroadcastStream()
-      .expand((List<int> charCodes) => charCodes)
-      .map((int charCode) => new String.fromCharCode(charCode));
+      .expand((charCodes) => charCodes)
+      .map((charCode) => new String.fromCharCode(charCode));
 
   // Configure the machine.
   var machine = new Machine();
 
-  var green = machine.newState("green");
-  var yellowToRed = machine.newState("yellow");
-  var yellowToGreen = machine.newState("yellow");
-  var red = machine.newState("red");
+  var green = machine.newState('green');
+  var yellowToRed = machine.newState('yellow');
+  var yellowToGreen = machine.newState('yellow');
+  var red = machine.newState('red');
 
   green.onEntry(() => output('${ansiGreen}GREEN '));
   green.onStream(input, keyboardDispatcher(yellowToRed));

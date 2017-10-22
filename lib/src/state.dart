@@ -21,7 +21,7 @@ class State {
   final String name;
 
   /// The list of transitions of this state.
-  final List<Transition> transitions = new List();
+  final List<Transition> transitions = [];
 
   /// Constructs a new state with an optional name.
   State(this.machine, [this.name]) {

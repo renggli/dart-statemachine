@@ -39,7 +39,7 @@ class Tooltip {
 
   /// Constructor for tooltip machine.
   factory Tooltip(
-      {Element root: null,
+      {Element root,
       String dataKey: 'tooltip',
       String baseCssClass: 'tooltip',
       String visibleCssClass: 'visible',
@@ -59,15 +59,15 @@ class Tooltip {
     _display = machine.newState('display');
     _cooling = machine.newState('cooling');
 
-    _waiting.onStream(root.onMouseOver, (MouseEvent event) {
-      var element = event.target as Element;
+    _waiting.onStream<MouseEvent>(root.onMouseOver, (event) {
+      Element element = event.target;
       if (element.dataset.containsKey(dataKey)) {
         _element = element;
         _heating.enter();
       }
     });
 
-    _heating.onStream(root.onMouseOut, (MouseEvent event) {
+    _heating.onStream(root.onMouseOut, (event) {
       _element = null;
       _waiting.enter();
     });
@@ -76,12 +76,12 @@ class Tooltip {
       _display.enter();
     });
 
-    _display.onStream(root.onMouseOut, (MouseEvent event) {
+    _display.onStream(root.onMouseOut, (event) {
       _cooling.enter();
     });
 
-    _cooling.onStream(root.onMouseOver, (MouseEvent event) {
-      var element = event.target as Element;
+    _cooling.onStream<MouseEvent>(root.onMouseOver, (event) {
+      Element element = event.target;
       if (element.dataset.containsKey(dataKey)) {
         show(_element = element, _element.dataset[dataKey]);
         _display.enter();

@@ -22,14 +22,14 @@ void main() {
       stateB = machine.newState('b');
       stateC = machine.newState('c');
 
-      stateA.onStream(controllerB.stream, (String event) => stateB.enter());
-      stateA.onStream(controllerC.stream, (String event) => stateC.enter());
+      stateA.onStream(controllerB.stream, (event) => stateB.enter());
+      stateA.onStream(controllerC.stream, (event) => stateC.enter());
 
-      stateB.onStream(controllerA.stream, (String event) => stateA.enter());
-      stateB.onStream(controllerC.stream, (String event) => stateC.enter());
+      stateB.onStream(controllerA.stream, (event) => stateA.enter());
+      stateB.onStream(controllerC.stream, (event) => stateC.enter());
 
-      stateC.onStream(controllerA.stream, (String event) => stateA.enter());
-      stateC.onStream(controllerB.stream, (String event) => stateB.enter());
+      stateC.onStream(controllerA.stream, (event) => stateA.enter());
+      stateC.onStream(controllerB.stream, (event) => stateB.enter());
     });
     tearDown(() {
       controllerA.close();
@@ -91,8 +91,8 @@ void main() {
       var stateB = machine.newState('b');
       var stateC = machine.newState('c');
 
-      stateA.onStream(controller.stream, (String value) => stateB.enter());
-      stateA.onStream(controller.stream, (String value) => stateC.enter());
+      stateA.onStream(controller.stream, (value) => stateB.enter());
+      stateA.onStream(controller.stream, (value) => stateC.enter());
 
       machine.start();
       controller.add('*');
@@ -103,15 +103,15 @@ void main() {
   });
   test('future transitions', () {
     var machine = new Machine();
-    var log = new List<String>();
+    var log = <String>[];
 
     var stateA = machine.newState('a');
     var stateB = machine.newState('b');
 
     stateA.onFuture(new Future<String>.delayed(const Duration(milliseconds: 100)),
-        (String value) => fail('should never be called'));
+        (value) => fail('should never be called'));
     stateA.onFuture(new Future.delayed(const Duration(milliseconds: 10), () => 'something'),
-        expectAsync1((String value) {
+        expectAsync1<String, Object>((value) {
       expect(log, isEmpty);
       expect(value, 'something');
       expect(machine.current, stateA);
@@ -119,7 +119,7 @@ void main() {
       stateB.enter();
     }));
     stateB.onFuture(new Future<String>.delayed(const Duration(milliseconds: 1)),
-        expectAsync1((String value) {
+        expectAsync1<String, Object>((value) {
       expect(log, ['a']);
       expect(value, isNull);
     }));
@@ -157,7 +157,7 @@ void main() {
     expect(machine.current, stopState);
   });
   test('entry/exit transitions', () {
-    var log = new List<String>();
+    var log = <String>[];
     var machine = new Machine();
     var stateA = machine.newState('a')
       ..onEntry(() => log.add('on a'))
@@ -172,7 +172,7 @@ void main() {
     expect(log, ['on a', 'off a', 'on b', 'off b', 'on a']);
   });
   test('nested machine', () {
-    var log = new List<String>();
+    var log = <String>[];
     var inner = new Machine();
     inner.newState('a')
       ..onEntry(() => log.add('inner entry a'))
