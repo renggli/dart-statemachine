@@ -117,6 +117,12 @@ activeState.addNested(anotherMachine);
 Misc
 ----
 
+### Resources
+
+- [The Rise Of The State Machines.](https://www.smashingmagazine.com/2018/01/rise-state-machines/)
+- [You are managing state? Think twice.](http://krasimirtsonev.com/blog/article/managing-state-in-javascript-with-state-machines-stent)
+- [Robust React User Interfaces with Finite State Machines.](https://css-tricks.com/robust-react-user-interfaces-with-finite-state-machines/)
+
 ### License
 
 The MIT License, see [LICENSE](https://github.com/renggli/dart-statemachine/raw/master/LICENSE).
