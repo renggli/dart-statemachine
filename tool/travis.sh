@@ -3,11 +3,10 @@
 # Fast fail the script on failures.
 set -e
 
-# Verify that the libraries are error free.
-dartanalyzer --fatal-warnings $(find . -name "*.dart")
-
-# Verify that all the tests pass.
-pub run test
+# Verify the
+if [ "${TRAVIS_DART_VERSION}" = "dev" ]; then
+  dart --preview-dart-2 test/all_tests.dart
+fi
 
 # Verify the coverage of the tests.
 if [ "${COVERALLS_TOKEN}" ] && [ "${TRAVIS_DART_VERSION}" = "stable" ]; then
