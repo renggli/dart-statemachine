@@ -3,7 +3,7 @@
 # Fast fail the script on failures.
 set -e
 
-# Verify the
+# Verify Dart 2.0 strict mode compatibility.
 if [ "${TRAVIS_DART_VERSION}" = "dev" ]; then
   dart --preview-dart-2 test/all_tests.dart
 fi
