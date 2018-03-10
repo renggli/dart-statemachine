@@ -108,9 +108,11 @@ void main() {
     var stateA = machine.newState('a');
     var stateB = machine.newState('b');
 
-    stateA.onFuture(new Future<String>.delayed(const Duration(milliseconds: 100)),
+    stateA.onFuture(
+        new Future<String>.delayed(const Duration(milliseconds: 100)),
         (value) => fail('should never be called'));
-    stateA.onFuture(new Future.delayed(const Duration(milliseconds: 10), () => 'something'),
+    stateA.onFuture(
+        new Future.delayed(const Duration(milliseconds: 10), () => 'something'),
         expectAsync1<String, Object>((value) {
       expect(log, isEmpty);
       expect(value, 'something');
@@ -137,8 +139,10 @@ void main() {
       expect(machine.current, stateA);
       stateB.enter();
     }));
-    stateA.onTimeout(const Duration(milliseconds: 20), () => fail('should never be called'));
-    stateB.onTimeout(const Duration(milliseconds: 20), () => fail('should never be called'));
+    stateA.onTimeout(
+        const Duration(milliseconds: 20), () => fail('should never be called'));
+    stateB.onTimeout(
+        const Duration(milliseconds: 20), () => fail('should never be called'));
     stateB.onTimeout(const Duration(milliseconds: 10), expectAsync0(() {
       expect(machine.current, stateB);
       stateC.enter();
@@ -185,6 +189,7 @@ void main() {
     outer.start();
     expect(log, ['outer entry a', 'inner entry a']);
     outer.stop();
-    expect(log, ['outer entry a', 'inner entry a', 'outer exit a', 'inner exit a']);
+    expect(log,
+        ['outer entry a', 'inner entry a', 'outer exit a', 'inner exit a']);
   });
 }
