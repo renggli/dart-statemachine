@@ -9,20 +9,18 @@ State Machine
 [![GitHub Stars](https://img.shields.io/github/stars/renggli/dart-statemachine.svg)](https://github.com/renggli/dart-statemachine/stargazers)
 [![GitHub License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/renggli/dart-statemachine/master/LICENSE)
 
-A simple, but generic state machine framework for Dart.
+A simple, yet powerful state machine framework for Dart supporting Flutter and web apps.
 
 This library is open source, stable and well tested. Development happens on [GitHub](https://github.com/renggli/dart-statemachine). Feel free to report issues or create a pull-request there. General questions are best asked on [StackOverflow](http://stackoverflow.com/questions/tagged/statemachine+dart).
 
-Up-to-date [class documentation](http://www.dartdocs.org/documentation/statemachine/latest/index.html) is created with every release.
-
-This code was inspired by work of Vassily Boykov on his [Smalltalk Announcement framework](http://www.cincomsmalltalk.com/userblogs/vbykov/blogView?searchCategory=Announcements%20Framework).
+The package is hosted on [dart packages](https://pub.dartlang.org/packages/statemachine). Up-to-date [class documentation](https://pub.dartlang.org/documentation/statemachine/latest/) is created with every release.
 
 Tutorial
 --------
 
 ### Installation
 
-Follow the _Installing_ instructions on https://pub.dartlang.org/packages/statemachine.
+Follow the installation instructions on [dart packages](https://pub.dartlang.org/packages/statemachine#-installing-tab-).
 
 Import the package into your Dart code using:
 
