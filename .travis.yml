@@ -14,9 +14,9 @@ jobs:
   - stage: test
     script: pub run build_runner test -- --platform chrome
 stages:
-  - analyze
-  - build
-  - test
+- analyze
+- build
+- test
 
 sudo: required
 cache:
