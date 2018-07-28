@@ -35,7 +35,7 @@ import 'package:statemachine/statemachine.dart';
 To create a new state machine instantiate `Machine`:
 
 ```dart
-var machine = new Machine();
+var machine = Machine();
 ```
 
 ### Defining states
@@ -101,7 +101,7 @@ startState.onFuture(computation, (value) => activeState.enter());
 Also, you can automatically trigger callbacks after a timeout using `State.onTimeout`. The following snippet calls the callback 1 second after the active state is entered and falls back to the inactive state:
 
 ```dart
-activeState.onTimeout(const Duration({seconds: 1}), () => startState.enter());
+activeState.onTimeout(Duration({seconds: 1}), () => startState.enter());
 ```
 
 Callbacks often contain code to check for additional constraints and update other objects or UI element before entering a different state. See the tooltip example directory for a more complete illustration of the functionality provided by this library.

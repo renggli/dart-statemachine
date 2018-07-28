@@ -26,10 +26,10 @@ class Tooltip {
   final int offsetY;
 
   /// The dom element that shows the tooltip contents.
-  final Element tooltip = new DivElement();
+  final Element tooltip = DivElement();
 
   /// The actual state machine for the tooltips.
-  final Machine machine = new Machine();
+  final Machine machine = Machine();
 
   /// Various (internal) states of the tooltip machine.
   State _waiting, _heating, _display, _cooling;
@@ -40,13 +40,13 @@ class Tooltip {
   /// Constructor for tooltip machine.
   factory Tooltip(
       {Element root,
-      String dataKey: 'tooltip',
-      String baseCssClass: 'tooltip',
-      String visibleCssClass: 'visible',
-      int offsetX: 0,
-      int offsetY: 0,
-      Duration delay: const Duration(milliseconds: 500)}) {
-    return new Tooltip._internal(root == null ? document.body : root, dataKey,
+      String dataKey = 'tooltip',
+      String baseCssClass = 'tooltip',
+      String visibleCssClass = 'visible',
+      int offsetX = 0,
+      int offsetY = 0,
+      Duration delay = const Duration(milliseconds: 500)}) {
+    return Tooltip._internal(root == null ? document.body : root, dataKey,
         baseCssClass, visibleCssClass, offsetX, offsetY, delay);
   }
 
@@ -67,7 +67,7 @@ class Tooltip {
       }
     });
 
-    _heating.onStream(root.onMouseOut, (event) {
+    _heating.onStream<MouseEvent>(root.onMouseOut, (event) {
       _element = null;
       _waiting.enter();
     });
@@ -76,7 +76,7 @@ class Tooltip {
       _display.enter();
     });
 
-    _display.onStream(root.onMouseOut, (event) {
+    _display.onStream<MouseEvent>(root.onMouseOut, (event) {
       _cooling.enter();
     });
 

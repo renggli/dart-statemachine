@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.0
+
+* Drop Dart 1.0 compatibility.
+
 ## 1.3.0
 
 * Reformat all code.

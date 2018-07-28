@@ -26,7 +26,7 @@ class State {
   /// Constructs a new state with an optional name.
   State(this.machine, [this.name]) {
     if (machine == null) {
-      throw new ArgumentError('States must be assiciated with a machine.');
+      throw ArgumentError('States must be assiciated with a machine.');
     }
   }
 
@@ -37,34 +37,34 @@ class State {
 
   /// Triggers the [callback] when the state is entered.
   void onEntry(Callback0 callback) {
-    addTransition(new EntryTransition(callback));
+    addTransition(EntryTransition(callback));
   }
 
   /// Triggers the [callback] when the state is left.
   void onExit(Callback0 callback) {
-    addTransition(new ExitTransition(callback));
+    addTransition(ExitTransition(callback));
   }
 
   /// Triggers the [callback] when [stream] triggers an event. The stream
   /// must be a broadcast stream.
   void onStream<T>(Stream<T> stream, Callback1<T> callback) {
-    addTransition(new StreamTransition<T>(stream, callback));
+    addTransition(StreamTransition<T>(stream, callback));
   }
 
   /// Triggers the [callback] when [future] provides a value.
   void onFuture<T>(Future<T> future, Callback1<T> callback) {
-    addTransition(new FutureTransition(future, callback));
+    addTransition(FutureTransition(future, callback));
   }
 
   /// Triggers the [callback] when [duration] elapses.
   void onTimeout(Duration duration, Callback0 callback) {
-    addTransition(new TimeoutTransition(duration, callback));
+    addTransition(TimeoutTransition(duration, callback));
   }
 
   /// Adds a nested [machine] that gets started when this state is entered, and
   /// stopped when this state is left.
   void addNested(Machine machine) {
-    addTransition(new NestedTransition(machine));
+    addTransition(NestedTransition(machine));
   }
 
   /// Call this method to enter this state.

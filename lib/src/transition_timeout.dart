@@ -20,7 +20,7 @@ class TimeoutTransition extends Transition {
   @override
   void activate() {
     assert(_timer == null);
-    _timer = new Timer(duration, callback);
+    _timer = Timer(duration, callback);
   }
 
   @override

@@ -54,10 +54,10 @@ void main() {
   var input = stdin
       .asBroadcastStream()
       .expand((charCodes) => charCodes)
-      .map((charCode) => new String.fromCharCode(charCode));
+      .map((charCode) => String.fromCharCode(charCode));
 
   // Configure the machine.
-  var machine = new Machine();
+  var machine = Machine();
 
   var green = machine.newState('green');
   var yellowToRed = machine.newState('yellow');
