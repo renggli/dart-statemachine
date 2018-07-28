@@ -5,18 +5,14 @@ jobs:
   include:
   - stage: analyze
     script: dartanalyzer --fatal-warnings .
-  - stage: format
+  - stage: analyze
     script: dartfmt --dry-run --set-exit-if-changed .
-  - stage: build
-    script: pub run build_runner build test
   - stage: test
-    script: pub run build_runner test -- --platform vm
+    script: pub run test --platform vm
   - stage: test
-    script: pub run build_runner test -- --platform chrome
+    script: pub run test --platform chrome
 stages:
   - analyze
-  - format
-  - build
   - test
 
 sudo: required
