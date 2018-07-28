@@ -1,15 +1,26 @@
 language: dart
-sudo: required
-dart:
-- dev
-dart_task:
-- dartanalyzer
-- test: --platform vm
-- test: --platform chrome
-matrix:
+dart: dev
+
+jobs:
   include:
-  - dart: dev
-    dart_task: dartfmt
+  - stage: analyze
+    script: dartanalyzer --fatal-warnings .
+  - stage: format
+    script: dartfmt --dry-run --set-exit-if-changed .
+  - stage: build
+    script: pub run build_runner build test
+  - stage: test
+    script: pub run build_runner test -- --platform vm
+  - stage: test
+    script: pub run build_runner test -- --platform chrome
+stages:
+  - analyze
+  - format
+  - build
+  - test
+
+sudo: required
 cache:
   directories:
   - $HOME/.pub-cache
+  - .dart_tool/build
