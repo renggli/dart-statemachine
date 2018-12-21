@@ -51,34 +51,34 @@ void main() {
   stdin.lineMode = false;
 
   // Setup a consumable input stream.
-  var input = stdin
+  final input = stdin
       .asBroadcastStream()
       .expand((charCodes) => charCodes)
       .map((charCode) => String.fromCharCode(charCode));
 
   // Configure the machine.
-  var machine = Machine();
+  final machine = Machine();
 
-  var green = machine.newState('green');
-  var yellowToRed = machine.newState('yellow');
-  var yellowToGreen = machine.newState('yellow');
-  var red = machine.newState('red');
+  final green = machine.newState('green');
+  final yellowToRed = machine.newState('yellow');
+  final yellowToGreen = machine.newState('yellow');
+  final red = machine.newState('red');
 
   green.onEntry(() => output('${ansiGreen}GREEN '));
   green.onStream(input, keyboardDispatcher(yellowToRed));
-  green.onTimeout(const Duration(seconds: 10), () => yellowToRed.enter());
+  green.onTimeout(const Duration(seconds: 10), yellowToRed.enter);
 
   yellowToRed.onEntry(() => output('${ansiYellow}YELLOW'));
   yellowToRed.onStream(input, keyboardDispatcher());
-  yellowToRed.onTimeout(const Duration(seconds: 1), () => red.enter());
+  yellowToRed.onTimeout(const Duration(seconds: 1), red.enter);
 
   yellowToGreen.onEntry(() => output('${ansiYellow}YELLOW'));
   yellowToGreen.onStream(input, keyboardDispatcher());
-  yellowToGreen.onTimeout(const Duration(seconds: 2), () => green.enter());
+  yellowToGreen.onTimeout(const Duration(seconds: 2), green.enter);
 
   red.onEntry(() => output('${ansiRed}RED   '));
   red.onStream(input, keyboardDispatcher(yellowToGreen));
-  red.onTimeout(const Duration(seconds: 20), () => yellowToGreen.enter());
+  red.onTimeout(const Duration(seconds: 20), yellowToGreen.enter);
 
   // Start the machine
   machine.start();

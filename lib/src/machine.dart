@@ -19,7 +19,7 @@ class Machine {
   /// Returns a new state. The first call to this method defines the start state
   /// of the machine. For debugging purposes an optional [name] can be provided.
   State newState([String name]) {
-    var state = State(this, name);
+    final state = State(this, name);
     _start ??= state;
     return state;
   }

@@ -60,7 +60,7 @@ class Tooltip {
     _cooling = machine.newState('cooling');
 
     _waiting.onStream<MouseEvent>(root.onMouseOver, (event) {
-      Element element = event.target;
+      final Element element = event.target;
       if (element.dataset.containsKey(dataKey)) {
         _element = element;
         _heating.enter();
@@ -81,7 +81,7 @@ class Tooltip {
     });
 
     _cooling.onStream<MouseEvent>(root.onMouseOver, (event) {
-      Element element = event.target;
+      final Element element = event.target;
       if (element.dataset.containsKey(dataKey)) {
         show(_element = element, _element.dataset[dataKey]);
         _display.enter();
@@ -98,8 +98,8 @@ class Tooltip {
 
   /// Shows tooltip with [message] relative to [element].
   void show(Element element, String message) {
-    var left = element.offset.left + element.offset.width / 2 + offsetX;
-    var top = element.offset.top + element.offset.height + offsetY;
+    final left = element.offset.left + element.offset.width / 2 + offsetX;
+    final top = element.offset.top + element.offset.height + offsetY;
     tooltip.style.left = '${left}px';
     tooltip.style.top = '${top}px';
     tooltip.innerHtml = message;
