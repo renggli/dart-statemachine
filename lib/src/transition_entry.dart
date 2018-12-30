@@ -14,5 +14,5 @@ class EntryTransition extends Transition {
   void activate() => callback();
 
   @override
-  void deactivate() => null;
+  void deactivate() {}
 }

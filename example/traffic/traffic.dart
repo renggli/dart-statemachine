@@ -13,22 +13,20 @@ void output(String output) {
   stdout.write('\r$output$ansiReset');
 }
 
-Callback1<String> keyboardDispatcher([State nextState]) {
-  return (input) {
-    switch (input) {
-      case ' ':
-        if (nextState != null) {
-          nextState.enter();
-        }
-        break;
-      case 'q':
-        stdin.echoMode = true;
-        stdin.lineMode = true;
-        exit(0);
-        break;
-    }
-  };
-}
+Callback1<String> keyboardDispatcher([State nextState]) => (input) {
+      switch (input) {
+        case ' ':
+          if (nextState != null) {
+            nextState.enter();
+          }
+          break;
+        case 'q':
+          stdin.echoMode = true;
+          stdin.lineMode = true;
+          exit(0);
+          break;
+      }
+    };
 
 void main() {
   // Require stdout to be connected to terminal.

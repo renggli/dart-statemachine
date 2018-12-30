@@ -1,7 +1,7 @@
 library statemachine.callback;
 
 /// A callback with no argument.
-typedef void Callback0();
+typedef Callback0 = void Function();
 
 /// A callback with one argument.
-typedef void Callback1<T>(T value);
+typedef Callback1<T> = void Function(T value);

@@ -11,7 +11,7 @@ class ExitTransition extends Transition {
   ExitTransition(this.callback);
 
   @override
-  void activate() => null;
+  void activate() {}
 
   @override
   void deactivate() => callback();

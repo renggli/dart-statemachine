@@ -39,16 +39,15 @@ class Tooltip {
 
   /// Constructor for tooltip machine.
   factory Tooltip(
-      {Element root,
-      String dataKey = 'tooltip',
-      String baseCssClass = 'tooltip',
-      String visibleCssClass = 'visible',
-      int offsetX = 0,
-      int offsetY = 0,
-      Duration delay = const Duration(milliseconds: 500)}) {
-    return Tooltip._internal(root == null ? document.body : root, dataKey,
-        baseCssClass, visibleCssClass, offsetX, offsetY, delay);
-  }
+          {Element root,
+          String dataKey = 'tooltip',
+          String baseCssClass = 'tooltip',
+          String visibleCssClass = 'visible',
+          int offsetX = 0,
+          int offsetY = 0,
+          Duration delay = const Duration(milliseconds: 500)}) =>
+      Tooltip._internal(root == null ? document.body : root, dataKey,
+          baseCssClass, visibleCssClass, offsetX, offsetY, delay);
 
   Tooltip._internal(this.root, this.dataKey, this.baseCssClass,
       this.visibleCssClass, this.offsetX, this.offsetY, Duration delay) {
