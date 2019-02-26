@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.0
+
+* Dart 2.2 compatibility and requirement.
+
 ## 1.4.0
 
 * Drop Dart 1.0 compatibility.
