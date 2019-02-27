@@ -1,5 +1,5 @@
 name: statemachine
-version: 1.4.3
+version: 1.5.0
 
 author: Lukas Renggli <renggli@gmail.com>
 homepage: https://github.com/renggli/dart-statemachine
