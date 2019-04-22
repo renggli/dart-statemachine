@@ -36,13 +36,13 @@ class Machine {
   /// Sets this machine to the given [state].
   set current(State state) {
     if (_current != null) {
-      for (var transition in _current.transitions) {
+      for (final transition in _current.transitions) {
         transition.deactivate();
       }
     }
     _current = state;
     if (_current != null) {
-      for (var transition in _current.transitions) {
+      for (final transition in _current.transitions) {
         transition.activate();
       }
     }

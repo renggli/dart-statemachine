@@ -19,13 +19,13 @@ class TimeoutTransition extends Transition {
 
   @override
   void activate() {
-    assert(_timer == null);
+    assert(_timer == null, 'timer must be null');
     _timer = Timer(duration, callback);
   }
 
   @override
   void deactivate() {
-    assert(_timer != null);
+    assert(_timer != null, 'timer must not be null');
     _timer.cancel();
     _timer = null;
   }

@@ -23,7 +23,7 @@ class FutureTransition<T> extends Transition {
 
   @override
   void activate() {
-    assert(!_active);
+    assert(!_active, 'active must be false');
     _active = true;
     if (!_started) {
       _started = true;
@@ -44,7 +44,7 @@ class FutureTransition<T> extends Transition {
 
   @override
   void deactivate() {
-    assert(_active);
+    assert(_active, 'active must be true');
     _active = false;
   }
 }

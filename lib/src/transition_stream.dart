@@ -19,13 +19,13 @@ class StreamTransition<T> extends Transition {
 
   @override
   void activate() {
-    assert(_subscription == null);
+    assert(_subscription == null, 'subscription must be null');
     _subscription = stream.listen(callback);
   }
 
   @override
   void deactivate() {
-    assert(_subscription != null);
+    assert(_subscription != null, 'subscription must not be null');
     _subscription.cancel();
     _subscription = null;
   }
