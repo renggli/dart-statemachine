@@ -1,5 +1,5 @@
 name: statemachine
-version: 1.5.0
+version: 1.6.0
 
 author: Lukas Renggli <renggli@gmail.com>
 homepage: https://github.com/renggli/dart-statemachine
@@ -10,5 +10,5 @@ environment:
   sdk: '>=2.3.0 <3.0.0'
 dev_dependencies:
   test: ^1.6.0
-  build_runner: ^1.3.0
-  build_web_compilers: ^1.2.0
+  build_runner: ^1.4.0
+  build_web_compilers: ^2.0.0

@@ -4,7 +4,12 @@ This package contains examples to illustrate the use of [StateMachine](https://g
 
 ### Custom Tooltip
 
-To run the tooltip example execute `webdev serve` from the root directory of this package and point your browser to [localhost:8081/tooltip/example.html](http://localhost:8081/tooltip/example.html)
+To run the tooltip example execute the following commands from the command line and navigate to http://localhost:8080/tooltip/example.html:
+
+```bash
+pub global activate webdev
+webdev serve
+```
 
 ### Traffic Lights
 
