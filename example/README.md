@@ -8,7 +8,7 @@ To run the tooltip example execute the following commands from the command line 
 
 ```bash
 pub global activate webdev
-webdev serve
+webdev serve example:8080
 ```
 
 ### Traffic Lights

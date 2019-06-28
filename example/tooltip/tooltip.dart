@@ -46,8 +46,8 @@ class Tooltip {
           int offsetX = 0,
           int offsetY = 0,
           Duration delay = const Duration(milliseconds: 500)}) =>
-      Tooltip._internal(root == null ? document.body : root, dataKey,
-          baseCssClass, visibleCssClass, offsetX, offsetY, delay);
+      Tooltip._internal(root ?? document.body, dataKey, baseCssClass,
+          visibleCssClass, offsetX, offsetY, delay);
 
   Tooltip._internal(this.root, this.dataKey, this.baseCssClass,
       this.visibleCssClass, this.offsetX, this.offsetY, Duration delay) {
