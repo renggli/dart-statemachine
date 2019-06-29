@@ -118,11 +118,13 @@ void main() {
       expect(machine.current, stateA);
       log.add('a');
       stateB.enter();
+      return null;
     }));
     stateB.onFuture<String>(Future.delayed(const Duration(milliseconds: 1)),
         expectAsync1<String, Object>((value) {
       expect(log, ['a']);
       expect(value, isNull);
+      return null;
     }));
 
     machine.start();
