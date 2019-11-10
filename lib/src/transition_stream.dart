@@ -2,8 +2,8 @@ library statemachine.transition.stream;
 
 import 'dart:async';
 
-import 'package:statemachine/src/callback.dart';
-import 'package:statemachine/src/transition.dart';
+import 'callback.dart';
+import 'transition.dart';
 
 /// A transition that is triggered through a stream.
 class StreamTransition<T> extends Transition {

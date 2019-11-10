@@ -2,15 +2,15 @@ library statemachine.state;
 
 import 'dart:async';
 
-import 'package:statemachine/src/callback.dart';
-import 'package:statemachine/src/machine.dart';
-import 'package:statemachine/src/transition.dart';
-import 'package:statemachine/src/transition_entry.dart';
-import 'package:statemachine/src/transition_exit.dart';
-import 'package:statemachine/src/transition_future.dart';
-import 'package:statemachine/src/transition_nested.dart';
-import 'package:statemachine/src/transition_stream.dart';
-import 'package:statemachine/src/transition_timeout.dart';
+import 'callback.dart';
+import 'machine.dart';
+import 'transition.dart';
+import 'transition_entry.dart';
+import 'transition_exit.dart';
+import 'transition_future.dart';
+import 'transition_nested.dart';
+import 'transition_stream.dart';
+import 'transition_timeout.dart';
 
 /// State of the state machine.
 class State {

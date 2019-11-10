@@ -1,6 +1,6 @@
 library statemachine.machine;
 
-import 'package:statemachine/src/state.dart';
+import 'state.dart';
 
 /// The state machine itself.
 class Machine {
