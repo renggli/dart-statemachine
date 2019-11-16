@@ -9,6 +9,6 @@ description: A simple, yet powerful state machine framework for Dart supporting
 environment:
   sdk: '>=2.6.0 <3.0.0'
 dev_dependencies:
-  test: ^1.6.0
-  build_runner: ^1.4.0
-  build_web_compilers: ^2.1.0
+  test: ^1.9.0
+  build_runner: ^1.7.0
+  build_web_compilers: ^2.7.0
