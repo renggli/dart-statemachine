@@ -1,7 +1,7 @@
 State Machine
 =============
 
-[![Pub Package](https://img.shields.io/pub/v/statemachine.svg)](https://pub.dartlang.org/packages/statemachine)
+[![Pub Package](https://img.shields.io/pub/v/statemachine.svg)](https://pub.dev/packages/statemachine)
 [![Build Status](https://travis-ci.org/renggli/dart-statemachine.svg)](https://travis-ci.org/renggli/dart-statemachine)
 [![Coverage Status](https://coveralls.io/repos/renggli/dart-statemachine/badge.svg)](https://coveralls.io/r/renggli/dart-statemachine)
 [![GitHub Issues](https://img.shields.io/github/issues/renggli/dart-statemachine.svg)](https://github.com/renggli/dart-statemachine/issues)
@@ -13,7 +13,7 @@ A simple, yet powerful state machine framework for Dart supporting Flutter and w
 
 This library is open source, stable and well tested. Development happens on [GitHub](https://github.com/renggli/dart-statemachine). Feel free to report issues or create a pull-request there. General questions are best asked on [StackOverflow](http://stackoverflow.com/questions/tagged/statemachine+dart).
 
-The package is hosted on [dart packages](https://pub.dartlang.org/packages/statemachine). Up-to-date [class documentation](https://pub.dartlang.org/documentation/statemachine/latest/) is created with every release.
+The package is hosted on [dart packages](https://pub.dev/packages/statemachine). Up-to-date [class documentation](https://pub.dev/documentation/statemachine/latest/) is created with every release.
 
 
 Tutorial
@@ -21,7 +21,7 @@ Tutorial
 
 ### Installation
 
-Follow the installation instructions on [dart packages](https://pub.dartlang.org/packages/statemachine#-installing-tab-).
+Follow the installation instructions on [dart packages](https://pub.dev/packages/statemachine#-installing-tab-).
 
 Import the package into your Dart code using:
 

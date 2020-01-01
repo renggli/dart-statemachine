@@ -1,6 +1,6 @@
 # State Machine Examples
 
-This package contains examples to illustrate the use of [StateMachine](https://github.com/renggli/dart-statemachine). A tutorial and full documentation is contained in the [package description](https://pub.dartlang.org/packages/statemachine) and [API documentation](https://pub.dartlang.org/documentation/statemachine/latest/).
+This package contains examples to illustrate the use of [StateMachine](https://github.com/renggli/dart-statemachine). A tutorial and full documentation is contained in the [package description](https://pub.dev/packages/statemachine) and [API documentation](https://pub.dev/documentation/statemachine/latest/).
 
 ### Custom Tooltip
 
