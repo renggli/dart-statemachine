@@ -1,7 +1,6 @@
 name: statemachine
 version: 1.6.0
 
-author: Lukas Renggli <renggli@gmail.com>
 homepage: https://github.com/renggli/dart-statemachine
 description: A simple, yet powerful state machine framework for Dart supporting
   Flutter and web apps.
