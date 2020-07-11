@@ -65,7 +65,7 @@ To start a state machine and set its state to its starting state call `Machine.s
 machine.start();
 ```
 
-Similarly you can stop a machine by calling `Machine.stop`.
+Similarly, you can stop a machine by calling `Machine.stop`.
 
 ### Transitioning between states
 
@@ -81,7 +81,7 @@ activeState.enter();
 
 #### Event triggered transition
 
-You can define transitions between states that are triggered by events of any kind using `State.onStream`. The example below registers for click events when the inactive state is entered. In case of a click event the callback is executed and the state machine transitions into the active state:
+You can define transitions between states that are triggered by events of any kind using `State.onStream`. The example below registers for click events when the inactive state is entered. In case of a click event the callback is executed, and the state machine transitions into the active state:
 
 ```dart
 startState.onStream(element.onClick, (value) => activeState.enter());
@@ -89,7 +89,7 @@ startState.onStream(element.onClick, (value) => activeState.enter());
 
 #### Future completion transition
 
-Also, transitions can be triggered by the completion of a future using `State.onFuture`. Since futures cannot be suspended or cancelled, the future continues to run even if the owning state is deactivated. Should the state be activated and the future value is already present, then the value is immediately supplied into the callback. Further activations have no effect.
+Also, transitions can be triggered by the completion of a future using `State.onFuture`. Since futures cannot be suspended or cancelled, the future continues to run even if the owning state is deactivated. Should the state be activated, and the future value is already present, then the value is immediately supplied into the callback. Further activations have no effect.
 
 ```dart
 startState.onFuture(computation, (value) => activeState.enter());
