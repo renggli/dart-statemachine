@@ -26,7 +26,7 @@ class State {
   /// Constructs a new state with an optional name.
   State(this.machine, [this.name]) {
     if (machine == null) {
-      throw ArgumentError('States must be assiciated with a machine.');
+      throw ArgumentError('States must be associated with a machine.');
     }
   }
 
