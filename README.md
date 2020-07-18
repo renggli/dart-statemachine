@@ -11,7 +11,7 @@ State Machine
 
 A simple, yet powerful state machine framework for Dart supporting Flutter and web apps.
 
-This library is open source, stable and well tested. Development happens on [GitHub](https://github.com/renggli/dart-statemachine). Feel free to report issues or create a pull-request there. General questions are best asked on [StackOverflow](http://stackoverflow.com/questions/tagged/statemachine+dart).
+This library is open source, stable and well tested. Development happens on [GitHub](https://github.com/renggli/dart-statemachine). Feel free to report issues or create a pull-request there. General questions are best asked on [StackOverflow](https://stackoverflow.com/questions/tagged/statemachine+dart).
 
 The package is hosted on [dart packages](https://pub.dev/packages/statemachine). Up-to-date [class documentation](https://pub.dev/documentation/statemachine/latest/) is created with every release.
 
@@ -119,7 +119,7 @@ Misc
 ### Resources
 
 - [The Rise Of The State Machines.](https://www.smashingmagazine.com/2018/01/rise-state-machines/)
-- [You are managing state? Think twice.](http://krasimirtsonev.com/blog/article/managing-state-in-javascript-with-state-machines-stent)
+- [You are managing state? Think twice.](https://krasimirtsonev.com/blog/article/managing-state-in-javascript-with-state-machines-stent)
 - [Robust React User Interfaces with Finite State Machines.](https://css-tricks.com/robust-react-user-interfaces-with-finite-state-machines/)
 
 ### License
