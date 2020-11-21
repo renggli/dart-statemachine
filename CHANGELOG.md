@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.0
+
+* Dart 2.12 requirement and null-safety.
+
 ## 1.6.0
 
 * Dart 2.3 compatibility and requirement.

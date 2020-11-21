@@ -13,20 +13,14 @@ class StreamTransition<T> extends Transition {
   /// The callback to be evaluated when the stream triggers.
   final Callback1<T> callback;
 
-  StreamSubscription<T> _subscription;
+  /// Current subscription
+  late StreamSubscription<T> _subscription;
 
   StreamTransition(this.stream, this.callback);
 
   @override
-  void activate() {
-    assert(_subscription == null, 'subscription must be null');
-    _subscription = stream.listen(callback);
-  }
+  void activate() => _subscription = stream.listen(callback);
 
   @override
-  void deactivate() {
-    assert(_subscription != null, 'subscription must not be null');
-    _subscription.cancel();
-    _subscription = null;
-  }
+  void deactivate() => _subscription.cancel();
 }

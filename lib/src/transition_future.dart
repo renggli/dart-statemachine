@@ -17,7 +17,7 @@ class FutureTransition<T> extends Transition {
   bool _started = false;
   bool _waiting = false;
 
-  T _value;
+  late T _value;
 
   FutureTransition(this.future, this.callback);
 
@@ -38,13 +38,9 @@ class FutureTransition<T> extends Transition {
     } else if (_waiting) {
       callback(_value);
       _waiting = false;
-      _value = null;
     }
   }
 
   @override
-  void deactivate() {
-    assert(_active, 'active must be true');
-    _active = false;
-  }
+  void deactivate() => _active = false;
 }

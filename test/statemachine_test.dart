@@ -7,9 +7,9 @@ import 'package:test/test.dart';
 
 void main() {
   group('stream transitions', () {
-    StreamController<String> controllerA, controllerB, controllerC;
-    Machine machine;
-    State stateA, stateB, stateC;
+    late StreamController<String> controllerA, controllerB, controllerC;
+    late Machine machine;
+    late State stateA, stateB, stateC;
 
     setUp(() {
       controllerA = StreamController.broadcast(sync: true);
@@ -77,9 +77,6 @@ void main() {
       expect(stateB.toString(), 'State[b]');
       expect(stateC.toString(), 'State[c]');
     });
-    test('state without machine', () {
-      expect(() => State(null), throwsArgumentError);
-    });
   });
   test('conflicting transitions', () {
     final controller = StreamController<String>.broadcast(sync: true);
@@ -108,23 +105,32 @@ void main() {
     final stateA = machine.newState('a');
     final stateB = machine.newState('b');
 
-    stateA.onFuture<String>(Future.delayed(const Duration(milliseconds: 100)),
+    stateA.onFuture<String>(
+        Future.delayed(
+          const Duration(milliseconds: 100),
+          () => 'something',
+        ),
         (value) => fail('should never be called'));
     stateA.onFuture<String>(
-        Future.delayed(const Duration(milliseconds: 10), () => 'something'),
-        expectAsync1<String, Object>((value) {
+        Future.delayed(
+          const Duration(milliseconds: 10),
+          () => 'something else',
+        ), expectAsync1<String, Object>((value) {
       expect(log, isEmpty);
-      expect(value, 'something');
+      expect(value, 'something else');
       expect(machine.current, stateA);
       log.add('a');
       stateB.enter();
-      return null;
+      return 'done';
     }));
-    stateB.onFuture<String>(Future.delayed(const Duration(milliseconds: 1)),
-        expectAsync1<String, Object>((value) {
+    stateB.onFuture<String>(
+        Future.delayed(
+          const Duration(milliseconds: 1),
+          () => 'completer',
+        ), expectAsync1<String, Object>((value) {
       expect(log, ['a']);
-      expect(value, isNull);
-      return null;
+      expect(value, 'completer');
+      return 'done';
     }));
 
     machine.start();

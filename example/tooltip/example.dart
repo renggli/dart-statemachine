@@ -1,7 +1,7 @@
 library statemachine.example.tooltip.example;
 
+import 'dart:html';
+
 import 'tooltip.dart';
 
-void main() {
-  Tooltip(offsetX: -16, offsetY: 8);
-}
+void main() => Tooltip(document.body!, offsetX: -16, offsetY: 8);

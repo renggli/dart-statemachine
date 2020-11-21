@@ -13,20 +13,14 @@ class TimeoutTransition extends Transition {
   /// The callback to be evaluated when the timer triggers.
   final Callback0 callback;
 
-  Timer _timer;
+  /// Time triggering after a timeout.
+  late Timer _timer;
 
   TimeoutTransition(this.duration, this.callback);
 
   @override
-  void activate() {
-    assert(_timer == null, 'timer must be null');
-    _timer = Timer(duration, callback);
-  }
+  void activate() => _timer = Timer(duration, callback);
 
   @override
-  void deactivate() {
-    assert(_timer != null, 'timer must not be null');
-    _timer.cancel();
-    _timer = null;
-  }
+  void deactivate() => _timer.cancel();
 }
