@@ -7,7 +7,7 @@ State Machine
 [![GitHub Issues](https://img.shields.io/github/issues/renggli/dart-statemachine.svg)](https://github.com/renggli/dart-statemachine/issues)
 [![GitHub Forks](https://img.shields.io/github/forks/renggli/dart-statemachine.svg)](https://github.com/renggli/dart-statemachine/network)
 [![GitHub Stars](https://img.shields.io/github/stars/renggli/dart-statemachine.svg)](https://github.com/renggli/dart-statemachine/stargazers)
-[![GitHub License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/renggli/dart-statemachine/master/LICENSE)
+[![GitHub License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/renggli/dart-statemachine/main/LICENSE)
 
 A simple, yet powerful state machine framework for Dart supporting Flutter and web apps.
 
@@ -124,4 +124,4 @@ Misc
 
 ### License
 
-The MIT License, see [LICENSE](https://github.com/renggli/dart-statemachine/raw/master/LICENSE).
+The MIT License, see [LICENSE](https://github.com/renggli/dart-statemachine/raw/main/LICENSE).
