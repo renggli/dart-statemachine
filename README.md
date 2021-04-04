@@ -2,8 +2,7 @@ State Machine
 =============
 
 [![Pub Package](https://img.shields.io/pub/v/statemachine.svg)](https://pub.dev/packages/statemachine)
-[![Build Status](https://travis-ci.org/renggli/dart-statemachine.svg)](https://travis-ci.org/renggli/dart-statemachine)
-[![Coverage Status](https://coveralls.io/repos/renggli/dart-statemachine/badge.svg)](https://coveralls.io/r/renggli/dart-statemachine)
+[![Build Status](https://github.com/renggli/dart-statemachine/actions/workflows/dart.yml/badge.svg?branch=main)](https://github.com/renggli/dart-statemachine/actions/workflows/dart.yml)
 [![GitHub Issues](https://img.shields.io/github/issues/renggli/dart-statemachine.svg)](https://github.com/renggli/dart-statemachine/issues)
 [![GitHub Forks](https://img.shields.io/github/forks/renggli/dart-statemachine.svg)](https://github.com/renggli/dart-statemachine/network)
 [![GitHub Stars](https://img.shields.io/github/stars/renggli/dart-statemachine.svg)](https://github.com/renggli/dart-statemachine/stargazers)
