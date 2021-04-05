@@ -1,16 +1,14 @@
-library statemachine.state;
-
 import 'dart:async';
 
 import 'callback.dart';
 import 'machine.dart';
 import 'transition.dart';
-import 'transition_entry.dart';
-import 'transition_exit.dart';
-import 'transition_future.dart';
-import 'transition_nested.dart';
-import 'transition_stream.dart';
-import 'transition_timeout.dart';
+import 'transitions/entry.dart';
+import 'transitions/exit.dart';
+import 'transitions/future.dart';
+import 'transitions/nested.dart';
+import 'transitions/stream.dart';
+import 'transitions/timeout.dart';
 
 /// State of the state machine.
 class State {

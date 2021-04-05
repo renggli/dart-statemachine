@@ -1,7 +1,5 @@
-library statemachine.transition.nested;
-
-import 'machine.dart';
-import 'transition.dart';
+import '../machine.dart';
+import '../transition.dart';
 
 /// A transition that triggers a nested state machine.
 class NestedTransition extends Transition {

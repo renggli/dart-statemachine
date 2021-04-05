@@ -1,5 +1,3 @@
-library statemachine.example.tooltip.example;
-
 import 'dart:html';
 
 import 'tooltip.dart';

@@ -1,7 +1,5 @@
-library statemachine.transition.entry;
-
-import 'callback.dart';
-import 'transition.dart';
+import '../callback.dart';
+import '../transition.dart';
 
 /// A callback that is triggered when the state activates.
 class EntryTransition extends Transition {

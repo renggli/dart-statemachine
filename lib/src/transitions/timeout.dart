@@ -1,9 +1,7 @@
-library statemachine.transition.timeout;
-
 import 'dart:async';
 
-import 'callback.dart';
-import 'transition.dart';
+import '../callback.dart';
+import '../transition.dart';
 
 /// A transition that happens automatically after a certain duration elapsed.
 class TimeoutTransition extends Transition {
@@ -14,13 +12,19 @@ class TimeoutTransition extends Transition {
   final Callback0 callback;
 
   /// Time triggering after a timeout.
-  late Timer _timer;
+  Timer? _timer;
 
   TimeoutTransition(this.duration, this.callback);
 
   @override
-  void activate() => _timer = Timer(duration, callback);
+  void activate() {
+    assert(_timer == null, 'timer must be null');
+    _timer = Timer(duration, callback);
+  }
 
   @override
-  void deactivate() => _timer.cancel();
+  void deactivate() {
+    _timer?.cancel();
+    _timer = null;
+  }
 }

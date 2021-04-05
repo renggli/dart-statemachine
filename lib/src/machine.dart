@@ -1,5 +1,3 @@
-library statemachine.machine;
-
 import 'state.dart';
 
 /// The state machine itself.

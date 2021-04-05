@@ -1,5 +1,3 @@
-library statemachine.test.statemachine_test;
-
 import 'dart:async';
 
 import 'package:statemachine/statemachine.dart';

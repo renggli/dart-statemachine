@@ -1,5 +1,3 @@
-library statemachine.example.traffic;
-
 import 'dart:io';
 
 import 'package:statemachine/statemachine.dart';

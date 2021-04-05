@@ -1,5 +1,3 @@
-library statemachine.transition;
-
 /// A transition from one state to another.
 abstract class Transition {
   /// Called when the source state is activate.

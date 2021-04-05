@@ -1,5 +1,3 @@
-library statemachine.callback;
-
 /// A callback with no argument.
 typedef Callback0 = void Function();
 
