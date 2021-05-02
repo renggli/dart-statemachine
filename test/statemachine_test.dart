@@ -23,15 +23,29 @@ void main() {
       expect(machine[state1.identifier], state1);
       expect(machine[state2.identifier], state2);
     });
+    test('accessing unknown states', () {
+      expect(() => machine[3], throwsArgumentError);
+    });
     test('set state by state', () {
       machine.current = state1;
       expect(machine.current, state1);
       machine.current = state2;
       expect(machine.current, state2);
     });
+    test('set state by unknown state', () {
+      final otherMachine = Machine<int>();
+      final otherState = otherMachine.newState(2);
+      machine.current = state1;
+      expect(machine.current, state1);
+      expect(() => machine.current = otherState, throwsArgumentError);
+      expect(machine.current, state1);
+    });
     test('set state by identifier', () {
       machine.current = state1.identifier;
       expect(machine.current, state1);
+    });
+    test('set state to by unknown identifier', () {
+      machine.current = state1.identifier;
       expect(() => machine.current = 3, throwsArgumentError);
       expect(machine.current, state1);
     });

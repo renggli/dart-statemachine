@@ -3,6 +3,7 @@
 ## 3.0.0
 
 * Make machines and states typed, so that a custom object can be associated and used for identification of each state.
+* To migrate existing code change the type of your state machine from `Machine` to `Machine<String>` and make sure to provide a unique name for each call to `newState`, `newStartState`, and `newStopState`.
 
 ## 2.0.0
 

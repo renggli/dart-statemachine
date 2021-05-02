@@ -46,13 +46,16 @@ class Machine<T> {
   State<T> operator [](T identifier) => _states.containsKey(identifier)
       ? _states[identifier]!
       : throw ArgumentError.value(
-          identifier, 'identifier', 'Invalid state identifier');
+          identifier, 'identifier', 'Unknown identifier');
 
   /// Returns the current state of this machine, or `null`.
   State? get current => _current;
 
   /// Sets this machine to the given [state], either specified with a [State]
   /// object or one of its identifiers.
+  ///
+  /// Throws an [ArgumentError], if the state is unknown or from a different
+  /// [Machine].
   set current(/*State<T>|T|Null*/ Object? state) {
     final target = state is State<T>
         ? state
@@ -60,7 +63,10 @@ class Machine<T> {
             ? this[state]
             : state == null
                 ? null
-                : throw ArgumentError.value(state, 'state', 'Invalid state');
+                : throw ArgumentError.value(state, 'state', 'Invalid type');
+    if (target != null && target.machine != this) {
+      throw ArgumentError.value(state, 'state', 'Invalid machine');
+    }
     final current = _current;
     if (current != null) {
       for (final transition in current.transitions) {
