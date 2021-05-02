@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 
 import 'state.dart';
+import 'transition_error.dart';
 
 /// The state machine itself.
 @optionalTypeArgs
@@ -52,32 +53,48 @@ class Machine<T> {
   State? get current => _current;
 
   /// Sets this machine to the given [state], either specified with a [State]
-  /// object or one of its identifiers.
+  /// object, one of its identifiers, or `null` to remove the active state.
   ///
   /// Throws an [ArgumentError], if the state is unknown or from a different
-  /// [Machine].
+  /// [Machine]. Errors happening during the transition are collected and
+  /// a [TransitionError] is thrown in case of a problem.
   set current(/*State<T>|T|Null*/ Object? state) {
+    // Figure out and validate the target state:
     final target = state is State<T>
         ? state
         : state is T
             ? this[state]
             : state == null
                 ? null
-                : throw ArgumentError.value(state, 'state', 'Invalid type');
+                : throw ArgumentError.value(state, 'state', 'Invalid state');
     if (target != null && target.machine != this) {
       throw ArgumentError.value(state, 'state', 'Invalid machine');
     }
-    final current = _current;
-    if (current != null) {
-      for (final transition in current.transitions) {
-        transition.deactivate();
+    // We are in a good state, perform the transition no matter what happens:
+    final source = _current;
+    final errors = <Object>[];
+    if (source != null) {
+      for (final transition in source.transitions) {
+        try {
+          transition.deactivate();
+        } catch (error) {
+          errors.add(error);
+        }
       }
     }
     _current = target;
     if (target != null) {
       for (final transition in target.transitions) {
-        transition.activate();
+        try {
+          transition.activate();
+        } catch (error) {
+          errors.add(error);
+        }
       }
+    }
+    // Rethrow all errors, if we encountered some during the transition:
+    if (errors.isNotEmpty) {
+      throw TransitionError(errors);
     }
   }
 

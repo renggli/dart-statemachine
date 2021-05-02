@@ -248,4 +248,39 @@ void main() {
     expect(log,
         ['outer entry a', 'inner entry 1', 'outer exit a', 'inner exit 1']);
   });
+  group('error transitions', () {
+    late Machine<Symbol> machine;
+    late State<Symbol> state;
+    setUp(() {
+      machine = Machine<Symbol>();
+      state = machine.newStartState(#error);
+      state.onEntry(() => throw 'Enter 1'); // ignore: only_throw_errors
+      state.onEntry(() => throw 'Enter 2'); // ignore: only_throw_errors
+      state.onExit(() => throw 'Exit 1'); // ignore: only_throw_errors
+      state.onExit(() => throw 'Exit 2'); // ignore: only_throw_errors
+    });
+    test('enter', () {
+      expect(
+          () => machine.current = state,
+          throwsA(isA<TransitionError>().having(
+              (error) => error.errors, 'errors', ['Enter 1', 'Enter 2'])));
+      expect(machine.current, state);
+    });
+    test('exit', () {
+      expect(() => machine.current = state, throwsA(isA<TransitionError>()));
+      expect(
+          () => machine.current = null,
+          throwsA(isA<TransitionError>().having(
+              (error) => error.errors, 'errors', ['Exit 1', 'Exit 2'])));
+      expect(machine.current, isNull);
+    });
+    test('enter / exit', () {
+      expect(() => machine.current = state, throwsA(isA<TransitionError>()));
+      expect(
+          () => machine.current = state,
+          throwsA(isA<TransitionError>().having((error) => error.errors,
+              'errors', ['Exit 1', 'Exit 2', 'Enter 1', 'Enter 2'])));
+      expect(machine.current, state);
+    });
+  });
 }
