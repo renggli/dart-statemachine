@@ -33,15 +33,17 @@ import 'package:statemachine/statemachine.dart';
 To create a new state machine instantiate `Machine`:
 
 ```dart
-var machine = Machine();
+var machine = Machine<String>();
 ```
+
+The type of the state machine is used to uniquely identify states of the machine. In this simple example we use a `String`; but typically you would define an enum, a `Symbol`, or an arbitrary other identifying object.
 
 ### Defining states
 
-To create states call `Machine.newState` and store them in variables. The first state created it the start state of the machine. Optionally you can provide a name as argument to ease debugging.
+To create states call `Machine.newState` and store them in variables. The first state created it the start state of the machine. Each state needs an identifying key of the declared type, in this case we use simple strings that help debugging:
 
 ```dart
-var startState = machine.newState();
+var startState = machine.newState('start');
 var activeState = machine.newState('active');
 ```
 
@@ -76,6 +78,18 @@ From anywhere within your code you can enter a specific state by calling `State.
 
 ```dart
 activeState.enter();
+```
+
+Depending on context, it might be easier to set the current state using the accessor on the state machine itself:
+
+```dart
+machine.current = activeState;
+```
+
+Alternatively, you can also use the identifying object to set the active state:
+
+```dart
+machine.current = 'active';
 ```
 
 #### Event triggered transition
