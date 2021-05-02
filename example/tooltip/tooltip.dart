@@ -27,7 +27,7 @@ class Tooltip {
   final Element tooltip = DivElement();
 
   /// The actual state machine for the tooltips.
-  final Machine machine = Machine();
+  final Machine machine = Machine<Symbol>();
 
   /// Various (internal) states of the tooltip machine.
   late State _waiting, _heating, _display, _cooling;
@@ -50,10 +50,10 @@ class Tooltip {
       this.visibleCssClass, this.offsetX, this.offsetY, Duration delay) {
     tooltip.classes.add(baseCssClass);
 
-    _waiting = machine.newState('waiting');
-    _heating = machine.newState('heating');
-    _display = machine.newState('display');
-    _cooling = machine.newState('cooling');
+    _waiting = machine.newState(#waiting);
+    _heating = machine.newState(#heating);
+    _display = machine.newState(#display);
+    _cooling = machine.newState(#cooling);
 
     _waiting.onStream<MouseEvent>(root.onMouseOver, (event) {
       final element = event.target;

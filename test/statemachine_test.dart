@@ -4,9 +4,46 @@ import 'package:statemachine/statemachine.dart';
 import 'package:test/test.dart';
 
 void main() {
+  group('states', () {
+    late Machine<int> machine;
+    late State<int> state1, state2;
+    setUp(() {
+      machine = Machine<int>();
+      state1 = machine.newState(1);
+      state2 = machine.newState(2);
+    });
+    test('duplicated definition', () {
+      expect(() => machine.newState(1), throwsArgumentError);
+      expect(() => machine.newState(2), throwsArgumentError);
+    });
+    test('enumerate states', () {
+      expect(machine.states, [state1, state2]);
+    });
+    test('accessing states', () {
+      expect(machine[state1.identifier], state1);
+      expect(machine[state2.identifier], state2);
+    });
+    test('set state by state', () {
+      machine.current = state1;
+      expect(machine.current, state1);
+      machine.current = state2;
+      expect(machine.current, state2);
+    });
+    test('set state by identifier', () {
+      machine.current = state1.identifier;
+      expect(machine.current, state1);
+      expect(() => machine.current = 3, throwsArgumentError);
+      expect(machine.current, state1);
+    });
+    test('unset state', () {
+      machine.current = state1;
+      machine.current = null;
+      expect(machine.current, isNull);
+    });
+  });
   group('stream transitions', () {
     late StreamController<String> controllerA, controllerB, controllerC;
-    late Machine machine;
+    late Machine<String> machine;
     late State stateA, stateB, stateC;
 
     setUp(() {
@@ -14,7 +51,7 @@ void main() {
       controllerB = StreamController.broadcast(sync: true);
       controllerC = StreamController.broadcast(sync: true);
 
-      machine = Machine();
+      machine = Machine<String>();
 
       stateA = machine.newState('a');
       stateB = machine.newState('b');
@@ -36,9 +73,9 @@ void main() {
     });
 
     test('string', () {
-      expect(machine.toString(), 'Instance of \'Machine\'[null]');
+      expect(machine.toString(), 'Instance of \'Machine<String>\'[null]');
       machine.start();
-      expect(machine.toString(), 'Instance of \'Machine\'[State[a]]');
+      expect(machine.toString(), 'Instance of \'Machine<String>\'[State[a]]');
     });
     test('initial state', () {
       machine.start();
@@ -80,7 +117,7 @@ void main() {
     final controller = StreamController<String>.broadcast(sync: true);
 
     try {
-      final machine = Machine();
+      final machine = Machine<String>();
 
       final stateA = machine.newState('a');
       final stateB = machine.newState('b');
@@ -97,7 +134,7 @@ void main() {
     }
   });
   test('future transitions', () {
-    final machine = Machine();
+    final machine = Machine<String>();
     final log = <String>[];
 
     final stateA = machine.newState('a');
@@ -134,7 +171,7 @@ void main() {
     machine.start();
   });
   test('timeout transitions', () {
-    final machine = Machine();
+    final machine = Machine<String>();
 
     final stateA = machine.newState('a');
     final stateB = machine.newState('b');
@@ -156,7 +193,7 @@ void main() {
     machine.start();
   });
   test('start/stop state', () {
-    final machine = Machine();
+    final machine = Machine<String>();
     final startState = machine.newStartState('a');
     final stopState = machine.newStopState('b');
     expect(machine.current, isNull);
@@ -167,7 +204,7 @@ void main() {
   });
   test('entry/exit transitions', () {
     final log = <String>[];
-    final machine = Machine();
+    final machine = Machine<String>();
     final stateA = machine.newState('a')
       ..onEntry(() => log.add('on a'))
       ..onExit(() => log.add('off a'));
@@ -182,19 +219,19 @@ void main() {
   });
   test('nested machine', () {
     final log = <String>[];
-    final inner = Machine();
-    inner.newState('a')
-      ..onEntry(() => log.add('inner entry a'))
-      ..onExit(() => log.add('inner exit a'));
-    final outer = Machine();
+    final inner = Machine<int>();
+    inner.newState(1)
+      ..onEntry(() => log.add('inner entry 1'))
+      ..onExit(() => log.add('inner exit 1'));
+    final outer = Machine<String>();
     outer.newState('a')
       ..onEntry(() => log.add('outer entry a'))
       ..onExit(() => log.add('outer exit a'))
       ..addNested(inner);
     outer.start();
-    expect(log, ['outer entry a', 'inner entry a']);
+    expect(log, ['outer entry a', 'inner entry 1']);
     outer.stop();
     expect(log,
-        ['outer entry a', 'inner entry a', 'outer exit a', 'inner exit a']);
+        ['outer entry a', 'inner entry 1', 'outer exit a', 'inner exit 1']);
   });
 }

@@ -1,51 +1,75 @@
+import 'package:meta/meta.dart';
+
 import 'state.dart';
 
 /// The state machine itself.
-class Machine {
+@optionalTypeArgs
+class Machine<T> {
   /// All the known states of this machine.
-  final List<State> _states = [];
+  final Map<T, State<T>> _states = {};
 
   /// The start state of this machine.
-  State? _start;
+  State<T>? _start;
 
   /// The stop state of this machine.
-  State? _stop;
+  State<T>? _stop;
 
   /// The current state of this machine.
-  State? _current;
+  State<T>? _current;
 
   /// Constructor of a state machine.
   Machine();
 
   /// Returns a new state. The first call to this method defines the start state
-  /// of the machine. For debugging purposes an optional [name] can be provided.
-  State newState([String? name]) {
-    final state = State(this, name ?? 'State ${_states.length + 1}');
-    _states.add(state);
+  /// of the machine. To identify states a unique identifier has to be provided.
+  State<T> newState(T identifier) {
+    if (_states.containsKey(identifier)) {
+      throw ArgumentError.value(
+          identifier, 'identifier', 'Duplicated state identifier');
+    }
+    final state = State<T>(this, identifier);
+    _states[identifier] = state;
     _start ??= state;
     return state;
   }
 
   /// Returns a new start state for this machine.
-  State newStartState([String? name]) => _start = newState(name);
+  State<T> newStartState(T identifier) => _start = newState(identifier);
 
   /// Returns a new stop state for this machine.
-  State newStopState([String? name]) => _stop = newState(name);
+  State<T> newStopState(T identifier) => _stop = newState(identifier);
 
-  /// Returns the current state of this machine.
+  /// Returns the states of this machine.
+  Iterable<State<T>> get states => _states.values;
+
+  /// Returns the state of the provided identifier.
+  State<T> operator [](T identifier) => _states.containsKey(identifier)
+      ? _states[identifier]!
+      : throw ArgumentError.value(
+          identifier, 'identifier', 'Invalid state identifier');
+
+  /// Returns the current state of this machine, or `null`.
   State? get current => _current;
 
-  /// Sets this machine to the given [state].
-  set current(State? state) {
+  /// Sets this machine to the given [state], either specified with a [State]
+  /// object or one of its identifiers.
+  set current(/*State<T>|T|Null*/ Object? state) {
+    final target = state is State<T>
+        ? state
+        : state is T
+            ? this[state]
+            : state == null
+                ? null
+                : throw ArgumentError.value(state, 'state', 'Invalid state');
     final current = _current;
     if (current != null) {
       for (final transition in current.transitions) {
         transition.deactivate();
       }
     }
-    _current = state;
-    if (state != null) {
-      for (final transition in state.transitions) {
+    _current = target;
+    if (target != null) {
+      for (final transition in target.transitions) {
         transition.activate();
       }
     }

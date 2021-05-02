@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.0
+
+* Make machines and states typed, so that a custom object can be associated and used for identification of each state.
+
 ## 2.0.0
 
 * Dart 2.12 requirement and null-safety.

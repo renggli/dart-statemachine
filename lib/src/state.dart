@@ -11,18 +11,21 @@ import 'transitions/stream.dart';
 import 'transitions/timeout.dart';
 
 /// State of the state machine.
-class State {
+class State<T> {
   /// The state machine holding this state.
   final Machine machine;
 
-  /// A human readable name of the state.
-  final String name;
+  /// Object identifying this state.
+  final T identifier;
 
   /// The list of transitions of this state.
   final List<Transition> transitions = [];
 
-  /// Constructs a new state with an optional name.
-  State(this.machine, this.name);
+  /// Constructs a new state with an identifier.
+  State(this.machine, this.identifier);
+
+  /// A human readable name of the state.
+  String get name => identifier.toString();
 
   /// Adds a new [transition] to this state.
   void addTransition(Transition transition) => transitions.add(transition);
@@ -35,12 +38,12 @@ class State {
 
   /// Triggers the [callback] when [stream] triggers an event. The stream
   /// must be a broadcast stream.
-  void onStream<T>(Stream<T> stream, Callback1<T> callback) =>
-      addTransition(StreamTransition<T>(stream, callback));
+  void onStream<S>(Stream<S> stream, Callback1<S> callback) =>
+      addTransition(StreamTransition<S>(stream, callback));
 
   /// Triggers the [callback] when [future] provides a value.
-  void onFuture<T>(Future<T> future, Callback1<T> callback) =>
-      addTransition(FutureTransition(future, callback));
+  void onFuture<S>(Future<S> future, Callback1<S> callback) =>
+      addTransition(FutureTransition<S>(future, callback));
 
   /// Triggers the [callback] when [duration] elapses.
   void onTimeout(Duration duration, Callback0 callback) =>
@@ -48,12 +51,13 @@ class State {
 
   /// Adds a nested [machine] that gets started when this state is entered, and
   /// stopped when this state is left.
-  void addNested(Machine machine) => addTransition(NestedTransition(machine));
+  void addNested<S>(Machine<S> machine) =>
+      addTransition(NestedTransition<S>(machine));
 
   /// Call this method to enter this state.
   void enter() => machine.current = this;
 
   /// Returns a debug string of this state.
   @override
-  String toString() => 'State[$name]';
+  String toString() => 'State[$identifier]';
 }

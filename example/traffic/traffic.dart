@@ -2,6 +2,13 @@ import 'dart:io';
 
 import 'package:statemachine/statemachine.dart';
 
+enum TrafficState {
+  green,
+  yellowToRed,
+  yellowToGreen,
+  red,
+}
+
 const String ansiReset = '\u001b[0m';
 const String ansiRed = '\u001b[31m';
 const String ansiGreen = '\u001b[32m';
@@ -11,10 +18,12 @@ void output(String output) {
   stdout.write('\r$output$ansiReset');
 }
 
-Callback1<String> keyboardDispatcher([State? nextState]) => (input) {
+Callback1<String> keyboardDispatcher(Machine<TrafficState> machine,
+        [TrafficState? state]) =>
+    (input) {
       if (input == ' ') {
-        if (nextState != null) {
-          nextState.enter();
+        if (state != null) {
+          machine.current = state;
         }
       } else if (input == 'q') {
         stdin.echoMode = true;
@@ -50,28 +59,35 @@ void main() {
       .map((charCode) => String.fromCharCode(charCode));
 
   // Configure the machine.
-  final machine = Machine();
-
-  final green = machine.newState('green');
-  final yellowToRed = machine.newState('yellow');
-  final yellowToGreen = machine.newState('yellow');
-  final red = machine.newState('red');
-
-  green.onEntry(() => output('${ansiGreen}GREEN '));
-  green.onStream(input, keyboardDispatcher(yellowToRed));
-  green.onTimeout(const Duration(seconds: 10), yellowToRed.enter);
-
-  yellowToRed.onEntry(() => output('${ansiYellow}YELLOW'));
-  yellowToRed.onStream(input, keyboardDispatcher());
-  yellowToRed.onTimeout(const Duration(seconds: 1), red.enter);
-
-  yellowToGreen.onEntry(() => output('${ansiYellow}YELLOW'));
-  yellowToGreen.onStream(input, keyboardDispatcher());
-  yellowToGreen.onTimeout(const Duration(seconds: 2), green.enter);
-
-  red.onEntry(() => output('${ansiRed}RED   '));
-  red.onStream(input, keyboardDispatcher(yellowToGreen));
-  red.onTimeout(const Duration(seconds: 20), yellowToGreen.enter);
+  final machine = Machine<TrafficState>();
+  machine.newState(TrafficState.green)
+    ..onEntry(() => output('${ansiGreen}GREEN '))
+    ..onStream(input, keyboardDispatcher(machine, TrafficState.yellowToRed))
+    ..onTimeout(
+      const Duration(seconds: 10),
+      () => machine.current = TrafficState.yellowToRed,
+    );
+  machine.newState(TrafficState.yellowToRed)
+    ..onEntry(() => output('${ansiYellow}YELLOW'))
+    ..onStream(input, keyboardDispatcher(machine))
+    ..onTimeout(
+      const Duration(seconds: 1),
+      () => machine.current = TrafficState.red,
+    );
+  machine.newState(TrafficState.yellowToGreen)
+    ..onEntry(() => output('${ansiYellow}YELLOW'))
+    ..onStream(input, keyboardDispatcher(machine))
+    ..onTimeout(
+      const Duration(seconds: 2),
+      () => machine.current = TrafficState.green,
+    );
+  machine.newState(TrafficState.red)
+    ..onEntry(() => output('${ansiRed}RED   '))
+    ..onStream(input, keyboardDispatcher(machine, TrafficState.yellowToGreen))
+    ..onTimeout(
+      const Duration(seconds: 20),
+      () => machine.current = TrafficState.yellowToGreen,
+    );
 
   // Start the machine
   machine.start();
