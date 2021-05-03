@@ -60,29 +60,40 @@ void main() {
 
   // Configure the machine.
   final machine = Machine<TrafficState>();
+  machine.onAfterTransition.forEach((event) {
+    switch (event.target?.identifier) {
+      case TrafficState.green:
+        return output('${ansiGreen}GREEN ');
+      case TrafficState.yellowToGreen:
+      case TrafficState.yellowToRed:
+        return output('${ansiYellow}YELLOW');
+      case TrafficState.red:
+        return output('${ansiRed}RED   ');
+      case null:
+      /* ignored */
+    }
+  });
+
+  // Configure the states.
   machine.newState(TrafficState.green)
-    ..onEntry(() => output('${ansiGreen}GREEN '))
     ..onStream(input, keyboardDispatcher(machine, TrafficState.yellowToRed))
     ..onTimeout(
       const Duration(seconds: 10),
       () => machine.current = TrafficState.yellowToRed,
     );
   machine.newState(TrafficState.yellowToRed)
-    ..onEntry(() => output('${ansiYellow}YELLOW'))
     ..onStream(input, keyboardDispatcher(machine))
     ..onTimeout(
       const Duration(seconds: 1),
       () => machine.current = TrafficState.red,
     );
   machine.newState(TrafficState.yellowToGreen)
-    ..onEntry(() => output('${ansiYellow}YELLOW'))
     ..onStream(input, keyboardDispatcher(machine))
     ..onTimeout(
       const Duration(seconds: 2),
       () => machine.current = TrafficState.green,
     );
   machine.newState(TrafficState.red)
-    ..onEntry(() => output('${ansiRed}RED   '))
     ..onStream(input, keyboardDispatcher(machine, TrafficState.yellowToGreen))
     ..onTimeout(
       const Duration(seconds: 20),

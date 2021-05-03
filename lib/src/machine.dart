@@ -1,7 +1,9 @@
+import 'dart:async';
+
 import 'package:meta/meta.dart';
 
+import 'events.dart';
 import 'state.dart';
-import 'transition_error.dart';
 
 /// The state machine itself.
 @optionalTypeArgs
@@ -17,6 +19,14 @@ class Machine<T> {
 
   /// The current state of this machine.
   State<T>? _current;
+
+  /// Stream controller for events triggered before each transition.
+  final StreamController<TransitionEvent<T>> _beforeTransitionController =
+      StreamController.broadcast(sync: true);
+
+  /// Stream controller for events triggered after each transition.
+  final StreamController<TransitionEvent<T>> _afterTransitionController =
+      StreamController.broadcast(sync: true);
 
   /// Constructor of a state machine.
   Machine();
@@ -49,6 +59,14 @@ class Machine<T> {
       : throw ArgumentError.value(
           identifier, 'identifier', 'Unknown identifier');
 
+  /// Returns an event stream that is triggered before each transition.
+  Stream<TransitionEvent<T>> get onBeforeTransition =>
+      _beforeTransitionController.stream;
+
+  /// Returns an event stream that is triggered after each transition.
+  Stream<TransitionEvent<T>> get onAfterTransition =>
+      _afterTransitionController.stream;
+
   /// Returns the current state of this machine, or `null`.
   State? get current => _current;
 
@@ -56,10 +74,14 @@ class Machine<T> {
   /// object, one of its identifiers, or `null` to remove the active state.
   ///
   /// Throws an [ArgumentError], if the state is unknown or from a different
-  /// [Machine]. Errors happening during the transition are collected and
-  /// a [TransitionError] is thrown in case of a problem.
+  /// [Machine].
+  ///
+  /// Triggers an [onBeforeTransition] event before the transition starts, and
+  /// an [onAfterTransition] after the transition completes. Errors during the
+  /// transition phase are collected, included in the [onAfterTransition] event,
+  /// and rethrown at the end of the state change as a single [TransitionError].
   set current(/*State<T>|T|Null*/ Object? state) {
-    // Figure out and validate the target state:
+    // Find and validate the target state.
     final target = state is State<T>
         ? state
         : state is T
@@ -70,8 +92,12 @@ class Machine<T> {
     if (target != null && target.machine != this) {
       throw ArgumentError.value(state, 'state', 'Invalid machine');
     }
-    // We are in a good state, perform the transition no matter what happens:
+    // Notify listeners about the upcoming transition.
     final source = _current;
+    if (_beforeTransitionController.hasListener) {
+      _beforeTransitionController.add(TransitionEvent<T>(this, source, target));
+    }
+    // Deactivate the source state.
     final errors = <Object>[];
     if (source != null) {
       for (final transition in source.transitions) {
@@ -82,7 +108,9 @@ class Machine<T> {
         }
       }
     }
+    // Switch to the target state.
     _current = target;
+    // Activate the target state.
     if (target != null) {
       for (final transition in target.transitions) {
         try {
@@ -92,9 +120,14 @@ class Machine<T> {
         }
       }
     }
-    // Rethrow all errors, if we encountered some during the transition:
+    // Notify listeners about the completed transition.
+    if (_afterTransitionController.hasListener) {
+      _afterTransitionController
+          .add(TransitionEvent<T>(this, source, target, errors));
+    }
+    // Rethrow any transition errors at the end.
     if (errors.isNotEmpty) {
-      throw TransitionError(errors);
+      throw TransitionError<T>(this, source, target, errors);
     }
   }
 

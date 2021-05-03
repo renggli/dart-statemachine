@@ -1,9 +1,9 @@
 /// Generic state machine framework.
 export 'package:statemachine/src/callback.dart';
+export 'package:statemachine/src/events.dart';
 export 'package:statemachine/src/machine.dart';
 export 'package:statemachine/src/state.dart';
 export 'package:statemachine/src/transition.dart';
-export 'package:statemachine/src/transition_error.dart';
 export 'package:statemachine/src/transitions/entry.dart';
 export 'package:statemachine/src/transitions/exit.dart';
 export 'package:statemachine/src/transitions/future.dart';
