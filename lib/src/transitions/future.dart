@@ -3,42 +3,31 @@ import 'dart:async';
 import '../callback.dart';
 import '../transition.dart';
 
-/// A transition that is triggered one time by a future.
+/// A transition that is triggered by a future.
 class FutureTransition<T> extends Transition {
-  /// The future triggering this transition.
-  final Future<T> future;
+  /// The provider of a future triggering this transition.
+  final Provider<Future<T>> provider;
 
   /// The callback to be evaluated when the future triggers.
   final Callback1<T> callback;
 
-  bool _active = false;
-  bool _started = false;
-  bool _waiting = false;
+  /// The currently active future.
+  Future<T>? _future;
 
-  late T _value;
-
-  FutureTransition(this.future, this.callback);
+  FutureTransition(this.provider, this.callback);
 
   @override
   void activate() {
-    assert(!_active, 'active must be false');
-    _active = true;
-    if (!_started) {
-      _started = true;
-      future.then((value) {
-        if (_active) {
-          callback(value);
-        } else {
-          _waiting = true;
-          _value = value;
-        }
-      });
-    } else if (_waiting) {
-      callback(_value);
-      _waiting = false;
-    }
+    assert(_future == null, 'future must be inactive');
+    final future = _future = provider();
+    future.then((value) {
+      if (future == _future) {
+        _future = null;
+        callback(value);
+      }
+    });
   }
 
   @override
-  void deactivate() => _active = false;
+  void deactivate() => _future == null;
 }

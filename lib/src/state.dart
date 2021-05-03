@@ -36,14 +36,25 @@ class State<T> {
   /// Triggers the [callback] when the state is left.
   void onExit(Callback0 callback) => addTransition(ExitTransition(callback));
 
-  /// Triggers the [callback] when [stream] triggers an event. The stream
-  /// must be a broadcast stream.
+  /// Triggers the [callback] when [stream] triggers an event.
   void onStream<S>(Stream<S> stream, Callback1<S> callback) =>
-      addTransition(StreamTransition<S>(stream, callback));
+      onStreamProvider<S>(() => stream, callback);
 
-  /// Triggers the [callback] when [future] provides a value.
+  /// Triggers the [callback] when the [Stream] provided by [provider] triggers
+  /// an event.
+  void onStreamProvider<S>(
+          Provider<Stream<S>> provider, Callback1<S> callback) =>
+      addTransition(StreamTransition<S>(provider, callback));
+
+  /// Triggers the [callback] when a [future] yields a value.
   void onFuture<S>(Future<S> future, Callback1<S> callback) =>
-      addTransition(FutureTransition<S>(future, callback));
+      onFutureProvider<S>(() => future, callback);
+
+  /// Triggers the [callback] when the [Future] provided by [provider] yields a
+  /// value.
+  void onFutureProvider<S>(
+          Provider<Future<S>> provider, Callback1<S> callback) =>
+      addTransition(FutureTransition<S>(provider, callback));
 
   /// Triggers the [callback] when [duration] elapses.
   void onTimeout(Duration duration, Callback0 callback) =>
