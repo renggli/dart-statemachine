@@ -15,13 +15,23 @@ TypeMatcher<TransitionEvent<T>> isTransitionEvent<T>(
         .having((error) => error.errors, 'errors', errors);
 
 void main() {
-  group('states', () {
-    late Machine<int> machine;
-    late State<int> state1, state2;
-    setUp(() {
-      machine = Machine<int>();
-      state1 = machine.newState(1);
-      state2 = machine.newState(2);
+  late Machine<int> machine;
+  late State<int> state1, state2;
+  setUp(() {
+    machine = Machine<int>();
+    state1 = machine.newState(1);
+    state2 = machine.newState(2);
+  });
+  group('machine', () {
+    test('start/stop state', () {
+      final machine = Machine<String>();
+      final startState = machine.newStartState('a');
+      final stopState = machine.newStopState('b');
+      expect(machine.current, isNull);
+      machine.start();
+      expect(machine.current, startState);
+      machine.stop();
+      expect(machine.current, stopState);
     });
     test('duplicated definition', () {
       expect(() => machine.newState(1), throwsArgumentError);
@@ -65,108 +75,32 @@ void main() {
       machine.current = null;
       expect(machine.current, isNull);
     });
+    test('states', () {
+      expect(machine.states, [state1, state2]);
+    });
+    test('toString', () {
+      expect(machine.toString(), 'Machine');
+      machine.current = state1;
+      expect(machine.toString(), 'Machine[1]');
+    });
   });
-  group('stream transitions', () {
-    late StreamController<String> controllerA, controllerB, controllerC;
-    late Machine<String> machine;
-    late State stateA, stateB, stateC;
-
-    setUp(() {
-      controllerA = StreamController.broadcast(sync: true);
-      controllerB = StreamController.broadcast(sync: true);
-      controllerC = StreamController.broadcast(sync: true);
-
-      machine = Machine<String>();
-
-      stateA = machine.newState('a');
-      stateB = machine.newState('b');
-      stateC = machine.newState('c');
-
-      stateA.onStream<String>(controllerB.stream, (event) => stateB.enter());
-      stateA.onStream<String>(controllerC.stream, (event) => stateC.enter());
-
-      stateB.onStream<String>(controllerA.stream, (event) => stateA.enter());
-      stateB.onStream<String>(controllerC.stream, (event) => stateC.enter());
-
-      stateC.onStream<String>(controllerA.stream, (event) => stateA.enter());
-      stateC.onStream<String>(controllerB.stream, (event) => stateB.enter());
+  group('states', () {
+    test('machine', () {
+      expect(state1.machine, machine);
+      expect(state2.machine, machine);
     });
-    tearDown(() {
-      controllerA.close();
-      controllerB.close();
-      controllerC.close();
-    });
-
-    test('string', () {
-      expect(machine.toString(), 'Instance of \'Machine<String>\'[null]');
-      machine.start();
-      expect(machine.toString(), 'Instance of \'Machine<String>\'[State[a]]');
-    });
-    test('initial state', () {
-      machine.start();
-      expect(machine.current, stateA);
-    });
-    test('simple transition', () {
-      machine.start();
-      controllerB.add('*');
-      expect(machine.current, stateB);
-    });
-    test('double transition', () {
-      machine.start();
-      controllerB.add('*');
-      controllerC.add('*');
-      expect(machine.current, stateC);
-    });
-    test('triple transition', () {
-      machine.start();
-      controllerB.add('*');
-      controllerC.add('*');
-      controllerA.add('*');
-      expect(machine.current, stateA);
-    });
-    test('many transitions', () {
-      machine.start();
-      for (var i = 0; i < 100; i++) {
-        controllerB.add('*');
-        controllerA.add('*');
-      }
-      expect(machine.current, stateA);
+    test('identifier', () {
+      expect(state1.identifier, 1);
+      expect(state2.identifier, 2);
     });
     test('name', () {
-      expect(stateA.toString(), 'State[a]');
-      expect(stateB.toString(), 'State[b]');
-      expect(stateC.toString(), 'State[c]');
+      expect(state1.name, '1');
+      expect(state2.name, '2');
     });
-  });
-  test('conflicting transitions', () {
-    final controller = StreamController<String>.broadcast(sync: true);
-
-    try {
-      final machine = Machine<String>();
-
-      final stateA = machine.newState('a');
-      final stateB = machine.newState('b');
-      final stateC = machine.newState('c');
-
-      stateA.onStream<String>(controller.stream, (value) => stateB.enter());
-      stateA.onStream<String>(controller.stream, (value) => stateC.enter());
-
-      machine.start();
-      controller.add('*');
-      expect(machine.current, stateB);
-    } finally {
-      controller.close();
-    }
-  });
-  test('start/stop state', () {
-    final machine = Machine<String>();
-    final startState = machine.newStartState('a');
-    final stopState = machine.newStopState('b');
-    expect(machine.current, isNull);
-    machine.start();
-    expect(machine.current, startState);
-    machine.stop();
-    expect(machine.current, stopState);
+    test('toString', () {
+      expect(state1.toString(), 'State[1]');
+      expect(state2.toString(), 'State[2]');
+    });
   });
   group('transitions', () {
     test('future', () {
@@ -202,6 +136,61 @@ void main() {
         return 'done';
       }));
       machine.start();
+    });
+    group('stream transitions', () {
+      late StreamController<String> controllerA, controllerB, controllerC;
+      late Machine<String> machine;
+      late State stateA, stateB, stateC;
+      setUp(() {
+        controllerA = StreamController.broadcast(sync: true);
+        controllerB = StreamController.broadcast(sync: true);
+        controllerC = StreamController.broadcast(sync: true);
+        machine = Machine<String>();
+        stateA = machine.newState('a');
+        stateB = machine.newState('b');
+        stateC = machine.newState('c');
+        stateA.onStream<String>(controllerB.stream, (event) => stateB.enter());
+        stateA.onStream<String>(controllerC.stream, (event) => stateC.enter());
+        stateB.onStream<String>(controllerA.stream, (event) => stateA.enter());
+        stateB.onStream<String>(controllerC.stream, (event) => stateC.enter());
+        stateC.onStream<String>(controllerA.stream, (event) => stateA.enter());
+        stateC.onStream<String>(controllerB.stream, (event) => stateB.enter());
+      });
+      tearDown(() {
+        controllerA.close();
+        controllerB.close();
+        controllerC.close();
+      });
+      test('initial state', () {
+        machine.start();
+        expect(machine.current, stateA);
+      });
+      test('simple transition', () {
+        machine.start();
+        controllerB.add('*');
+        expect(machine.current, stateB);
+      });
+      test('double transition', () {
+        machine.start();
+        controllerB.add('*');
+        controllerC.add('*');
+        expect(machine.current, stateC);
+      });
+      test('triple transition', () {
+        machine.start();
+        controllerB.add('*');
+        controllerC.add('*');
+        controllerA.add('*');
+        expect(machine.current, stateA);
+      });
+      test('many transitions', () {
+        machine.start();
+        for (var i = 0; i < 100; i++) {
+          controllerB.add('*');
+          controllerA.add('*');
+        }
+        expect(machine.current, stateA);
+      });
     });
     test('timeout', () {
       final machine = Machine<String>();

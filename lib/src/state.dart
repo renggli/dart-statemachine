@@ -36,7 +36,9 @@ class State<T> {
   /// Triggers the [callback] when the state is left.
   void onExit(Callback0 callback) => addTransition(ExitTransition(callback));
 
-  /// Triggers the [callback] when [stream] triggers an event.
+  /// Triggers the [callback] when [stream] triggers an event. The stream
+  /// must be a broadcast stream, since it might be shared among multiple
+  /// subscriptions.
   void onStream<S>(Stream<S> stream, Callback1<S> callback) =>
       onStreamProvider<S>(() => stream, callback);
 
@@ -70,5 +72,5 @@ class State<T> {
 
   /// Returns a debug string of this state.
   @override
-  String toString() => 'State[$identifier]';
+  String toString() => 'State[$name]';
 }

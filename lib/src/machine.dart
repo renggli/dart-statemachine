@@ -139,5 +139,5 @@ class Machine<T> {
 
   /// Returns a debug string of this state.
   @override
-  String toString() => '${super.toString()}[$current]';
+  String toString() => 'Machine${current != null ? '[${current?.name}]' : ''}';
 }
