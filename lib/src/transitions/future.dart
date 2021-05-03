@@ -21,7 +21,7 @@ class FutureTransition<T> extends Transition {
     assert(_future == null, 'future must be inactive');
     final future = _future = provider();
     future.then((value) {
-      if (future == _future) {
+      if (_future == future) {
         _future = null;
         callback(value);
       }
@@ -29,5 +29,5 @@ class FutureTransition<T> extends Transition {
   }
 
   @override
-  void deactivate() => _future == null;
+  void deactivate() => _future = null;
 }
