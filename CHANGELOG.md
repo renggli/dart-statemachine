@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.1.0
+
+* Add `onBeforeTransition` and `onAfterTransition` to let others observe state transitions.
+* Throw a composite `TransitionError` at the end of a transition where something went wrong.
+* Allow `Future` and `Stream` transitions to recreate their source on activation using a provider function.
+
 ## 3.0.0
 
 * Make machines and states typed, so that a custom object can be associated and used for identification of each state.
