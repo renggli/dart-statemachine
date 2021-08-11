@@ -68,7 +68,7 @@ class Machine<T> {
       _afterTransitionController.stream;
 
   /// Returns the current state of this machine, or `null`.
-  State? get current => _current;
+  State<T>? get current => _current;
 
   /// Sets this machine to the given [state], either specified with a [State]
   /// object, one of its identifiers, or `null` to remove the active state.
