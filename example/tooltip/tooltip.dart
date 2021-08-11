@@ -27,66 +27,58 @@ class Tooltip {
   final Element tooltip = DivElement();
 
   /// The actual state machine for the tooltips.
-  final Machine machine = Machine<Symbol>();
-
-  /// Various (internal) states of the tooltip machine.
-  late State _waiting, _heating, _display, _cooling;
+  final machine = Machine<Symbol>();
 
   /// The currently active element.
   Element? _element;
 
   /// Constructor for tooltip machine.
-  factory Tooltip(Element root,
-          {String dataKey = 'tooltip',
-          String baseCssClass = 'tooltip',
-          String visibleCssClass = 'visible',
-          int offsetX = 0,
-          int offsetY = 0,
-          Duration delay = const Duration(milliseconds: 500)}) =>
-      Tooltip._internal(root, dataKey, baseCssClass, visibleCssClass, offsetX,
-          offsetY, delay);
-
-  Tooltip._internal(this.root, this.dataKey, this.baseCssClass,
-      this.visibleCssClass, this.offsetX, this.offsetY, Duration delay) {
+  Tooltip(this.root,
+      {this.dataKey = 'tooltip',
+      this.baseCssClass = 'tooltip',
+      this.visibleCssClass = 'visible',
+      this.offsetX = 0,
+      this.offsetY = 0,
+      Duration delay = const Duration(milliseconds: 500)}) {
     tooltip.classes.add(baseCssClass);
 
-    _waiting = machine.newState(#waiting);
-    _heating = machine.newState(#heating);
-    _display = machine.newState(#display);
-    _cooling = machine.newState(#cooling);
+    final waiting = machine.newState(#waiting);
+    final heating = machine.newState(#heating);
+    final display = machine.newState(#display);
+    final cooling = machine.newState(#cooling);
 
-    _waiting.onStream<MouseEvent>(root.onMouseOver, (event) {
+    waiting.onStream<MouseEvent>(root.onMouseOver, (event) {
       final element = event.target;
       if (element is Element && element.dataset.containsKey(dataKey)) {
         _element = element;
-        _heating.enter();
+        heating.enter();
       }
     });
 
-    _heating.onStream<MouseEvent>(root.onMouseOut, (event) {
+    heating.onStream<MouseEvent>(root.onMouseOut, (event) {
       _element = null;
-      _waiting.enter();
+      waiting.enter();
     });
-    _heating.onTimeout(delay, () {
+    heating.onTimeout(delay, () {
       show(_element, _element?.dataset[dataKey]);
-      _display.enter();
+      display.enter();
     });
 
-    _display.onStream<MouseEvent>(root.onMouseOut, (event) {
-      _cooling.enter();
+    display.onStream<MouseEvent>(root.onMouseOut, (event) {
+      cooling.enter();
     });
 
-    _cooling.onStream<MouseEvent>(root.onMouseOver, (event) {
+    cooling.onStream<MouseEvent>(root.onMouseOver, (event) {
       final element = event.target;
       if (element is Element && element.dataset.containsKey(dataKey)) {
         show(_element = element, _element?.dataset[dataKey]);
-        _display.enter();
+        display.enter();
       }
     });
-    _cooling.onTimeout(delay, () {
+    cooling.onTimeout(delay, () {
       hide();
       _element = null;
-      _waiting.enter();
+      waiting.enter();
     });
 
     machine.start();

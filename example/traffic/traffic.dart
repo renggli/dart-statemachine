@@ -9,10 +9,10 @@ enum TrafficState {
   red,
 }
 
-const String ansiReset = '\u001b[0m';
-const String ansiRed = '\u001b[31m';
-const String ansiGreen = '\u001b[32m';
-const String ansiYellow = '\u001b[33m';
+const ansiReset = '\u001b[0m';
+const ansiRed = '\u001b[31m';
+const ansiGreen = '\u001b[32m';
+const ansiYellow = '\u001b[33m';
 
 void output(String output) {
   stdout.write('\r$output$ansiReset');

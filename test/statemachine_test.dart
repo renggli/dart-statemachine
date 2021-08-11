@@ -140,7 +140,7 @@ void main() {
     group('stream transitions', () {
       late StreamController<String> controllerA, controllerB, controllerC;
       late Machine<String> machine;
-      late State stateA, stateB, stateC;
+      late State<String> stateA, stateB, stateC;
       setUp(() {
         controllerA = StreamController.broadcast(sync: true);
         controllerB = StreamController.broadcast(sync: true);

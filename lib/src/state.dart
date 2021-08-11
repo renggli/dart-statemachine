@@ -19,7 +19,7 @@ class State<T> {
   final T identifier;
 
   /// The list of transitions of this state.
-  final List<Transition> transitions = [];
+  final transitions = <Transition>[];
 
   /// Constructs a new state with an identifier.
   State(this.machine, this.identifier);

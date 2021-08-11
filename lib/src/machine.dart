@@ -9,7 +9,7 @@ import 'state.dart';
 @optionalTypeArgs
 class Machine<T> {
   /// All the known states of this machine.
-  final Map<T, State<T>> _states = {};
+  final _states = <T, State<T>>{};
 
   /// The start state of this machine.
   State<T>? _start;
