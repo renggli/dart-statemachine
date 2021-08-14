@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.2.0
+
+* Improve typing of State<T> across the code-base.
+
 ## 3.1.0
 
 * Add `onBeforeTransition` and `onAfterTransition` to let others observe state transitions.

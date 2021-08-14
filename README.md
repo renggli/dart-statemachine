@@ -20,7 +20,7 @@ Tutorial
 
 ### Installation
 
-Follow the installation instructions on [dart packages](https://pub.dev/packages/statemachine#-installing-tab-).
+Follow the installation instructions on [dart packages](https://pub.dev/packages/statemachine/install).
 
 Import the package into your Dart code using:
 
