@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.3.0 (unpublished)
+
+* Dart 2.14 requirement.
+
 ## 3.2.0
 
 * Improve typing of State<T> across the code-base.
