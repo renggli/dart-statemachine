@@ -5,6 +5,8 @@ import '../transition.dart';
 
 /// A transition that happens automatically after a certain duration elapsed.
 class TimeoutTransition extends Transition {
+  TimeoutTransition(this.duration, this.callback);
+
   /// The duration to wait before the timer triggers.
   final Duration duration;
 
@@ -13,8 +15,6 @@ class TimeoutTransition extends Transition {
 
   /// Time triggering after a timeout.
   Timer? _timer;
-
-  TimeoutTransition(this.duration, this.callback);
 
   @override
   void activate() {

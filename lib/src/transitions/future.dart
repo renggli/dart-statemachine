@@ -5,6 +5,8 @@ import '../transition.dart';
 
 /// A transition that is triggered by a future.
 class FutureTransition<T> extends Transition {
+  FutureTransition(this.provider, this.callback);
+
   /// The provider of a future triggering this transition.
   final Provider<Future<T>> provider;
 
@@ -13,8 +15,6 @@ class FutureTransition<T> extends Transition {
 
   /// The currently active future.
   Future<T>? _future;
-
-  FutureTransition(this.provider, this.callback);
 
   @override
   void activate() {

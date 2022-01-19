@@ -5,6 +5,8 @@ import '../transition.dart';
 
 /// A transition that is triggered through a stream.
 class StreamTransition<T> extends Transition {
+  StreamTransition(this.provider, this.callback);
+
   /// The provider of a stream triggering this transition.
   final Provider<Stream<T>> provider;
 
@@ -13,8 +15,6 @@ class StreamTransition<T> extends Transition {
 
   /// Current subscription
   StreamSubscription<T>? _subscription;
-
-  StreamTransition(this.provider, this.callback);
 
   @override
   void activate() {

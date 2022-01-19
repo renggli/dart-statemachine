@@ -8,6 +8,9 @@ import 'state.dart';
 /// The state machine itself.
 @optionalTypeArgs
 class Machine<T> {
+  /// Constructor of a state machine.
+  Machine();
+
   /// All the known states of this machine.
   final _states = <T, State<T>>{};
 
@@ -27,9 +30,6 @@ class Machine<T> {
   /// Stream controller for events triggered after each transition.
   final StreamController<TransitionEvent<T>> _afterTransitionController =
       StreamController.broadcast(sync: true);
-
-  /// Constructor of a state machine.
-  Machine();
 
   /// Returns a new state. The first call to this method defines the start state
   /// of the machine. To identify states a unique identifier has to be provided.

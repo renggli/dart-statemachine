@@ -3,10 +3,10 @@ import '../transition.dart';
 
 /// A transition that triggers a nested state machine.
 class NestedTransition<T> extends Transition {
+  NestedTransition(this.machine);
+
   /// The nested state machine.
   final Machine<T> machine;
-
-  NestedTransition(this.machine);
 
   @override
   void activate() => machine.start();

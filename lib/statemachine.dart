@@ -1,12 +1,12 @@
 /// Generic state machine framework.
-export 'package:statemachine/src/callback.dart';
-export 'package:statemachine/src/events.dart';
-export 'package:statemachine/src/machine.dart';
-export 'package:statemachine/src/state.dart';
-export 'package:statemachine/src/transition.dart';
-export 'package:statemachine/src/transitions/entry.dart';
-export 'package:statemachine/src/transitions/exit.dart';
-export 'package:statemachine/src/transitions/future.dart';
-export 'package:statemachine/src/transitions/nested.dart';
-export 'package:statemachine/src/transitions/stream.dart';
-export 'package:statemachine/src/transitions/timeout.dart';
+export 'src/callback.dart';
+export 'src/events.dart';
+export 'src/machine.dart';
+export 'src/state.dart';
+export 'src/transition.dart';
+export 'src/transitions/entry.dart';
+export 'src/transitions/exit.dart';
+export 'src/transitions/future.dart';
+export 'src/transitions/nested.dart';
+export 'src/transitions/stream.dart';
+export 'src/transitions/timeout.dart';

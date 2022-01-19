@@ -5,33 +5,6 @@ import 'package:statemachine/statemachine.dart';
 
 /// A pretty HTML tooltip machine.
 class Tooltip {
-  /// The element this tooltip machine is installed on.
-  final Element root;
-
-  /// The data key used to retrieve the tooltip text.
-  final String dataKey;
-
-  /// The CSS class applied to the tooltip style.
-  final String baseCssClass;
-
-  /// The CSS class applied to the tooltip to show it.
-  final String visibleCssClass;
-
-  /// The X offset of the tooltip element.
-  final int offsetX;
-
-  /// The Y offset of the tooltip element.
-  final int offsetY;
-
-  /// The dom element that shows the tooltip contents.
-  final Element tooltip = DivElement();
-
-  /// The actual state machine for the tooltips.
-  final machine = Machine<Symbol>();
-
-  /// The currently active element.
-  Element? _element;
-
   /// Constructor for tooltip machine.
   Tooltip(this.root,
       {this.dataKey = 'tooltip',
@@ -83,6 +56,33 @@ class Tooltip {
 
     machine.start();
   }
+
+  /// The element this tooltip machine is installed on.
+  final Element root;
+
+  /// The data key used to retrieve the tooltip text.
+  final String dataKey;
+
+  /// The CSS class applied to the tooltip style.
+  final String baseCssClass;
+
+  /// The CSS class applied to the tooltip to show it.
+  final String visibleCssClass;
+
+  /// The X offset of the tooltip element.
+  final int offsetX;
+
+  /// The Y offset of the tooltip element.
+  final int offsetY;
+
+  /// The dom element that shows the tooltip contents.
+  final Element tooltip = DivElement();
+
+  /// The actual state machine for the tooltips.
+  final machine = Machine<Symbol>();
+
+  /// The currently active element.
+  Element? _element;
 
   /// Shows tooltip with [message] relative to [element].
   void show(Element? element, String? message) {

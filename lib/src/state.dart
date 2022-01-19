@@ -12,6 +12,9 @@ import 'transitions/timeout.dart';
 
 /// State of the state machine.
 class State<T> {
+  /// Constructs a new state with an identifier.
+  State(this.machine, this.identifier);
+
   /// The state machine holding this state.
   final Machine machine;
 
@@ -20,9 +23,6 @@ class State<T> {
 
   /// The list of transitions of this state.
   final transitions = <Transition>[];
-
-  /// Constructs a new state with an identifier.
-  State(this.machine, this.identifier);
 
   /// A human readable name of the state.
   String get name => identifier.toString();

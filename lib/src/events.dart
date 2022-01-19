@@ -3,6 +3,10 @@ import 'state.dart';
 
 /// Transition event.
 class TransitionEvent<T> {
+  /// Constructs a transition event.
+  TransitionEvent(this.machine, this.source, this.target,
+      [this.errors = const []]);
+
   /// The state machine triggering this event.
   final Machine<T> machine;
 
@@ -14,10 +18,6 @@ class TransitionEvent<T> {
 
   /// List of errors triggered during the transition.
   final List<Object> errors;
-
-  /// Constructs a transition event.
-  TransitionEvent(this.machine, this.source, this.target,
-      [this.errors = const []]);
 }
 
 /// Transition error thrown at the end of a failing transition.
