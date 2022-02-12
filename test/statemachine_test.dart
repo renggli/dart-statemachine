@@ -264,11 +264,11 @@ void main() {
       start = machine.newState(#start);
       other = machine.newState(#other);
       entryError = machine.newState(#entryError);
-      entryError.onEntry(() => throw 'Entry 1'); // ignore: only_throw_errors
-      entryError.onEntry(() => throw 'Entry 2'); // ignore: only_throw_errors
+      entryError.onEntry(() => throw 'Entry 1');
+      entryError.onEntry(() => throw 'Entry 2');
       exitError = machine.newState(#exitError);
-      exitError.onExit(() => throw 'Exit 1'); // ignore: only_throw_errors
-      exitError.onExit(() => throw 'Exit 2'); // ignore: only_throw_errors
+      exitError.onExit(() => throw 'Exit 1');
+      exitError.onExit(() => throw 'Exit 2');
       machine.start();
     });
     test('no errors', () {
