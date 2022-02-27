@@ -1,11 +1,9 @@
 # Changelog
 
-## 3.3.0 (unpublished)
-
-* Dart 2.16 requirement.
-
 ## 3.2.0
 
+* Dart 2.16 requirement.
+* Avoid dynamic calls across the code.
 * Improve typing of State<T> across the code-base.
 
 ## 3.1.0
