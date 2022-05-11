@@ -2,6 +2,8 @@
 
 ## 3.3.0 (unpublished)
 
+* Dart 2.17 requirement.
+
 ## 3.2.0
 
 * Dart 2.16 requirement.

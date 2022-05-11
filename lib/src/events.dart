@@ -23,7 +23,5 @@ class TransitionEvent<T> {
 /// Transition error thrown at the end of a failing transition.
 class TransitionError<T> extends TransitionEvent<T> implements Exception {
   /// Constructs a transition error.
-  TransitionError(Machine<T> machine, State<T>? source, State<T>? target,
-      List<Object> errors)
-      : super(machine, source, target, errors);
+  TransitionError(super.machine, super.source, super.target, super.errors);
 }
