@@ -3,6 +3,7 @@
 ## 3.3.0 (unpublished)
 
 * Dart 2.17 requirement.
+* Add the ability to abort transitions from the `onBeforeTransition` event.
 
 ## 3.2.0
 

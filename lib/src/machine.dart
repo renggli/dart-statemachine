@@ -24,11 +24,11 @@ class Machine<T> {
   State<T>? _current;
 
   /// Stream controller for events triggered before each transition.
-  final StreamController<TransitionEvent<T>> _beforeTransitionController =
+  final StreamController<BeforeTransitionEvent<T>> _beforeTransitionController =
       StreamController.broadcast(sync: true);
 
   /// Stream controller for events triggered after each transition.
-  final StreamController<TransitionEvent<T>> _afterTransitionController =
+  final StreamController<AfterTransitionEvent<T>> _afterTransitionController =
       StreamController.broadcast(sync: true);
 
   /// Internal helper that can be overridden by subclasses to customize the
@@ -65,11 +65,11 @@ class Machine<T> {
           identifier, 'identifier', 'Unknown identifier');
 
   /// Returns an event stream that is triggered before each transition.
-  Stream<TransitionEvent<T>> get onBeforeTransition =>
+  Stream<BeforeTransitionEvent<T>> get onBeforeTransition =>
       _beforeTransitionController.stream;
 
   /// Returns an event stream that is triggered after each transition.
-  Stream<TransitionEvent<T>> get onAfterTransition =>
+  Stream<AfterTransitionEvent<T>> get onAfterTransition =>
       _afterTransitionController.stream;
 
   /// Returns the current state of this machine, or `null`.
@@ -81,10 +81,14 @@ class Machine<T> {
   /// Throws an [ArgumentError], if the state is unknown or from a different
   /// [Machine].
   ///
-  /// Triggers an [onBeforeTransition] event before the transition starts, and
-  /// an [onAfterTransition] after the transition completes. Errors during the
-  /// transition phase are collected, included in the [onAfterTransition] event,
-  /// and rethrown at the end of the state change as a single [TransitionError].
+  /// Triggers an [onBeforeTransition] event before the transition starts. This
+  /// gives listeners the opportunity to abort the transition before it is
+  /// started.
+  ///
+  /// Triggers an [onAfterTransition] event after completion. Errors during the
+  /// transition phase are collected and included in the [onAfterTransition]
+  /// event. A single [TransitionError] is rethrown at the end of the state
+  /// change.
   set current(/*State<T>|T|Null*/ Object? state) {
     // Find and validate the target state.
     final target = state is State<T>
@@ -97,10 +101,15 @@ class Machine<T> {
     if (target != null && target.machine != this) {
       throw ArgumentError.value(state, 'state', 'Invalid machine');
     }
-    // Notify listeners about the upcoming transition.
+    // Notify listeners about the upcoming transition. Check if any of the
+    // listeners wish to abort the transition.
     final source = _current;
     if (_beforeTransitionController.hasListener) {
-      _beforeTransitionController.add(TransitionEvent<T>(this, source, target));
+      final transitionEvent = BeforeTransitionEvent<T>(this, source, target);
+      _beforeTransitionController.add(transitionEvent);
+      if (transitionEvent.isAborted) {
+        return;
+      }
     }
     // Deactivate the source state.
     final errors = <Object>[];
@@ -128,7 +137,7 @@ class Machine<T> {
     // Notify listeners about the completed transition.
     if (_afterTransitionController.hasListener) {
       _afterTransitionController
-          .add(TransitionEvent<T>(this, source, target, errors));
+          .add(AfterTransitionEvent<T>(this, source, target, errors));
     }
     // Rethrow any transition errors at the end.
     if (errors.isNotEmpty) {
