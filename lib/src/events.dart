@@ -33,7 +33,8 @@ class BeforeTransitionEvent<T> extends TransitionEvent<T> {
 class AfterTransitionEvent<T> extends TransitionEvent<T> {
   AfterTransitionEvent(super.machine, super.source, super.target, this.errors);
 
-  /// List of errors triggered during the transition.
+  /// List of errors triggered during the transition. Can be modified to prevent
+  /// a [TransitionError] from being thrown at the end of the transition.
   final List<Object> errors;
 }
 

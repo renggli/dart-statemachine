@@ -81,14 +81,14 @@ class Machine<T> {
   /// Throws an [ArgumentError], if the state is unknown or from a different
   /// [Machine].
   ///
-  /// Triggers an [onBeforeTransition] event before the transition starts. This
-  /// gives listeners the opportunity to abort the transition before it is
-  /// started.
+  /// Triggers a [BeforeTransitionEvent] event before the transition starts.
+  /// This gives listeners the opportunity to observe the transitions and
+  /// possibly abort before it starts.
   ///
-  /// Triggers an [onAfterTransition] event after completion. Errors during the
-  /// transition phase are collected and included in the [onAfterTransition]
-  /// event. A single [TransitionError] is rethrown at the end of the state
-  /// change.
+  /// Triggers a [AfterTransitionEvent] event after the transition completes.
+  /// Errors during the transition phase are collected and included in the
+  /// event. Handlers can inspect and clear the errors. If any errors remain,
+  /// a single [TransitionError] is rethrown at the end of the state change.
   set current(/*State<T>|T|Null*/ Object? state) {
     // Find and validate the target state.
     final target = state is State<T>
