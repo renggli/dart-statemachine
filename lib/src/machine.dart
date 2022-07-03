@@ -31,14 +31,19 @@ class Machine<T> {
   final StreamController<TransitionEvent<T>> _afterTransitionController =
       StreamController.broadcast(sync: true);
 
+  /// Internal helper that can be overridden by subclasses to customize the
+  /// creation of [State] objects.
+  @protected
+  State<T> createState(T identifier) => State<T>(this, identifier);
+
   /// Returns a new state. The first call to this method defines the start state
-  /// of the machine. To identify states a unique identifier has to be provided.
+  /// of the machine. To identify states a unique [identifier] has to be provided.
   State<T> newState(T identifier) {
     if (_states.containsKey(identifier)) {
       throw ArgumentError.value(
           identifier, 'identifier', 'Duplicated state identifier');
     }
-    final state = State<T>(this, identifier);
+    final state = createState(identifier);
     _states[identifier] = state;
     _start ??= state;
     return state;
