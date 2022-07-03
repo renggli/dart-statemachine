@@ -139,7 +139,7 @@ class Machine<T> {
       _afterTransitionController
           .add(AfterTransitionEvent<T>(this, source, target, errors));
     }
-    // Rethrow any transition errors at the end.
+    // Rethrow any remaining transition errors at the end.
     if (errors.isNotEmpty) {
       throw TransitionError<T>(this, source, target, errors);
     }
