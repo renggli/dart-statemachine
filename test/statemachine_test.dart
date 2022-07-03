@@ -391,6 +391,22 @@ void main() {
           )));
       expect(machine.current, entryError);
     });
+    test('clear all errors', () {
+      machine.current = exitError;
+      machine.onAfterTransition.forEach((event) {
+        expect(
+            event,
+            isAfterTransitionEvent(
+              machine: machine,
+              source: exitError,
+              target: entryError,
+              errors: ['Exit 1', 'Exit 2', 'Entry 1', 'Entry 2'],
+            ));
+        event.errors.clear();
+      });
+      machine.current = entryError;
+      expect(machine.current, entryError);
+    });
     test('abort on entry', () {
       machine.current = other;
       expectLater(
