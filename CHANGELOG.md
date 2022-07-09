@@ -1,5 +1,7 @@
 # Changelog
 
+## 3.4.0 (Unpublished)
+
 ## 3.3.0
 
 * Dart 2.17 requirement.
