@@ -1,9 +1,10 @@
 # Changelog
 
-## 3.3.0 (unpublished)
+## 3.3.0
 
 * Dart 2.17 requirement.
 * Add the ability to abort transitions from the `onBeforeTransition` event.
+* Add an factory method `Machine.createState` for subclasses to customize.
 
 ## 3.2.0
 
