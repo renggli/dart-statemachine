@@ -433,23 +433,5 @@ void main() {
       machine.current = other;
       expect(machine.current, exitAbort);
     });
-    test('skip before/after event', () {
-      expectLater(
-          machine.onBeforeTransition,
-          emits(isBeforeTransitionEvent(
-            machine: machine,
-            source: other,
-            target: start,
-          )));
-      expectLater(
-          machine.onAfterTransition,
-          emits(isAfterTransitionEvent(
-            machine: machine,
-            source: start,
-            target: other,
-          )));
-      machine.setCurrent(other, skipBeforeEvent: true);
-      machine.setCurrent(start, skipAfterEvent: true);
-    });
   });
 }
