@@ -89,7 +89,26 @@ class Machine<T> {
   /// Errors during the transition phase are collected and included in the
   /// event. Handlers can inspect and clear the errors. If any errors remain,
   /// a single [TransitionError] is rethrown at the end of the state change.
-  set current(/*State<T>|T|Null*/ Object? state) {
+  set current(/*State<T>|T|Null*/ Object? state) => setCurrent(state);
+
+  /// Sets this machine to the given [state], either specified with a [State]
+  /// object, one of its identifiers, or `null` to remove the active state.
+  ///
+  /// Throws an [ArgumentError], if the state is unknown or from a different
+  /// [Machine].
+  ///
+  /// Triggers a [BeforeTransitionEvent] event before the transition starts,
+  /// unless [skipBeforeEvent] is set to `true`. This gives listeners the
+  /// opportunity to observe the transitions and possibly abort before it
+  /// starts.
+  ///
+  /// Triggers an [AfterTransitionEvent] event after the transition completes,
+  /// unless [skipAfterEvent] is set to `true`. Errors during the transition
+  /// phase are collected and included in the event. Handlers can inspect and
+  /// clear the errors. If any errors remain, a single [TransitionError] is
+  /// rethrown at the end of the state change.
+  void setCurrent(/*State<T>|T|Null*/ Object? state,
+      {bool skipBeforeEvent = false, bool skipAfterEvent = false}) {
     // Find and validate the target state.
     final target = state is State<T>
         ? state
@@ -104,7 +123,7 @@ class Machine<T> {
     // Notify listeners about the upcoming transition. Check if any of the
     // listeners wish to abort the transition.
     final source = _current;
-    if (_beforeTransitionController.hasListener) {
+    if (!skipBeforeEvent && _beforeTransitionController.hasListener) {
       final transitionEvent = BeforeTransitionEvent<T>(this, source, target);
       _beforeTransitionController.add(transitionEvent);
       if (transitionEvent.isAborted) {
@@ -135,7 +154,7 @@ class Machine<T> {
       }
     }
     // Notify listeners about the completed transition.
-    if (_afterTransitionController.hasListener) {
+    if (!skipAfterEvent && _afterTransitionController.hasListener) {
       _afterTransitionController
           .add(AfterTransitionEvent<T>(this, source, target, errors));
     }
