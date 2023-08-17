@@ -4,6 +4,11 @@ version: 3.3.1
 homepage: https://github.com/renggli/dart-statemachine
 description: A simple, yet powerful state machine framework for Dart supporting
   Flutter and web apps.
+topics:
+  - async
+  - state
+  - state-machine
+  - streams
 
 environment:
   sdk: ^3.0.0
