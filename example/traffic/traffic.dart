@@ -56,7 +56,7 @@ void main() {
   final input = stdin
       .asBroadcastStream()
       .expand((charCodes) => charCodes)
-      .map((charCode) => String.fromCharCode(charCode));
+      .map(String.fromCharCode);
 
   // Configure the machine.
   final machine = Machine<TrafficState>();

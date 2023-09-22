@@ -1,4 +1,6 @@
 /// Generic state machine framework.
+library statemachine;
+
 export 'src/callback.dart';
 export 'src/events.dart';
 export 'src/machine.dart';
