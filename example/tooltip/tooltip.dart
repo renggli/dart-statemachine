@@ -1,19 +1,19 @@
 import 'dart:async';
-import 'dart:html';
 
 import 'package:statemachine/statemachine.dart';
+import 'package:web/web.dart';
 
 /// A pretty HTML tooltip machine.
 class Tooltip {
   /// Constructor for tooltip machine.
   Tooltip(this.root,
-      {this.dataKey = 'tooltip',
+      {this.attributeKey = 'data-tooltip',
       this.baseCssClass = 'tooltip',
       this.visibleCssClass = 'visible',
       this.offsetX = 0,
       this.offsetY = 0,
       Duration delay = const Duration(milliseconds: 500)}) {
-    tooltip.classes.add(baseCssClass);
+    tooltip.classList.add(baseCssClass);
 
     final waiting = machine.newState(#waiting);
     final heating = machine.newState(#heating);
@@ -22,7 +22,7 @@ class Tooltip {
 
     waiting.onStream<MouseEvent>(root.onMouseOver, (event) {
       final element = event.target;
-      if (element is Element && element.dataset.containsKey(dataKey)) {
+      if (element is HTMLElement && element.hasAttribute(attributeKey)) {
         _element = element;
         heating.enter();
       }
@@ -33,7 +33,7 @@ class Tooltip {
       waiting.enter();
     });
     heating.onTimeout(delay, () {
-      show(_element, _element?.dataset[dataKey]);
+      show(_element, _element?.getAttribute(attributeKey));
       display.enter();
     });
 
@@ -43,8 +43,8 @@ class Tooltip {
 
     cooling.onStream<MouseEvent>(root.onMouseOver, (event) {
       final element = event.target;
-      if (element is Element && element.dataset.containsKey(dataKey)) {
-        show(_element = element, _element?.dataset[dataKey]);
+      if (element is HTMLElement && element.hasAttribute(attributeKey)) {
+        show(_element = element, _element?.getAttribute(attributeKey));
         display.enter();
       }
     });
@@ -58,10 +58,10 @@ class Tooltip {
   }
 
   /// The element this tooltip machine is installed on.
-  final Element root;
+  final HTMLElement root;
 
-  /// The data key used to retrieve the tooltip text.
-  final String dataKey;
+  /// The attribute key used to retrieve the tooltip text.
+  final String attributeKey;
 
   /// The CSS class applied to the tooltip style.
   final String baseCssClass;
@@ -76,30 +76,30 @@ class Tooltip {
   final int offsetY;
 
   /// The dom element that shows the tooltip contents.
-  final Element tooltip = DivElement();
+  final HTMLElement tooltip = document.createElement('div') as HTMLElement;
 
   /// The actual state machine for the tooltips.
   final machine = Machine<Symbol>();
 
   /// The currently active element.
-  Element? _element;
+  HTMLElement? _element;
 
   /// Shows tooltip with [message] relative to [element].
-  void show(Element? element, String? message) {
+  void show(HTMLElement? element, String? message) {
     final parent = element?.parentNode;
     if (element != null && parent != null && message != null) {
-      final left = element.offset.left + element.offset.width / 2 + offsetX;
-      final top = element.offset.top + element.offset.height + offsetY;
+      final left = element.offsetLeft + element.offsetWidth / 2 + offsetX;
+      final top = element.offsetTop + element.offsetHeight + offsetY;
       tooltip.style.left = '${left}px';
       tooltip.style.top = '${top}px';
-      tooltip.innerHtml = message;
-      parent.insertBefore(tooltip, element.nextNode);
-      Timer.run(() => tooltip.classes.add(visibleCssClass));
+      tooltip.innerHTML = message;
+      parent.insertBefore(tooltip, element.nextElementSibling);
+      Timer.run(() => tooltip.classList.add(visibleCssClass));
     }
   }
 
   /// Removes the tooltip.
   void hide() {
-    tooltip.classes.remove(visibleCssClass);
+    tooltip.classList.remove(visibleCssClass);
   }
 }
