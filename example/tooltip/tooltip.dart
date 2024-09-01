@@ -92,7 +92,7 @@ class Tooltip {
       final top = element.offsetTop + element.offsetHeight + offsetY;
       tooltip.style.left = '${left}px';
       tooltip.style.top = '${top}px';
-      tooltip.innerHTML = message;
+      tooltip.innerText = message;
       parent.insertBefore(tooltip, element.nextElementSibling);
       Timer.run(() => tooltip.classList.add(visibleCssClass));
     }
