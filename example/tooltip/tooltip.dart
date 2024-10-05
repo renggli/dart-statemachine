@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:js_interop';
 
 import 'package:statemachine/statemachine.dart';
 import 'package:web/web.dart';
@@ -21,10 +22,13 @@ class Tooltip {
     final cooling = machine.newState(#cooling);
 
     waiting.onStream<MouseEvent>(root.onMouseOver, (event) {
-      final element = event.target;
-      if (element is HTMLElement && element.hasAttribute(attributeKey)) {
-        _element = element;
-        heating.enter();
+      final node = event.target;
+      if (node != null && node.isA<HTMLElement>()) {
+        final element = node as HTMLElement;
+        if (element.hasAttribute(attributeKey)) {
+          _element = element;
+          heating.enter();
+        }
       }
     });
 
@@ -42,10 +46,13 @@ class Tooltip {
     });
 
     cooling.onStream<MouseEvent>(root.onMouseOver, (event) {
-      final element = event.target;
-      if (element is HTMLElement && element.hasAttribute(attributeKey)) {
-        show(_element = element, _element?.getAttribute(attributeKey));
-        display.enter();
+      final node = event.target;
+      if (node != null && node.isA<HTMLElement>()) {
+        final element = node as HTMLElement;
+        if (element.hasAttribute(attributeKey)) {
+          show(_element = element, element.getAttribute(attributeKey));
+          display.enter();
+        }
       }
     });
     cooling.onTimeout(delay, () {
