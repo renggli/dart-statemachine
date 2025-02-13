@@ -45,8 +45,9 @@ class State<T> {
   /// Triggers the [callback] when the [Stream] provided by [provider] triggers
   /// an event.
   void onStreamProvider<S>(
-          Provider<Stream<S>> provider, Callback1<S> callback) =>
-      addTransition(StreamTransition<S>(provider, callback));
+    Provider<Stream<S>> provider,
+    Callback1<S> callback,
+  ) => addTransition(StreamTransition<S>(provider, callback));
 
   /// Triggers the [callback] when a [future] yields a value.
   void onFuture<S>(Future<S> future, Callback1<S> callback) =>
@@ -55,8 +56,9 @@ class State<T> {
   /// Triggers the [callback] when the [Future] provided by [provider] yields a
   /// value.
   void onFutureProvider<S>(
-          Provider<Future<S>> provider, Callback1<S> callback) =>
-      addTransition(FutureTransition<S>(provider, callback));
+    Provider<Future<S>> provider,
+    Callback1<S> callback,
+  ) => addTransition(FutureTransition<S>(provider, callback));
 
   /// Triggers the [callback] when [duration] elapses.
   void onTimeout(Duration duration, Callback0 callback) =>

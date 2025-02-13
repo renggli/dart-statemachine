@@ -41,7 +41,10 @@ class Machine<T> {
   State<T> newState(T identifier) {
     if (_states.containsKey(identifier)) {
       throw ArgumentError.value(
-          identifier, 'identifier', 'Duplicated state identifier');
+        identifier,
+        'identifier',
+        'Duplicated state identifier',
+      );
     }
     final state = createState(identifier);
     _states[identifier] = state;
@@ -59,10 +62,14 @@ class Machine<T> {
   Iterable<State<T>> get states => _states.values;
 
   /// Returns the state of the provided identifier.
-  State<T> operator [](T identifier) => _states.containsKey(identifier)
-      ? _states[identifier]!
-      : throw ArgumentError.value(
-          identifier, 'identifier', 'Unknown identifier');
+  State<T> operator [](T identifier) =>
+      _states.containsKey(identifier)
+          ? _states[identifier]!
+          : throw ArgumentError.value(
+            identifier,
+            'identifier',
+            'Unknown identifier',
+          );
 
   /// Returns an event stream that is triggered before each transition.
   Stream<BeforeTransitionEvent<T>> get onBeforeTransition =>
@@ -91,13 +98,14 @@ class Machine<T> {
   /// a single [TransitionError] is rethrown at the end of the state change.
   set current(/*State<T>|T|Null*/ Object? state) {
     // Find and validate the target state.
-    final target = state is State<T>
-        ? state
-        : state is T
+    final target =
+        state is State<T>
+            ? state
+            : state is T
             ? this[state]
             : state == null
-                ? null
-                : throw ArgumentError.value(state, 'state', 'Invalid state');
+            ? null
+            : throw ArgumentError.value(state, 'state', 'Invalid state');
     if (target != null && target.machine != this) {
       throw ArgumentError.value(state, 'state', 'Invalid machine');
     }
@@ -136,8 +144,9 @@ class Machine<T> {
     }
     // Notify listeners about the completed transition.
     if (_afterTransitionController.hasListener) {
-      _afterTransitionController
-          .add(AfterTransitionEvent<T>(this, source, target, errors));
+      _afterTransitionController.add(
+        AfterTransitionEvent<T>(this, source, target, errors),
+      );
     }
     // Rethrow any remaining transition errors at the end.
     if (errors.isNotEmpty) {

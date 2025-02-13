@@ -2,12 +2,7 @@ import 'dart:io';
 
 import 'package:statemachine/statemachine.dart';
 
-enum TrafficState {
-  green,
-  yellowToRed,
-  yellowToGreen,
-  red,
-}
+enum TrafficState { green, yellowToRed, yellowToGreen, red }
 
 const ansiReset = '\u001b[0m';
 const ansiRed = '\u001b[31m';
@@ -18,19 +13,20 @@ void output(String output) {
   stdout.write('\r$output$ansiReset');
 }
 
-Callback1<String> keyboardDispatcher(Machine<TrafficState> machine,
-        [TrafficState? state]) =>
-    (input) {
-      if (input == ' ') {
-        if (state != null) {
-          machine.current = state;
-        }
-      } else if (input == 'q') {
-        stdin.echoMode = true;
-        stdin.lineMode = true;
-        exit(0);
-      }
-    };
+Callback1<String> keyboardDispatcher(
+  Machine<TrafficState> machine, [
+  TrafficState? state,
+]) => (input) {
+  if (input == ' ') {
+    if (state != null) {
+      machine.current = state;
+    }
+  } else if (input == 'q') {
+    stdin.echoMode = true;
+    stdin.lineMode = true;
+    exit(0);
+  }
+};
 
 void main() {
   // Require stdout to be connected to terminal.

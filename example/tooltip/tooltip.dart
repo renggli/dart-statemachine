@@ -7,13 +7,15 @@ import 'package:web/web.dart';
 /// A pretty HTML tooltip machine.
 class Tooltip {
   /// Constructor for tooltip machine.
-  Tooltip(this.root,
-      {this.attributeKey = 'data-tooltip',
-      this.baseCssClass = 'tooltip',
-      this.visibleCssClass = 'visible',
-      this.offsetX = 0,
-      this.offsetY = 0,
-      Duration delay = const Duration(milliseconds: 500)}) {
+  Tooltip(
+    this.root, {
+    this.attributeKey = 'data-tooltip',
+    this.baseCssClass = 'tooltip',
+    this.visibleCssClass = 'visible',
+    this.offsetX = 0,
+    this.offsetY = 0,
+    Duration delay = const Duration(milliseconds: 500),
+  }) {
     tooltip.classList.add(baseCssClass);
 
     final waiting = machine.newState(#waiting);

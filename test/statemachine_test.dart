@@ -8,24 +8,22 @@ TypeMatcher<BeforeTransitionEvent<T>> isBeforeTransitionEvent<T>({
   State<T>? source,
   State<T>? target,
   bool? isAborted = false,
-}) =>
-    isA<BeforeTransitionEvent<T>>()
-        .having((event) => event.machine, 'machine', machine)
-        .having((event) => event.source, 'source', source)
-        .having((event) => event.target, 'target', target)
-        .having((event) => event.isAborted, 'isAborted', isAborted);
+}) => isA<BeforeTransitionEvent<T>>()
+    .having((event) => event.machine, 'machine', machine)
+    .having((event) => event.source, 'source', source)
+    .having((event) => event.target, 'target', target)
+    .having((event) => event.isAborted, 'isAborted', isAborted);
 
 TypeMatcher<AfterTransitionEvent<T>> isAfterTransitionEvent<T>({
   required Machine<T> machine,
   State<T>? source,
   State<T>? target,
   List<Object> errors = const [],
-}) =>
-    isA<AfterTransitionEvent<T>>()
-        .having((event) => event.machine, 'machine', machine)
-        .having((event) => event.source, 'source', source)
-        .having((event) => event.target, 'target', target)
-        .having((event) => event.errors, 'errors', errors);
+}) => isA<AfterTransitionEvent<T>>()
+    .having((event) => event.machine, 'machine', machine)
+    .having((event) => event.source, 'source', source)
+    .having((event) => event.target, 'target', target)
+    .having((event) => event.errors, 'errors', errors);
 
 void main() {
   late Machine<int> machine;
@@ -122,32 +120,31 @@ void main() {
       final stateA = machine.newState('a');
       final stateB = machine.newState('b');
       stateA.onFuture<String>(
-          Future.delayed(
-            const Duration(milliseconds: 100),
-            () => 'something',
-          ),
-          (value) => fail('should never be called'));
+        Future.delayed(const Duration(milliseconds: 100), () => 'something'),
+        (value) => fail('should never be called'),
+      );
       stateA.onFuture<String>(
-          Future.delayed(
-            const Duration(milliseconds: 10),
-            () => 'something else',
-          ), expectAsync1<String, Object>((value) {
-        expect(log, isEmpty);
-        expect(value, 'something else');
-        expect(machine.current, stateA);
-        log.add('a');
-        stateB.enter();
-        return 'done';
-      }));
+        Future.delayed(
+          const Duration(milliseconds: 10),
+          () => 'something else',
+        ),
+        expectAsync1<String, Object>((value) {
+          expect(log, isEmpty);
+          expect(value, 'something else');
+          expect(machine.current, stateA);
+          log.add('a');
+          stateB.enter();
+          return 'done';
+        }),
+      );
       stateB.onFuture<String>(
-          Future.delayed(
-            const Duration(milliseconds: 1),
-            () => 'completer',
-          ), expectAsync1<String, Object>((value) {
-        expect(log, ['a']);
-        expect(value, 'completer');
-        return 'done';
-      }));
+        Future.delayed(const Duration(milliseconds: 1), () => 'completer'),
+        expectAsync1<String, Object>((value) {
+          expect(log, ['a']);
+          expect(value, 'completer');
+          return 'done';
+        }),
+      );
       machine.start();
     });
     group('stream transitions', () {
@@ -210,29 +207,41 @@ void main() {
       final stateA = machine.newState('a');
       final stateB = machine.newState('b');
       final stateC = machine.newState('c');
-      stateA.onTimeout(const Duration(milliseconds: 10), expectAsync0(() {
-        expect(machine.current, stateA);
-        stateB.enter();
-      }));
-      stateA.onTimeout(const Duration(milliseconds: 20),
-          () => fail('should never be called'));
-      stateB.onTimeout(const Duration(milliseconds: 20),
-          () => fail('should never be called'));
-      stateB.onTimeout(const Duration(milliseconds: 10), expectAsync0(() {
-        expect(machine.current, stateB);
-        stateC.enter();
-      }));
+      stateA.onTimeout(
+        const Duration(milliseconds: 10),
+        expectAsync0(() {
+          expect(machine.current, stateA);
+          stateB.enter();
+        }),
+      );
+      stateA.onTimeout(
+        const Duration(milliseconds: 20),
+        () => fail('should never be called'),
+      );
+      stateB.onTimeout(
+        const Duration(milliseconds: 20),
+        () => fail('should never be called'),
+      );
+      stateB.onTimeout(
+        const Duration(milliseconds: 10),
+        expectAsync0(() {
+          expect(machine.current, stateB);
+          stateC.enter();
+        }),
+      );
       machine.start();
     });
     test('entry and exit', () {
       final log = <String>[];
       final machine = Machine<String>();
-      final stateA = machine.newState('a')
-        ..onEntry(() => log.add('on a'))
-        ..onExit(() => log.add('off a'));
-      final stateB = machine.newState('b')
-        ..onEntry(() => log.add('on b'))
-        ..onExit(() => log.add('off b'));
+      final stateA =
+          machine.newState('a')
+            ..onEntry(() => log.add('on a'))
+            ..onExit(() => log.add('off a'));
+      final stateB =
+          machine.newState('b')
+            ..onEntry(() => log.add('on b'))
+            ..onExit(() => log.add('off b'));
       machine.start();
       stateB.enter();
       expect(log, ['on a', 'off a', 'on b']);
@@ -253,8 +262,12 @@ void main() {
       outer.start();
       expect(log, ['outer entry a', 'inner entry 1']);
       outer.stop();
-      expect(log,
-          ['outer entry a', 'inner entry 1', 'outer exit a', 'inner exit 1']);
+      expect(log, [
+        'outer entry a',
+        'inner entry 1',
+        'outer exit a',
+        'inner exit 1',
+      ]);
     });
   });
   group('events', () {
@@ -294,114 +307,148 @@ void main() {
     });
     test('no errors', () {
       expectLater(
-          machine.onBeforeTransition,
-          emits(isBeforeTransitionEvent(
+        machine.onBeforeTransition,
+        emits(
+          isBeforeTransitionEvent(
             machine: machine,
             source: start,
             target: other,
-          )));
+          ),
+        ),
+      );
       expectLater(
-          machine.onAfterTransition,
-          emits(isAfterTransitionEvent(
+        machine.onAfterTransition,
+        emits(
+          isAfterTransitionEvent(
             machine: machine,
             source: start,
             target: other,
-          )));
+          ),
+        ),
+      );
       machine.current = other;
       expect(machine.current, other);
     });
     test('errors on entry', () {
       machine.current = other;
       expectLater(
-          machine.onBeforeTransition,
-          emits(isBeforeTransitionEvent(
+        machine.onBeforeTransition,
+        emits(
+          isBeforeTransitionEvent(
             machine: machine,
             source: other,
             target: entryError,
-          )));
+          ),
+        ),
+      );
       expectLater(
-          machine.onAfterTransition,
-          emits(isAfterTransitionEvent(
+        machine.onAfterTransition,
+        emits(
+          isAfterTransitionEvent(
             machine: machine,
             source: other,
             target: entryError,
             errors: ['Entry 1', 'Entry 2'],
-          )));
+          ),
+        ),
+      );
       expect(
-          () => machine.current = entryError,
-          throwsA(isAfterTransitionEvent(
+        () => machine.current = entryError,
+        throwsA(
+          isAfterTransitionEvent(
             machine: machine,
             source: other,
             target: entryError,
             errors: ['Entry 1', 'Entry 2'],
-          )));
+          ),
+        ),
+      );
       expect(machine.current, entryError);
     });
     test('errors on exit', () {
       machine.current = exitError;
       expectLater(
-          machine.onBeforeTransition,
-          emits(isBeforeTransitionEvent(
+        machine.onBeforeTransition,
+        emits(
+          isBeforeTransitionEvent(
             machine: machine,
             source: exitError,
             target: other,
-          )));
+          ),
+        ),
+      );
       expectLater(
-          machine.onAfterTransition,
-          emits(isAfterTransitionEvent(
+        machine.onAfterTransition,
+        emits(
+          isAfterTransitionEvent(
             machine: machine,
             source: exitError,
             target: other,
             errors: ['Exit 1', 'Exit 2'],
-          )));
+          ),
+        ),
+      );
       expect(
-          () => machine.current = other,
-          throwsA(isAfterTransitionEvent(
+        () => machine.current = other,
+        throwsA(
+          isAfterTransitionEvent(
             machine: machine,
             source: exitError,
             target: other,
             errors: ['Exit 1', 'Exit 2'],
-          )));
+          ),
+        ),
+      );
       expect(machine.current, other);
     });
     test('errors on entry and exit', () {
       machine.current = exitError;
       expectLater(
-          machine.onBeforeTransition,
-          emits(isBeforeTransitionEvent(
+        machine.onBeforeTransition,
+        emits(
+          isBeforeTransitionEvent(
             machine: machine,
             source: exitError,
             target: entryError,
-          )));
+          ),
+        ),
+      );
       expectLater(
-          machine.onAfterTransition,
-          emits(isAfterTransitionEvent(
+        machine.onAfterTransition,
+        emits(
+          isAfterTransitionEvent(
             machine: machine,
             source: exitError,
             target: entryError,
             errors: ['Exit 1', 'Exit 2', 'Entry 1', 'Entry 2'],
-          )));
+          ),
+        ),
+      );
       expect(
-          () => machine.current = entryError,
-          throwsA(isAfterTransitionEvent(
+        () => machine.current = entryError,
+        throwsA(
+          isAfterTransitionEvent(
             machine: machine,
             source: exitError,
             target: entryError,
             errors: ['Exit 1', 'Exit 2', 'Entry 1', 'Entry 2'],
-          )));
+          ),
+        ),
+      );
       expect(machine.current, entryError);
     });
     test('clear all errors', () {
       machine.current = exitError;
       machine.onAfterTransition.forEach((event) {
         expect(
-            event,
-            isAfterTransitionEvent(
-              machine: machine,
-              source: exitError,
-              target: entryError,
-              errors: ['Exit 1', 'Exit 2', 'Entry 1', 'Entry 2'],
-            ));
+          event,
+          isAfterTransitionEvent(
+            machine: machine,
+            source: exitError,
+            target: entryError,
+            errors: ['Exit 1', 'Exit 2', 'Entry 1', 'Entry 2'],
+          ),
+        );
         event.errors.clear();
       });
       machine.current = entryError;
@@ -410,26 +457,32 @@ void main() {
     test('abort on entry', () {
       machine.current = other;
       expectLater(
-          machine.onBeforeTransition,
-          emits(isBeforeTransitionEvent(
+        machine.onBeforeTransition,
+        emits(
+          isBeforeTransitionEvent(
             machine: machine,
             source: other,
             target: entryAbort,
             isAborted: true,
-          )));
+          ),
+        ),
+      );
       machine.current = entryAbort;
       expect(machine.current, other);
     });
     test('abort on exit', () {
       machine.current = exitAbort;
       expectLater(
-          machine.onBeforeTransition,
-          emits(isBeforeTransitionEvent(
+        machine.onBeforeTransition,
+        emits(
+          isBeforeTransitionEvent(
             machine: machine,
             source: exitAbort,
             target: other,
             isAborted: true,
-          )));
+          ),
+        ),
+      );
       machine.current = other;
       expect(machine.current, exitAbort);
     });
