@@ -234,14 +234,12 @@ void main() {
     test('entry and exit', () {
       final log = <String>[];
       final machine = Machine<String>();
-      final stateA =
-          machine.newState('a')
-            ..onEntry(() => log.add('on a'))
-            ..onExit(() => log.add('off a'));
-      final stateB =
-          machine.newState('b')
-            ..onEntry(() => log.add('on b'))
-            ..onExit(() => log.add('off b'));
+      final stateA = machine.newState('a')
+        ..onEntry(() => log.add('on a'))
+        ..onExit(() => log.add('off a'));
+      final stateB = machine.newState('b')
+        ..onEntry(() => log.add('on b'))
+        ..onExit(() => log.add('off b'));
       machine.start();
       stateB.enter();
       expect(log, ['on a', 'off a', 'on b']);

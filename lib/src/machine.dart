@@ -62,14 +62,13 @@ class Machine<T> {
   Iterable<State<T>> get states => _states.values;
 
   /// Returns the state of the provided identifier.
-  State<T> operator [](T identifier) =>
-      _states.containsKey(identifier)
-          ? _states[identifier]!
-          : throw ArgumentError.value(
-            identifier,
-            'identifier',
-            'Unknown identifier',
-          );
+  State<T> operator [](T identifier) => _states.containsKey(identifier)
+      ? _states[identifier]!
+      : throw ArgumentError.value(
+          identifier,
+          'identifier',
+          'Unknown identifier',
+        );
 
   /// Returns an event stream that is triggered before each transition.
   Stream<BeforeTransitionEvent<T>> get onBeforeTransition =>
@@ -98,14 +97,13 @@ class Machine<T> {
   /// a single [TransitionError] is rethrown at the end of the state change.
   set current(/*State<T>|T|Null*/ Object? state) {
     // Find and validate the target state.
-    final target =
-        state is State<T>
-            ? state
-            : state is T
-            ? this[state]
-            : state == null
-            ? null
-            : throw ArgumentError.value(state, 'state', 'Invalid state');
+    final target = state is State<T>
+        ? state
+        : state is T
+        ? this[state]
+        : state == null
+        ? null
+        : throw ArgumentError.value(state, 'state', 'Invalid state');
     if (target != null && target.machine != this) {
       throw ArgumentError.value(state, 'state', 'Invalid machine');
     }
