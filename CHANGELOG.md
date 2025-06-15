@@ -1,8 +1,9 @@
 # Changelog
 
-## 3.4.0 (Unpublished)
+## 3.4.0
 
-- Dart 3.7 requirement.
+- Dart 3.8 requirement.
+- Bug fixes, address linter issues, and compatibility with latest dependencies.
 
 ## 3.3.0
 
