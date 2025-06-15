@@ -1,5 +1,4 @@
-State Machine
-=============
+# State Machine
 
 [![Pub Package](https://img.shields.io/pub/v/statemachine.svg)](https://pub.dev/packages/statemachine)
 [![Build Status](https://github.com/renggli/dart-statemachine/actions/workflows/dart.yml/badge.svg?branch=main)](https://github.com/renggli/dart-statemachine/actions/workflows/dart.yml)
@@ -15,9 +14,7 @@ This library is open source, stable and well tested. Development happens on [Git
 
 The package is hosted on [dart packages](https://pub.dev/packages/statemachine). Up-to-date [class documentation](https://pub.dev/documentation/statemachine/latest/) is created with every release.
 
-
-Tutorial
---------
+## Tutorial
 
 ### Installation
 
@@ -41,7 +38,7 @@ The type of the state machine is used to uniquely identify states of the machine
 
 ### Defining states
 
-To create states call `Machine.newState` and store them in variables. Each state needs an identifying key of the declared type, as described above we use a `String` that helps debugging. 
+To create states call `Machine.newState` and store them in variables. Each state needs an identifying key of the declared type, as described above we use a `String` that helps debugging.
 
 ```dart
 final startState = machine.newState('start');
@@ -127,8 +124,7 @@ Machines can be nested. Simply add another machine that gets started when the st
 someState.addNested(anotherMachine);
 ```
 
-Misc
-----
+## Misc
 
 ### Resources
 
