@@ -3,7 +3,7 @@ import 'dart:async';
 import '../callback.dart';
 import '../transition.dart';
 
-/// A transition that happens automatically after a certain duration elapsed.
+/// A transition that triggers automatically after a specified [duration].
 class TimeoutTransition extends Transition {
   TimeoutTransition(this.duration, this.callback);
 

@@ -3,7 +3,7 @@ import 'dart:async';
 import '../callback.dart';
 import '../transition.dart';
 
-/// A transition that is triggered by a future.
+/// A transition that is triggered by the completion of a [Future].
 class FutureTransition<T> extends Transition {
   FutureTransition(this.provider, this.callback);
 

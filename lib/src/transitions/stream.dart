@@ -3,7 +3,7 @@ import 'dart:async';
 import '../callback.dart';
 import '../transition.dart';
 
-/// A transition that is triggered through a stream.
+/// A transition that is triggered by an event on a [Stream].
 class StreamTransition<T> extends Transition {
   StreamTransition(this.provider, this.callback);
 

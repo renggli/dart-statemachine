@@ -1,7 +1,7 @@
 import '../callback.dart';
 import '../transition.dart';
 
-/// A callback that is triggered when the state activates.
+/// A transition that triggers a callback when the state is entered.
 class EntryTransition extends Transition {
   EntryTransition(this.callback);
 

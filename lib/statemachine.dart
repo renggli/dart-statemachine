@@ -1,4 +1,4 @@
-/// Generic state machine framework.
+/// A simple, yet powerful state machine framework for Dart.
 library;
 
 export 'src/callback.dart';

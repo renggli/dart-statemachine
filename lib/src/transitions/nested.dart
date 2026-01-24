@@ -1,7 +1,7 @@
 import '../machine.dart';
 import '../transition.dart';
 
-/// A transition that triggers a nested state machine.
+/// A transition that takes control of a nested state [machine].
 class NestedTransition<T> extends Transition {
   NestedTransition(this.machine);
 

@@ -1,7 +1,7 @@
 import '../callback.dart';
 import '../transition.dart';
 
-/// A callback that is triggered when the state deactivates.
+/// A transition that triggers a callback when the state is left.
 class ExitTransition extends Transition {
   ExitTransition(this.callback);
 

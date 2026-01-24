@@ -5,10 +5,19 @@ import 'package:meta/meta.dart';
 import 'events.dart';
 import 'state.dart';
 
-/// The state machine itself.
+/// A state machine manages a set of states and transitions between them.
+///
+/// To create a new state machine, instantiate it:
+///
+/// ```dart
+/// final machine = Machine<String>();
+/// ```
+///
+/// The type parameter [T] represents the identifier used to distinguish states.
+/// This is typically an enum, a string, or a symbol.
 @optionalTypeArgs
 class Machine<T> {
-  /// Constructor of a state machine.
+  /// Constructs a new state machine.
   Machine();
 
   /// All the known states of this machine.
@@ -36,8 +45,17 @@ class Machine<T> {
   @protected
   State<T> createState(T identifier) => State<T>(this, identifier);
 
-  /// Returns a new state. The first call to this method defines the start state
-  /// of the machine. To identify states a unique [identifier] has to be provided.
+  /// Creates and returns a new state with the given [identifier].
+  ///
+  /// The first state created becomes the start state of the machine.
+  ///
+  /// ```dart
+  /// final startState = machine.newState('start');
+  /// final otherState = machine.newState('other');
+  /// ```
+  ///
+  /// Throws an [ArgumentError] if a state with the same [identifier] already
+  /// exists.
   State<T> newState(T identifier) {
     if (_states.containsKey(identifier)) {
       throw ArgumentError.value(
@@ -52,10 +70,14 @@ class Machine<T> {
     return state;
   }
 
-  /// Returns a new start state for this machine.
+  /// Creates and returns a new start state with the given [identifier].
+  ///
+  /// This explicitly sets the start state, separate from the order of creation.
   State<T> newStartState(T identifier) => _start = newState(identifier);
 
-  /// Returns a new stop state for this machine.
+  /// Creates and returns a new stop state with the given [identifier].
+  ///
+  /// This state is entered when the machine is stopped.
   State<T> newStopState(T identifier) => _stop = newState(identifier);
 
   /// Returns the states of this machine.
@@ -78,23 +100,34 @@ class Machine<T> {
   Stream<AfterTransitionEvent<T>> get onAfterTransition =>
       _afterTransitionController.stream;
 
-  /// Returns the current state of this machine, or `null`.
+  /// Returns the currently active state of this machine, or `null` if not
+  /// started.
   State<T>? get current => _current;
 
-  /// Sets this machine to the given [state], either specified with a [State]
-  /// object, one of its identifiers, or `null` to remove the active state.
+  /// Sets the currently active state to [state].
   ///
-  /// Throws an [ArgumentError], if the state is unknown or from a different
-  /// [Machine].
+  /// The [state] can be a [State] object, a state identifier, or `null` to
+  /// deactivate the current state.
   ///
-  /// Triggers a [BeforeTransitionEvent] event before the transition starts.
-  /// This gives listeners the opportunity to observe the transitions and
-  /// possibly abort before it starts.
+  /// ```dart
+  /// machine.current = startState;
+  /// machine.current = 'active';
+  /// ```
   ///
-  /// Triggers a [AfterTransitionEvent] event after the transition completes.
-  /// Errors during the transition phase are collected and included in the
-  /// event. Handlers can inspect and clear the errors. If any errors remain,
-  /// a single [TransitionError] is rethrown at the end of the state change.
+  /// Throws an [ArgumentError] if the state is unknown or belongs to a
+  /// different machine.
+  ///
+  /// This setter triggers the following sequence:
+  /// 1. A [BeforeTransitionEvent] is emitted. Listeners can abort the
+  ///    transition.
+  /// 2. The current state is deactivated (callbacks are executed).
+  /// 3. The new state is set.
+  /// 4. The new state is activated (callbacks are executed).
+  /// 5. An [AfterTransitionEvent] is emitted.
+  ///
+  /// If any errors occur during deactivation or activation, they are collected
+  /// and passed to the [AfterTransitionEvent]. If the errors are not handled
+  /// by listeners, a [TransitionError] is thrown.
   set current(/*State<T>|T|Null*/ Object? state) {
     // Find and validate the target state.
     final target = state is State<T>
@@ -152,10 +185,10 @@ class Machine<T> {
     }
   }
 
-  /// Sets the machine to its start state.
+  /// Starts the machine by setting the current state to the start state.
   void start() => current = _start;
 
-  /// Sets the machine to its stop state.
+  /// Stops the machine by setting the current state to the stop state.
   void stop() => current = _stop;
 
   /// Returns a debug string of this state.
