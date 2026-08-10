@@ -24,7 +24,7 @@ jobs:
           path: "~/.pub-cache/hosted"
           key: "os:ubuntu-latest;pub-cache-hosted;dart:stable"
       - uses: actions/checkout@v7
-      - uses: dart-lang/setup-dart@v1.7.2
+      - uses: dart-lang/setup-dart@v1.8.0
       - name: "Dependencies"
         run: dart pub upgrade --no-precompile
       - name: "Dart Analyzer"
