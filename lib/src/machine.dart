@@ -18,7 +18,7 @@ import 'state.dart';
 @optionalTypeArgs
 class Machine<T> {
   /// Constructs a new state machine.
-  Machine();
+  new();
 
   /// All the known states of this machine.
   final _states = <T, State<T>>{};

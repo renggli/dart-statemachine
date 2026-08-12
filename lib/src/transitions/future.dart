@@ -5,7 +5,7 @@ import '../transition.dart';
 
 /// A transition that is triggered by the completion of a [Future].
 class FutureTransition<T> extends Transition {
-  FutureTransition(this.provider, this.callback);
+  new(this.provider, this.callback);
 
   /// The provider of a future triggering this transition.
   final Provider<Future<T>> provider;

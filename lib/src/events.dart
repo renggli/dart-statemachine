@@ -7,7 +7,7 @@ import 'state.dart';
 /// [machine].
 abstract class TransitionEvent<T> {
   /// Constructs a transition event.
-  const TransitionEvent(this.machine, this.source, this.target);
+  const new(this.machine, this.source, this.target);
 
   /// The state machine triggering this event.
   final Machine<T> machine;
@@ -24,7 +24,7 @@ abstract class TransitionEvent<T> {
 /// This event allows listeners to observe and strictly control state changes.
 /// Calling [abort] will prevent the transition from happening.
 class BeforeTransitionEvent<T> extends TransitionEvent<T> {
-  BeforeTransitionEvent(super.machine, super.source, super.target);
+  new(super.machine, super.source, super.target);
 
   bool _aborted = false;
 
@@ -41,12 +41,7 @@ class BeforeTransitionEvent<T> extends TransitionEvent<T> {
 /// any [errors] that occurred during the process.
 class AfterTransitionEvent<T> extends TransitionEvent<T> {
   /// Constructs an after transition event.
-  const AfterTransitionEvent(
-    super.machine,
-    super.source,
-    super.target,
-    this.errors,
-  );
+  const new(super.machine, super.source, super.target, this.errors);
 
   /// List of errors triggered during the transition. Can be modified to prevent
   /// a [TransitionError] from being thrown at the end of the transition.
@@ -59,10 +54,5 @@ class AfterTransitionEvent<T> extends TransitionEvent<T> {
 /// entry or exit phases of a transition.
 class TransitionError<T> extends AfterTransitionEvent<T> implements Exception {
   /// Constructs a transition error.
-  const TransitionError(
-    super.machine,
-    super.source,
-    super.target,
-    super.errors,
-  );
+  const new(super.machine, super.source, super.target, super.errors);
 }

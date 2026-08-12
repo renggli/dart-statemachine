@@ -5,7 +5,7 @@ import '../transition.dart';
 
 /// A transition that triggers automatically after a specified [duration].
 class TimeoutTransition extends Transition {
-  TimeoutTransition(this.duration, this.callback);
+  new(this.duration, this.callback);
 
   /// The duration to wait before the timer triggers.
   final Duration duration;

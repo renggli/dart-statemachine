@@ -7,7 +7,7 @@ import 'package:web/web.dart';
 /// A pretty HTML tooltip machine.
 class Tooltip {
   /// Constructor for tooltip machine.
-  Tooltip(
+  new(
     this.root, {
     this.attributeKey = 'data-tooltip',
     this.baseCssClass = 'tooltip',

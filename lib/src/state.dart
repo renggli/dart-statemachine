@@ -16,7 +16,7 @@ import 'transitions/timeout.dart';
 /// to other states and execute callbacks when entered or left.
 class State<T> {
   /// Constructs a new state with an identifier.
-  State(this.machine, this.identifier);
+  new(this.machine, this.identifier);
 
   /// The state machine holding this state.
   final Machine machine;

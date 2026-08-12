@@ -5,7 +5,7 @@ import '../transition.dart';
 
 /// A transition that is triggered by an event on a [Stream].
 class StreamTransition<T> extends Transition {
-  StreamTransition(this.provider, this.callback);
+  new(this.provider, this.callback);
 
   /// The provider of a stream triggering this transition.
   final Provider<Stream<T>> provider;
