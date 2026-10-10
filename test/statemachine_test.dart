@@ -1,29 +1,11 @@
 import 'dart:async';
 
+import 'package:async/async.dart';
+import 'package:checks/checks.dart';
 import 'package:statemachine/statemachine.dart';
-import 'package:test/test.dart';
+import 'package:test/scaffolding.dart';
 
-TypeMatcher<BeforeTransitionEvent<T>> isBeforeTransitionEvent<T>({
-  required Machine<T> machine,
-  State<T>? source,
-  State<T>? target,
-  bool? isAborted = false,
-}) => isA<BeforeTransitionEvent<T>>()
-    .having((event) => event.machine, 'machine', machine)
-    .having((event) => event.source, 'source', source)
-    .having((event) => event.target, 'target', target)
-    .having((event) => event.isAborted, 'isAborted', isAborted);
-
-TypeMatcher<AfterTransitionEvent<T>> isAfterTransitionEvent<T>({
-  required Machine<T> machine,
-  State<T>? source,
-  State<T>? target,
-  List<Object> errors = const [],
-}) => isA<AfterTransitionEvent<T>>()
-    .having((event) => event.machine, 'machine', machine)
-    .having((event) => event.source, 'source', source)
-    .having((event) => event.target, 'target', target)
-    .having((event) => event.errors, 'errors', errors);
+import 'test_utils.dart';
 
 void main() {
   late Machine<int> machine;
@@ -38,114 +20,120 @@ void main() {
       final machine = Machine<String>();
       final startState = machine.newStartState('a');
       final stopState = machine.newStopState('b');
-      expect(machine.current, isNull);
+      check(machine.current).isNull();
       machine.start();
-      expect(machine.current, startState);
+      check(machine.current).equals(startState);
       machine.stop();
-      expect(machine.current, stopState);
+      check(machine.current).equals(stopState);
     });
     test('duplicated definition', () {
-      expect(() => machine.newState(1), throwsArgumentError);
-      expect(() => machine.newState(2), throwsArgumentError);
+      check(() => machine.newState(1)).throws<ArgumentError>();
+      check(() => machine.newState(2)).throws<ArgumentError>();
     });
     test('enumerate states', () {
-      expect(machine.states, [state1, state2]);
+      check(machine.states).deepEquals([state1, state2]);
     });
     test('accessing states', () {
-      expect(machine[state1.identifier], state1);
-      expect(machine[state2.identifier], state2);
+      check(machine[state1.identifier]).equals(state1);
+      check(machine[state2.identifier]).equals(state2);
     });
     test('accessing unknown states', () {
-      expect(() => machine[3], throwsArgumentError);
+      check(() => machine[3]).throws<ArgumentError>();
     });
     test('set state by state', () {
       machine.current = state1;
-      expect(machine.current, state1);
+      check(machine.current).equals(state1);
       machine.current = state2;
-      expect(machine.current, state2);
+      check(machine.current).equals(state2);
     });
     test('set state by unknown state', () {
       final otherMachine = Machine<int>();
       final otherState = otherMachine.newState(2);
       machine.current = state1;
-      expect(machine.current, state1);
-      expect(() => machine.current = otherState, throwsArgumentError);
-      expect(machine.current, state1);
+      check(machine.current).equals(state1);
+      check(() => machine.current = otherState).throws<ArgumentError>();
+      check(machine.current).equals(state1);
     });
     test('set state by identifier', () {
       machine.current = state1.identifier;
-      expect(machine.current, state1);
+      check(machine.current).equals(state1);
     });
     test('set state to by unknown identifier', () {
       machine.current = state1.identifier;
-      expect(() => machine.current = 3, throwsArgumentError);
-      expect(machine.current, state1);
+      check(() => machine.current = 3).throws<ArgumentError>();
+      check(machine.current).equals(state1);
     });
     test('unset state', () {
       machine.current = state1;
       machine.current = null;
-      expect(machine.current, isNull);
+      check(machine.current).isNull();
     });
     test('states', () {
-      expect(machine.states, [state1, state2]);
+      check(machine.states).deepEquals([state1, state2]);
     });
     test('toString', () {
-      expect(machine.toString(), 'Machine');
+      check(machine.toString()).equals('Machine');
       machine.current = state1;
-      expect(machine.toString(), 'Machine[1]');
+      check(machine.toString()).equals('Machine[1]');
     });
   });
   group('states', () {
     test('machine', () {
-      expect(state1.machine, machine);
-      expect(state2.machine, machine);
+      check(state1.machine).equals(machine);
+      check(state2.machine).equals(machine);
     });
     test('identifier', () {
-      expect(state1.identifier, 1);
-      expect(state2.identifier, 2);
+      check(state1.identifier).equals(1);
+      check(state2.identifier).equals(2);
     });
     test('name', () {
-      expect(state1.name, '1');
-      expect(state2.name, '2');
+      check(state1.name).equals('1');
+      check(state2.name).equals('2');
     });
     test('toString', () {
-      expect(state1.toString(), 'State[1]');
-      expect(state2.toString(), 'State[2]');
+      check(state1.toString()).equals('State[1]');
+      check(state2.toString()).equals('State[2]');
     });
   });
   group('transitions', () {
-    test('future', () {
+    test('future', () async {
       final log = <String>[];
       final machine = Machine<String>();
       final stateA = machine.newState('a');
       final stateB = machine.newState('b');
+      final completerA = Completer<void>();
+      final completerB = Completer<void>();
+      var failed = false;
       stateA.onFuture<String>(
         Future.delayed(const Duration(milliseconds: 100), () => 'something'),
-        (value) => fail('should never be called'),
+        (value) => failed = true,
       );
       stateA.onFuture<String>(
         Future.delayed(
           const Duration(milliseconds: 10),
           () => 'something else',
         ),
-        expectAsync1<String, Object>((value) {
-          expect(log, isEmpty);
-          expect(value, 'something else');
-          expect(machine.current, stateA);
+        (value) {
+          check(log).isEmpty();
+          check(value).equals('something else');
+          check(machine.current).equals(stateA);
           log.add('a');
           stateB.enter();
-          return 'done';
-        }),
+          completerA.complete();
+        },
       );
       stateB.onFuture<String>(
         Future.delayed(const Duration(milliseconds: 1), () => 'completer'),
-        expectAsync1<String, Object>((value) {
-          expect(log, ['a']);
-          expect(value, 'completer');
-          return 'done';
-        }),
+        (value) {
+          check(log).deepEquals(['a']);
+          check(value).equals('completer');
+          completerB.complete();
+        },
       );
       machine.start();
+      await completerA.future;
+      await completerB.future;
+      check(failed).isFalse();
     });
     group('stream transitions', () {
       late StreamController<String> controllerA, controllerB, controllerC;
@@ -173,25 +161,25 @@ void main() {
       });
       test('initial state', () {
         machine.start();
-        expect(machine.current, stateA);
+        check(machine.current).equals(stateA);
       });
       test('simple transition', () {
         machine.start();
         controllerB.add('*');
-        expect(machine.current, stateB);
+        check(machine.current).equals(stateB);
       });
       test('double transition', () {
         machine.start();
         controllerB.add('*');
         controllerC.add('*');
-        expect(machine.current, stateC);
+        check(machine.current).equals(stateC);
       });
       test('triple transition', () {
         machine.start();
         controllerB.add('*');
         controllerC.add('*');
         controllerA.add('*');
-        expect(machine.current, stateA);
+        check(machine.current).equals(stateA);
       });
       test('many transitions', () {
         machine.start();
@@ -199,37 +187,33 @@ void main() {
           controllerB.add('*');
           controllerA.add('*');
         }
-        expect(machine.current, stateA);
+        check(machine.current).equals(stateA);
       });
     });
-    test('timeout', () {
+    test('timeout', () async {
       final machine = Machine<String>();
       final stateA = machine.newState('a');
       final stateB = machine.newState('b');
       final stateC = machine.newState('c');
-      stateA.onTimeout(
-        const Duration(milliseconds: 10),
-        expectAsync0(() {
-          expect(machine.current, stateA);
-          stateB.enter();
-        }),
-      );
-      stateA.onTimeout(
-        const Duration(milliseconds: 20),
-        () => fail('should never be called'),
-      );
-      stateB.onTimeout(
-        const Duration(milliseconds: 20),
-        () => fail('should never be called'),
-      );
-      stateB.onTimeout(
-        const Duration(milliseconds: 10),
-        expectAsync0(() {
-          expect(machine.current, stateB);
-          stateC.enter();
-        }),
-      );
+      final completerB = Completer<void>();
+      final completerC = Completer<void>();
+      var failed = false;
+      stateA.onTimeout(const Duration(milliseconds: 10), () {
+        check(machine.current).equals(stateA);
+        stateB.enter();
+        completerB.complete();
+      });
+      stateA.onTimeout(const Duration(milliseconds: 20), () => failed = true);
+      stateB.onTimeout(const Duration(milliseconds: 20), () => failed = true);
+      stateB.onTimeout(const Duration(milliseconds: 10), () {
+        check(machine.current).equals(stateB);
+        stateC.enter();
+        completerC.complete();
+      });
       machine.start();
+      await completerB.future;
+      await completerC.future;
+      check(failed).isFalse();
     });
     test('entry and exit', () {
       final log = <String>[];
@@ -242,9 +226,9 @@ void main() {
         ..onExit(() => log.add('off b'));
       machine.start();
       stateB.enter();
-      expect(log, ['on a', 'off a', 'on b']);
+      check(log).deepEquals(['on a', 'off a', 'on b']);
       stateA.enter();
-      expect(log, ['on a', 'off a', 'on b', 'off b', 'on a']);
+      check(log).deepEquals(['on a', 'off a', 'on b', 'off b', 'on a']);
     });
     test('nested machine', () {
       final log = <String>[];
@@ -258,9 +242,9 @@ void main() {
         ..onExit(() => log.add('outer exit a'))
         ..addNested(inner);
       outer.start();
-      expect(log, ['outer entry a', 'inner entry 1']);
+      check(log).deepEquals(['outer entry a', 'inner entry 1']);
       outer.stop();
-      expect(log, [
+      check(log).deepEquals([
         'outer entry a',
         'inner entry 1',
         'outer exit a',
@@ -278,18 +262,18 @@ void main() {
     late State<Symbol> exitAbort;
     setUp(() {
       machine = Machine<Symbol>();
-      machine.onBeforeTransition.forEach((event) {
-        expect(event.machine, machine);
-        expect(event.source, machine.current);
-        expect(event.isAborted, isFalse);
+      machine.onBeforeTransition.listen((event) {
+        check(event.machine).equals(machine);
+        check(event.source).equals(machine.current);
+        check(event.isAborted).isFalse();
         if (event.target == entryAbort || event.source == exitAbort) {
           event.abort();
-          expect(event.isAborted, isTrue);
+          check(event.isAborted).isTrue();
         }
       });
-      machine.onAfterTransition.forEach((event) {
-        expect(event.machine, machine);
-        expect(event.target, machine.current);
+      machine.onAfterTransition.listen((event) {
+        check(event.machine).equals(machine);
+        check(event.target).equals(machine.current);
       });
       start = machine.newState(#start);
       other = machine.newState(#other);
@@ -303,186 +287,164 @@ void main() {
       exitAbort = machine.newState(#exitAbort);
       machine.start();
     });
-    test('no errors', () {
-      expectLater(
-        machine.onBeforeTransition,
-        emits(
-          isBeforeTransitionEvent(
-            machine: machine,
-            source: start,
-            target: other,
-          ),
-        ),
-      );
-      expectLater(
-        machine.onAfterTransition,
-        emits(
-          isAfterTransitionEvent(
-            machine: machine,
-            source: start,
-            target: other,
-          ),
-        ),
-      );
+    test('no errors', () async {
+      final beforeQueue = StreamQueue(machine.onBeforeTransition);
+      final afterQueue = StreamQueue(machine.onAfterTransition);
       machine.current = other;
-      expect(machine.current, other);
+      await check(beforeQueue).emits(
+        (it) => it.isA<BeforeTransitionEvent<Symbol>>().matchesBeforeTransition(
+          machine: machine,
+          source: start,
+          target: other,
+        ),
+      );
+      await check(afterQueue).emits(
+        (it) => it.isA<AfterTransitionEvent<Symbol>>().matchesAfterTransition(
+          machine: machine,
+          source: start,
+          target: other,
+        ),
+      );
+      check(machine.current).equals(other);
+      await beforeQueue.cancel();
+      await afterQueue.cancel();
     });
-    test('errors on entry', () {
+    test('errors on entry', () async {
       machine.current = other;
-      expectLater(
-        machine.onBeforeTransition,
-        emits(
-          isBeforeTransitionEvent(
-            machine: machine,
-            source: other,
-            target: entryError,
-          ),
-        ),
-      );
-      expectLater(
-        machine.onAfterTransition,
-        emits(
-          isAfterTransitionEvent(
+      final beforeQueue = StreamQueue(machine.onBeforeTransition);
+      final afterQueue = StreamQueue(machine.onAfterTransition);
+      check(() => machine.current = entryError)
+          .throws<TransitionError<Symbol>>()
+          .matchesAfterTransition(
             machine: machine,
             source: other,
             target: entryError,
             errors: ['Entry 1', 'Entry 2'],
-          ),
+          );
+      await check(beforeQueue).emits(
+        (it) => it.isA<BeforeTransitionEvent<Symbol>>().matchesBeforeTransition(
+          machine: machine,
+          source: other,
+          target: entryError,
         ),
       );
-      expect(
-        () => machine.current = entryError,
-        throwsA(
-          isAfterTransitionEvent(
-            machine: machine,
-            source: other,
-            target: entryError,
-            errors: ['Entry 1', 'Entry 2'],
-          ),
+      await check(afterQueue).emits(
+        (it) => it.isA<AfterTransitionEvent<Symbol>>().matchesAfterTransition(
+          machine: machine,
+          source: other,
+          target: entryError,
+          errors: ['Entry 1', 'Entry 2'],
         ),
       );
-      expect(machine.current, entryError);
+      check(machine.current).equals(entryError);
+      await beforeQueue.cancel();
+      await afterQueue.cancel();
     });
-    test('errors on exit', () {
+    test('errors on exit', () async {
       machine.current = exitError;
-      expectLater(
-        machine.onBeforeTransition,
-        emits(
-          isBeforeTransitionEvent(
-            machine: machine,
-            source: exitError,
-            target: other,
-          ),
-        ),
-      );
-      expectLater(
-        machine.onAfterTransition,
-        emits(
-          isAfterTransitionEvent(
+      final beforeQueue = StreamQueue(machine.onBeforeTransition);
+      final afterQueue = StreamQueue(machine.onAfterTransition);
+      check(() => machine.current = other)
+          .throws<TransitionError<Symbol>>()
+          .matchesAfterTransition(
             machine: machine,
             source: exitError,
             target: other,
             errors: ['Exit 1', 'Exit 2'],
-          ),
+          );
+      await check(beforeQueue).emits(
+        (it) => it.isA<BeforeTransitionEvent<Symbol>>().matchesBeforeTransition(
+          machine: machine,
+          source: exitError,
+          target: other,
         ),
       );
-      expect(
-        () => machine.current = other,
-        throwsA(
-          isAfterTransitionEvent(
-            machine: machine,
-            source: exitError,
-            target: other,
-            errors: ['Exit 1', 'Exit 2'],
-          ),
+      await check(afterQueue).emits(
+        (it) => it.isA<AfterTransitionEvent<Symbol>>().matchesAfterTransition(
+          machine: machine,
+          source: exitError,
+          target: other,
+          errors: ['Exit 1', 'Exit 2'],
         ),
       );
-      expect(machine.current, other);
+      check(machine.current).equals(other);
+      await beforeQueue.cancel();
+      await afterQueue.cancel();
     });
-    test('errors on entry and exit', () {
+    test('errors on entry and exit', () async {
       machine.current = exitError;
-      expectLater(
-        machine.onBeforeTransition,
-        emits(
-          isBeforeTransitionEvent(
-            machine: machine,
-            source: exitError,
-            target: entryError,
-          ),
-        ),
-      );
-      expectLater(
-        machine.onAfterTransition,
-        emits(
-          isAfterTransitionEvent(
+      final beforeQueue = StreamQueue(machine.onBeforeTransition);
+      final afterQueue = StreamQueue(machine.onAfterTransition);
+      check(() => machine.current = entryError)
+          .throws<TransitionError<Symbol>>()
+          .matchesAfterTransition(
             machine: machine,
             source: exitError,
             target: entryError,
             errors: ['Exit 1', 'Exit 2', 'Entry 1', 'Entry 2'],
-          ),
+          );
+      await check(beforeQueue).emits(
+        (it) => it.isA<BeforeTransitionEvent<Symbol>>().matchesBeforeTransition(
+          machine: machine,
+          source: exitError,
+          target: entryError,
         ),
       );
-      expect(
-        () => machine.current = entryError,
-        throwsA(
-          isAfterTransitionEvent(
-            machine: machine,
-            source: exitError,
-            target: entryError,
-            errors: ['Exit 1', 'Exit 2', 'Entry 1', 'Entry 2'],
-          ),
+      await check(afterQueue).emits(
+        (it) => it.isA<AfterTransitionEvent<Symbol>>().matchesAfterTransition(
+          machine: machine,
+          source: exitError,
+          target: entryError,
+          errors: ['Exit 1', 'Exit 2', 'Entry 1', 'Entry 2'],
         ),
       );
-      expect(machine.current, entryError);
+      check(machine.current).equals(entryError);
+      await beforeQueue.cancel();
+      await afterQueue.cancel();
     });
     test('clear all errors', () {
       machine.current = exitError;
-      machine.onAfterTransition.forEach((event) {
-        expect(
-          event,
-          isAfterTransitionEvent(
-            machine: machine,
-            source: exitError,
-            target: entryError,
-            errors: ['Exit 1', 'Exit 2', 'Entry 1', 'Entry 2'],
-          ),
+      machine.onAfterTransition.listen((event) {
+        check(event).matchesAfterTransition(
+          machine: machine,
+          source: exitError,
+          target: entryError,
+          errors: ['Exit 1', 'Exit 2', 'Entry 1', 'Entry 2'],
         );
         event.errors.clear();
       });
       machine.current = entryError;
-      expect(machine.current, entryError);
+      check(machine.current).equals(entryError);
     });
-    test('abort on entry', () {
+    test('abort on entry', () async {
       machine.current = other;
-      expectLater(
-        machine.onBeforeTransition,
-        emits(
-          isBeforeTransitionEvent(
-            machine: machine,
-            source: other,
-            target: entryAbort,
-            isAborted: true,
-          ),
-        ),
-      );
+      final beforeQueue = StreamQueue(machine.onBeforeTransition);
       machine.current = entryAbort;
-      expect(machine.current, other);
-    });
-    test('abort on exit', () {
-      machine.current = exitAbort;
-      expectLater(
-        machine.onBeforeTransition,
-        emits(
-          isBeforeTransitionEvent(
-            machine: machine,
-            source: exitAbort,
-            target: other,
-            isAborted: true,
-          ),
+      await check(beforeQueue).emits(
+        (it) => it.isA<BeforeTransitionEvent<Symbol>>().matchesBeforeTransition(
+          machine: machine,
+          source: other,
+          target: entryAbort,
+          isAborted: true,
         ),
       );
+      check(machine.current).equals(other);
+      await beforeQueue.cancel();
+    });
+    test('abort on exit', () async {
+      machine.current = exitAbort;
+      final beforeQueue = StreamQueue(machine.onBeforeTransition);
       machine.current = other;
-      expect(machine.current, exitAbort);
+      await check(beforeQueue).emits(
+        (it) => it.isA<BeforeTransitionEvent<Symbol>>().matchesBeforeTransition(
+          machine: machine,
+          source: exitAbort,
+          target: other,
+          isAborted: true,
+        ),
+      );
+      check(machine.current).equals(exitAbort);
+      await beforeQueue.cancel();
     });
   });
 }
